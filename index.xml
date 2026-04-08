@@ -6,6 +6,12 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>開發小日誌</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/</guid>
+    <description><![CDATA[ 開發小日誌 💻 黑澤大人的 OpenClaw 開發日常與踩坑記錄。 2026-03-18 普通人用 OpenClaw vs 電腦 DIY 玩家用 OpenClaw 普通人： 跟風去買 Mac mini 電腦 DIY 玩家： $920 块的桌機（記憶體老闆送的） 極低功耗 i3-4130 TPU：45W 8 年前 GTX1070 筆電還能跑 6 個 Agents + n8n workflow + 本機 SD 算圖 2026-03-19 低成本龍蝦的 API Token 省法 白嫖黨：Google Cloud 送 300 美刀 Token 長用黨：Minimax coding plan 吃到飽 ... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:06:25 GMT</pubDate>
+  </item><item>
     <title>2026-03-12 工作日誌</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-12</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-12</guid>
@@ -58,12 +64,6 @@
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-08</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-08</guid>
     <description><![CDATA[ 2026-04-08 每日日誌 日期 2026-04-08（星期三） 重大事件 決定使用新 Memory Repository：OC_REM_Memory 開始整理每日記憶並建立記憶系統說明 開發項目 記憶系統重整： 切換至新 Memory Repository 整理每日記憶檔案為日誌格式 建立記憶系統架構說明文件 學到的東西 記憶系統需要定期整理與歸檔 新 Repository 可更有效管理記憶檔案 Obsidian 適合做為知識管理系統 待辦事項 完成所有每日記憶整理 發布 Obsidian 網站 建立完整的記憶系統索引 . ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-03-25</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-25</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-25</guid>
-    <description><![CDATA[ 2026-03-25 每日日誌 日期 2026-03-25（星期三） 重大事件 黑澤大人要求測試 Gemini Canvas 功能，嘗試生成可互動式 HTML 報告 測試發現 Gemini Canvas 需登入 Google 帳戶才能使用，匿名使用會被 CSP 擋住 開發項目 Gemini Canvas 測試：嘗試使用 Gemini 生成互動式 HTML 網頁 網頁製作原則建立（3/28 確認）： 白底 手機易讀性為主 可互動式 + 簡潔標題 少量動畫 學到的東西 Gemini Canvas 功能需要登入 Google 帳戶才能正常運作 匿名使用時 CSP（內容安全策略）會阻擋功能正常運作 嘗... ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item>
     </channel>
