@@ -6,16 +6,28 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>2026-03-12 工作日誌</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-12</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-12</guid>
+    <description><![CDATA[ 2026-03-12 工作日誌. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:02:54 GMT</pubDate>
+  </item><item>
+    <title>2026-03-18 工作日誌</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-18</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-18</guid>
+    <description><![CDATA[ 2026-03-18 工作日誌. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:02:54 GMT</pubDate>
+  </item><item>
+    <title>2026-03-20 工作日誌</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-20</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-20</guid>
+    <description><![CDATA[ 2026-03-20 工作日誌. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:02:54 GMT</pubDate>
+  </item><item>
     <title>2026-02-21</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-21</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-21</guid>
     <description><![CDATA[ 2026-02-21 持續性記憶 學習 QMD 相關知識，準備升級 OpenClaw 記憶系統。 嘗試修復 QMD 索引錯誤，但尚未成功。 刪除廢棄 agents 的檔案。 發現並嘗試修正 OpenClaw 的設定檔。 . ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-03-20</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-20</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-20</guid>
-    <description><![CDATA[  2026-03-20T04:02:17.032Z [entity:agent:main] agent=main source=auto-capture 你幫我寫一篇threads 我的人設是省錢玩openclaw 這次內容是加強openclaw的技能 用jina跟brave api 當然這些也是白嫖的 寫說怎樣加強openclaw能力 用這兩個api可以做到什麼 為什麼可以白嫖用免費 限制是多少，對一般人來就夠不夠 字數不要太多 也不要太複雜 口語化一點 2026-03-20T04:14:46.650Z [other:agent:main] agent=main source=auto-ca... ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item><item>
     <title>2026-03-29</title>
@@ -48,22 +60,10 @@
     <description><![CDATA[ 2026-04-08 每日日誌 日期 2026-04-08（星期三） 重大事件 決定使用新 Memory Repository：OC_REM_Memory 開始整理每日記憶並建立記憶系統說明 開發項目 記憶系統重整： 切換至新 Memory Repository 整理每日記憶檔案為日誌格式 建立記憶系統架構說明文件 學到的東西 記憶系統需要定期整理與歸檔 新 Repository 可更有效管理記憶檔案 Obsidian 適合做為知識管理系統 待辦事項 完成所有每日記憶整理 發布 Obsidian 網站 建立完整的記憶系統索引 . ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item><item>
-    <title>2026-03-16</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-16</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-16</guid>
-    <description><![CDATA[  2026-03-16T08:55:52.095Z [other:agent:main] agent=main source=auto-capture [message_id: om_x100b544816865ca4ee8d02b94206003] Hay: 我想你以後都可以幫我修改n8n 以你能全權操控作目標 . ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
     <title>2026-03-25</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-25</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-25</guid>
     <description><![CDATA[ 2026-03-25 每日日誌 日期 2026-03-25（星期三） 重大事件 黑澤大人要求測試 Gemini Canvas 功能，嘗試生成可互動式 HTML 報告 測試發現 Gemini Canvas 需登入 Google 帳戶才能使用，匿名使用會被 CSP 擋住 開發項目 Gemini Canvas 測試：嘗試使用 Gemini 生成互動式 HTML 網頁 網頁製作原則建立（3/28 確認）： 白底 手機易讀性為主 可互動式 + 簡潔標題 少量動畫 學到的東西 Gemini Canvas 功能需要登入 Google 帳戶才能正常運作 匿名使用時 CSP（內容安全策略）會阻擋功能正常運作 嘗... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-04-03</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-03</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-03</guid>
-    <description><![CDATA[  2026-04-03T11:15:42.995Z [other:agent:main] agent=main source=auto-capture 幫我看一下這個專案 github.com/serenakeyitan/citation-check-skill 製作成網頁 . ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item>
     </channel>
