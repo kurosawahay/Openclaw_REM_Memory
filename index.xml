@@ -6,65 +6,65 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
-    <title>2026-03-31 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-31</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-31</guid>
-    <description><![CDATA[ 2026-03-31 我覺得AI Agent的興起 除了把20年前的Markdown格式重新熱門起來外 還有一個最常見又簡單易用的HTML 感覺HTML將會迎來第二春 自2000年互聯網爆發後，在AI世代再次偉大 為什麼是HTML? 應該大家已經受夠手機一堆app 又NotebookLM, 又Notion, 又Trello 做個東西又要切來切去，關鍵時間又要更新 除了要更多學習成本、還要記哪個apps做哪些事 那在AI agent + HTML的時代 所有人都可以量身訂造屬於自己的apps 不再是由用戶去學習、適應apps 而是它去學習用戶的使用習慣 而且還不用下載額外apps，所有裝置一個瀏... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:25:36 GMT</pubDate>
-  </item><item>
-    <title>2026-03-30 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-30</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-30</guid>
-    <description><![CDATA[ 2026-03-30 因為Claude桌面版應用程式只有英、日等 並沒有繁體中文版 作為90後，以前玩的遊戲很多都有漢化補丁 所以我嘗試以同樣方法在Windows版的Claude上做漢化 懶人包結論： 失敗，沒有辦法做到，要繁體中文就一起寫信去給Claude反映 以下是做不到的原因，跟我的試錯過程： 我有拆包抓到語言的json檔 就在 \Program Files\WindowsApps\Claude_(版本號）\app\resources\語言.json 然後嘗試把日文json換成繁中 這樣只要設日文就會顯示繁中 （90後的童年都是這樣玩的） 結果拆包的json只有200多行 語言包只有放系... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:25:27 GMT</pubDate>
-  </item><item>
-    <title>2026-03-22 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-22</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-22</guid>
-    <description><![CDATA[ 2026-03-22 繼續省錢流Openclaw 眾所周知，用Openclaw開大的開銷是Token 那要省錢玩Openclaw，就從減省上下文入手 而且減省上下文長度還可以讓Agents回應更快更準 我現在有用兩個記憶系統 一個是我自己寫的手動調整記憶的「記憶揉捏」 另一個是下面這位大神寫的記憶摘要系統 github.com/Corte… 原理很簡單： LLM的記憶系統原理是每次吐文字前 都讀完你所有對話記錄 這樣久而久之、上下文就越來越長 回應越來越慢，成本越來越高 這個技能： • 對話結束後存進資料庫 • 下次開聊只讀精華摘要 • 不會浪費 Token 重讀廢話 跟官方的qmd差別在於 ... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:25:06 GMT</pubDate>
-  </item><item>
-    <title>2026-03-20 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-20</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-20</guid>
-    <description><![CDATA[ 2026-03-20 繼續低成本玩Openclaw （白嫖黨 能白嫖就絕對不會付錢） 今天介紹兩個白嫖API 除了可以大幅度增加OpenClaw能力之外 還可以省掉大量Token 重點是這兩個API可以免費用 🔹 Jina Reader • 幫 AI 讀網頁 • 自動把文章轉成乾淨文字 • 省掉搜索網頁時大量無用的上下文 • 免費額度：一個月 10 萬次 🔹 Brave Search • AI 搜尋引擎 • 快速找到你要的情報，不用再用Gemini搜/開你瀏覽器 • 免費額度：一個月 2000 次搜索次數 • 一般人根本用不完 設定超簡單： 去官網申請 API Key（免費） 貼到 Ope... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:24:56 GMT</pubDate>
-  </item><item>
-    <title>2026-03-19 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-19</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-19</guid>
-    <description><![CDATA[ 2026-03-19 昨天講完低成本龍蝦的硬體怎麼玩 今天來講軟體，也就是API Token怎樣省 下面是我花了3000多台幣學費的成果 TLDR結論： 白嫖黨：Google Cloud送300美刀Token 長用黨：Minimax coding plan 吃到飽 推薦：Minimax coding plan 10美刀/月 我在用：Minimax coding plan 20美刀/月 首先先說一下我用過哪些API Openai: 充了5塊美刀，跑Dalle3 + Whisper測試 Grok: 生色圖用的提詞生成 Google: 白嫖，但性能拉，一直改錯系統檔，他內建不會幫你省token，要付... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:24:34 GMT</pubDate>
-  </item><item>
-    <title>2026-03-18 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-18</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-03-18</guid>
-    <description><![CDATA[ 2026-03-18 普通人用OpenClaw： 跟風去買Mac mini 電腦DIY玩家用OpenClaw：千元裸跑電腦 + 8年前筆電還能在跑6個Agents + n8n workflow + 本機SD算圖 桌機是$920塊（記憶體老闆用送的） 極低功耗 i3-4130 TPU:45W （本來想找更低的，但很難找） 跑了一年的TrueNAS 原本是公家機關退役一次後，我買回來做NAS NAS的二次退役後，拿來養龍蝦 （本來還沒有開機鍵，是用起子短接開機，丟垃圾時看到有人丟主機殼，把開機鍵摳了下來用） 筆電是GTX1070西風之神，幫我剪片維生好幾年 用到兩邊Ctrl鍵都壞掉、Enter鍵壞... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:24:23 GMT</pubDate>
-  </item><item>
     <title>sub_飛書_OpenClaw_整合指南</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_%E9%A3%9B%E6%9B%B8_OpenClaw_%E6%95%B4%E5%90%88%E6%8C%87%E5%8D%97</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_%E9%A3%9B%E6%9B%B8_OpenClaw_%E6%95%B4%E5%90%88%E6%8C%87%E5%8D%97</guid>
     <description><![CDATA[ 飛書 + OpenClaw 整合指南：讓 AI 讀寫你的文檔 aliases: 飛書 + OpenClaw 整合指南：讓 AI 讀寫你的文檔 📋 來源資訊 來源：掘金社區文章《AI实战丨飞书 + OpenClaw：让 AI 读写你的文档》 作者：AI有招團隊 發布時間：2026-03-09 (推測) 適用性：已在生產環境運行一段時間 🎯 核心目標 讓 AI Agent 直接操作飛書文檔——讀取內容、寫入內容、管理知識庫、操作多維表格。不是「AI 幫你總結飛書文檔」，而是 AI 自己登入飛書，直接讀寫你的文檔。 🔧 前提條件 OpenClaw 已安裝並運行（版本 &gt;= 0.3.x） ... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:22:34 GMT</pubDate>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
   </item><item>
     <title>sub_飛書國際版_Lark_完整使用指南</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_%E9%A3%9B%E6%9B%B8%E5%9C%8B%E9%9A%9B%E7%89%88_Lark_%E5%AE%8C%E6%95%B4%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_%E9%A3%9B%E6%9B%B8%E5%9C%8B%E9%9A%9B%E7%89%88_Lark_%E5%AE%8C%E6%95%B4%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97</guid>
     <description><![CDATA[ 飛書國際版 (Lark) 完整使用指南 aliases: 飛書國際版 (Lark) 完整使用指南 📋 核心概念 飛書 (Feishu)：中國大陸版本，面向中國用戶 Lark：國際版本，面向全球用戶（功能完全相同，只是域名不同） 🔧 技術差異 主要域名 Lark 國際版：open.larksuite.com 飛書中國版：open.feishu.cn API 端點設定差異 // Lark 國際版 const lark = require(&#039;@larksuiteoapi/node-sdk&#039;); const client = new lark.Client({ appId: &... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:22:34 GMT</pubDate>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
   </item><item>
     <title>記憶索引</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E8%A8%98%E6%86%B6%E7%B4%A2%E5%BC%95</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E8%A8%98%E6%86%B6%E7%B4%A2%E5%BC%95</guid>
     <description><![CDATA[ 記憶索引 🧠 ⚠️ 重要資產 — 此頁面為記憶系統的核心索引，請勿刪除或修改結構。 快速連結 daily-logs（每日日誌） 系統設定類 2026-02-21 系統權限與代理人設定調整 aliases: 2026-02-21 系統權限與代理人設定調整 閱讀全文 2026-03-08 系統整合與清理紀錄 aliases: 2026-03-08 系統整合與清理紀錄 閱讀全文 OpenClaw Source Code Structure Summary aliases: OpenClaw Source Code Structure Summary 閱讀全文 OpenClaw 備份系統設定 ali... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:22:34 GMT</pubDate>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
   </item><item>
-    <title>sub_openclaw_system</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_openclaw_system</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_openclaw_system</guid>
-    <description><![CDATA[ OpenClaw 系統調整與記憶規範更新 aliases: OpenClaw系統, 記憶規範, 系統調整, Cron任務, 模型配置 2026-03-11 02:24 記憶揉捏 v2.2 導入：全面採用 Claude Opus 設計的新版記憶系統 AGENTS.md 更新：觸發規則簡化為常駐上下文，詳細 SOP 移至 skills/記憶揉捏.md 技能檔案建立：建立完整的記憶揉捏 v2.2 技能文件，包含 8 步 SOP 與完整規範 系統架構升級：從舊版記憶揉捏 SOP 升級到 v2.2，支援自動觸發、冷藏機制、別名系統 決策與變更 記憶揉捏 SOP 更新：於 AGENTS.md 定義新規範，... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:22:34 GMT</pubDate>
+    <title>sub_report_format_rules</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_report_format_rules</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_report_format_rules</guid>
+    <description><![CDATA[ 每日彙報結構化規範 aliases: 彙報格式, 工作報告格式, 每日總結, 結構化規範 標題 🌹 代理人今日工作總結 (YYYY-MM-DD) 🌹 🎀 1. 雷姆 — 技術總監 (Main) 📡 項目名稱：簡短描述。 🔐 項目名稱：簡短描述。 (以此類推) 🛡️ 2. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
+  </item><item>
+    <title>sub_social_media_automation</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_social_media_automation</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_social_media_automation</guid>
+    <description><![CDATA[ 社交媒體自動化研究記錄 aliases: 社交媒體自動化研究記錄 Threads 發佈嘗試 工具: 使用 OpenClaw Browser Relay (Chrome Extension)。 現狀: 瀏覽器控制服務目前極不穩定，頻繁出現 ref is required 或連線中斷錯誤。 建議: 暫時以手動發佈為主，或等待系統更新穩定度。 替代方案研究 Reddit: 發現 reddit-post-lab 技能，可建立高品質社群貼文。 Mixpost: 官方推薦的社交管理技能，支援多平台。 安全警告: ClawHub 社群近期發現多起惡意技能（Malware）案例，安裝非官方技能前需使用 ski... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
+  </item><item>
+    <title>sub_stable_diffusion_integration</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_stable_diffusion_integration</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_stable_diffusion_integration</guid>
+    <description><![CDATA[ Stable Diffusion + ComfyUI 安裝與 API 整合 aliases: Stable Diffusion, ComfyUI, 圖片生成, AI繪圖, SD整合 2026-03-10 20:44 ComfyUI Bridge 模式啟用：連接到 Windows RTX 3080 主機 (192.168.1.110:8188)，切換到 novaAnimeXL_ilV170.safetensors 高品質動漫模型 黑澤大人視覺偏好分析： 核心畫風：NovaAnime 夢幻光影風格 關鍵詞：masterpiece, best quality, amazing quality, 4k... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
+  </item><item>
+    <title>sub_system_authorization_logs</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_system_authorization_logs</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_system_authorization_logs</guid>
+    <description><![CDATA[ OpenClaw 系統日誌：最高權限授權與安全性強化 aliases: OpenClaw 系統日誌：最高權限授權與安全性強化 1. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
+  </item><item>
+    <title>sub_whisper_setup</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_whisper_setup</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_whisper_setup</guid>
+    <description><![CDATA[ Whisper 語音轉文字配置 (本機/GPU) aliases: Whisper, 語音轉文字, 語音識別, 本機GPU 環境規格 硬體: NVIDIA GeForce GTX 1070 (筆電版)。 系統: Linux Ubuntu 22.04+。 驅動: CUDA 11.8+ 支援。 安裝流程記錄 環境隔離: 因應 GLIBC 版本相容性問題，使用 Miniconda 建立 Python 3.11 虛擬環境。 PyTorch: 安裝支援 sm_61 算力的版本 (2.4.1+cu118)。 Whisper: 安裝 openai-whisper 並連結執行檔至 ~/.local/bin/w... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
+  </item><item>
+    <title>sub_xact-invest_孟芳</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_xact-invest_%E5%AD%9F%E8%8A%B3</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_xact-invest_%E5%AD%9F%E8%8A%B3</guid>
+    <description><![CDATA[ 孟芳 (xact-invest) 記憶揉捏 基本資訊 Agent ID: xact-invest 名稱: 元大證卷 - 投資小助手 工作區: /home/hay/.openclaw/workspace-xact-invest 創建日期: 2025 已開通技能 playwright-mcp - 瀏覽器控制 playwright-scraper-skill - 網頁爬蟲 memory-lancedb-pro-skill - 記憶系統 功能特點 Chrome 共享機制: 使用統一 openclaw profile，cookie 持久保存 會員狀態繼承: 使用瀏覽器時可看到會員登入狀態 重要帳號 服務... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
+  </item><item>
+    <title>sub_系統健康檢查</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_%E7%B3%BB%E7%B5%B1%E5%81%A5%E5%BA%B7%E6%AA%A2%E6%9F%A5</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/sub_%E7%B3%BB%E7%B5%B1%E5%81%A5%E5%BA%B7%E6%AA%A2%E6%9F%A5</guid>
+    <description><![CDATA[ 雷姆 - 系統健康檢查任務 執行時間 每日 6:00、12:00、18:00 檢查項目 1. OpenClaw Gateway 服務 openclaw gateway status openclaw gateway probe 檢查服務是否運行中 檢查 RPC 是否正常回應 2. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:27:19 GMT</pubDate>
   </item>
     </channel>
   </rss>
