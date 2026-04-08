@@ -6,6 +6,12 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>區域網跨裝置算力共享</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%A8%E8%A3%9D%E7%BD%AE%E7%AE%97%E5%8A%9B%E5%85%B1%E4%BA%AB</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%A8%E8%A3%9D%E7%BD%AE%E7%AE%97%E5%8A%9B%E5%85%B1%E4%BA%AB</guid>
+    <description><![CDATA[ 區域網跨裝置算力共享 利用同一網域下的多台裝置共享 AI 計算資源的系統。 系統架構 整個系統由三層組成： 層次組成功能第一層OpenClaw（AI Agent）接收用戶指令並呼叫 API第二層ComfyUI Bridge（FastAPI port 8001）接收 OpenClaw 請求，轉換成 ComfyUI workflow JSON，透過 HTTP/WebSocket 送出執行，最後將圖片以 Base64 回傳第三層ComfyUI 本體運行在主力機（RTX3080，192.168.1.110:8188），負責實際算圖 資料流向 OpenClaw → Bridge → ComfyUI → ... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:09:53 GMT</pubDate>
+  </item><item>
     <title>開發小日誌</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/</guid>
@@ -58,12 +64,6 @@
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-02</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-02</guid>
     <description><![CDATA[  2026-04-02T00:49:22.008Z [entity:agent:main] agent=main source=auto-capture 存取權遭封鎖：授權錯誤 ￼ azureflamefilms@gmail.com Required parameter is missing: response_type 進一步瞭解此錯誤 如果你是此應用程式的開發人員，請參閱錯誤詳細資料。 錯誤代碼 400： invalid_request 2026-04-02T02:39:35.939Z [decision:agent:main] agent=main source=auto-capture... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-04-08</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-08</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-08</guid>
-    <description><![CDATA[ 2026-04-08 每日日誌 日期 2026-04-08（星期三） 重大事件 決定使用新 Memory Repository：OC_REM_Memory 開始整理每日記憶並建立記憶系統說明 開發項目 記憶系統重整： 切換至新 Memory Repository 整理每日記憶檔案為日誌格式 建立記憶系統架構說明文件 學到的東西 記憶系統需要定期整理與歸檔 新 Repository 可更有效管理記憶檔案 Obsidian 適合做為知識管理系統 待辦事項 完成所有每日記憶整理 發布 Obsidian 網站 建立完整的記憶系統索引 . ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item>
     </channel>
