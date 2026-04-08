@@ -6,6 +6,36 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>關於記憶系統</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E9%97%9C%E6%96%BC%E8%A8%98%E6%86%B6%E7%B3%BB%E7%B5%B1</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E9%97%9C%E6%96%BC%E8%A8%98%E6%86%B6%E7%B3%BB%E7%B5%B1</guid>
+    <description><![CDATA[ 關於記憶系統 設計理念 記憶系統是 OpenClaw 代理運作的核心，確保代理在漫長的對話中保持上下文。 主要功能 長期記憶：重要原則、偏好、決策永不遺忘 短期記憶：當日工作紀錄、流水帳 情境記憶：各專案的詳細背景 安全機制：脫敏處理保護敏感資料 . ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:15:47 GMT</pubDate>
+  </item><item>
+    <title>記憶索引</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E8%A8%98%E6%86%B6%E7%B4%A2%E5%BC%95</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E8%A8%98%E6%86%B6%E7%B4%A2%E5%BC%95</guid>
+    <description><![CDATA[ 記憶索引 🧠 ⚠️ 重要資產 — 此頁面為記憶系統的核心索引，請勿刪除或修改結構。 快速連結 daily-logs（每日日誌） Sub Memory 說明 Sub Memory 儲存各專案的詳細執行紀錄，屬於內部資料。 完整內容請參閱洋亦投資情報站 &gt; 05-系統記憶. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:15:40 GMT</pubDate>
+  </item><item>
+    <title>記憶系統架構</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E8%A8%98%E6%86%B6%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/%E8%A8%98%E6%86%B6%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B</guid>
+    <description><![CDATA[ 記憶系統架構 系統組成 OpenClaw 記憶系統由多層結構組成： MEMORY.md：核心長期記憶，儲存重要原則與決策 每日記憶：按日期分類的流水帳（daily-logs/） Sub Memory：各專案的詳細紀錄 記憶類別 類別說明entity實體資訊fact客觀事實decision重要決策learning新學到的知識preference偏好設定reflection反思與建議 安全設計 敏感資訊自動脫敏，分層存取控制，定期清理機制。. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:15:32 GMT</pubDate>
+  </item><item>
+    <title>2026-03-25</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-25</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-25</guid>
+    <description><![CDATA[ 2026-03-25 每日日誌 日期 2026-03-25（星期三） 重大事件 黑澤大人要求測試 Gemini Canvas 功能，嘗試生成可互動式 HTML 報告 測試發現 Gemini Canvas 需登入 Google 帳戶才能使用，匿名使用會被 CSP 擋住 開發項目 Gemini Canvas 測試：嘗試使用 Gemini 生成互動式 HTML 網頁 網頁製作原則建立（3/28 確認）： 白底 手機易讀性為主 可互動式 + 簡潔標題 少量動畫 學到的東西 Gemini Canvas 功能需要登入 Google 帳戶才能正常運作 匿名使用時 CSP（內容安全策略）會阻擋功能正常運作 嘗... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:15:23 GMT</pubDate>
+  </item><item>
+    <title>2026-03-15</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-15</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-15</guid>
+    <description><![CDATA[ 2026-03-15 工作日誌 Line 配對 (12:44) 指令：openclaw pairing approve line USMQH47M 結果：✅ 批准成功，ID: [LINE_ID] xact-invest 權限開通 (12:50) 問題：xact-invest 無法控制 Chrome 解決：在 openclaw.json 中為 xact-invest 新增技能 playwright-mcp playwright-scraper-skill 結果：✅ Gateway 重啟後生效 DIGITIMES 會員登入 (13:34-13:41) 帳號：a0978932061@gmail.co... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:15:23 GMT</pubDate>
+  </item><item>
     <title>掛接網站技能</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E6%8E%9B%E6%8E%A5%E7%B6%B2%E7%AB%99%E6%8A%80%E8%83%BD</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E6%8E%9B%E6%8E%A5%E7%B6%B2%E7%AB%99%E6%8A%80%E8%83%BD</guid>
@@ -24,24 +54,6 @@
     <description><![CDATA[ 開發小日誌 💻 黑澤大人的 OpenClaw 開發日常與踩坑記錄。 2026-03-18 普通人用 OpenClaw vs 電腦 DIY 玩家用 OpenClaw 普通人： 跟風去買 Mac mini 電腦 DIY 玩家： $920 块的桌機（記憶體老闆送的） 極低功耗 i3-4130 TPU：45W 8 年前 GTX1070 筆電還能跑 6 個 Agents + n8n workflow + 本機 SD 算圖 2026-03-19 低成本龍蝦的 API Token 省法 白嫖黨：Google Cloud 送 300 美刀 Token 長用黨：Minimax coding plan 吃到飽 ... ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:08:29 GMT</pubDate>
   </item><item>
-    <title>2026-03-12 工作日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-12</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-12</guid>
-    <description><![CDATA[ 2026-03-12 工作日誌. ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:02:54 GMT</pubDate>
-  </item><item>
-    <title>2026-03-18 工作日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-18</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-18</guid>
-    <description><![CDATA[ 2026-03-18 工作日誌. ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:02:54 GMT</pubDate>
-  </item><item>
-    <title>2026-03-20 工作日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-20</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-20</guid>
-    <description><![CDATA[ 2026-03-20 工作日誌. ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:02:54 GMT</pubDate>
-  </item><item>
     <title>2026-02-21</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-21</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-21</guid>
@@ -52,18 +64,6 @@
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-29</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-29</guid>
     <description><![CDATA[ 2026-03-29 每日日誌 日期 2026-03-29（星期日） 重大事件 完成安奈兒三月社群內容（已交付） 四月四篇內容與業主對稿中 嘗試設置 AssemblyAI 語音轉文字功能 更新每日進度 開發項目 AssemblyAI 整合：嘗試設定語音/錄音傳輸至所有 Agent 安奈兒社群代操：3月完成、4月對稿中 學到的東西 AssemblyAI 可作為語音轉文字的替代方案 安奈兒專案進度：3月完成、4月對稿中 待辦事項 完成 AssemblyAI 設定 持續追蹤安奈兒 4 月內容進度 更新每日進度 . ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-03-30</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-30</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-03-30</guid>
-    <description><![CDATA[ 2026-03-30 每日日誌 日期 2026-03-30（星期一） 重大事件 檢查電腦是否登入 Claude 網頁版 研究 ProActor AI 工具官方文件 新合約簽訂：迪卡斯網站專案 嘗試 Chrome 操作協助搶票 開發項目 ProActor AI 研究：評估自動化玩法 迪卡斯網站專案：新專案啟動 Chrome 自動化：評估操控瀏覽器搶票可能性 學到的東西 ProActor AI 提供瀏覽器自動化功能 迪卡斯網站專案是新簽訂的網站開發合約 Chrome 搶票可透過自動化工具實現 待辦事項 深入研究 ProActor AI 自動化功能 迪卡斯網站專案啟動規劃 持續最佳化搶票自動化流程 ... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-04-01</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-01</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-01</guid>
-    <description><![CDATA[  2026-04-01T22:45:26.142Z [other:agent:main] agent=main source=auto-capture 你幫我安裝 2026-04-01T22:48:49.701Z [other:agent:main] agent=main source=auto-capture 你之前都可以幫我執行sudo的 2026-04-01T22:53:55.077Z [other:agent:main] agent=main source=auto-capture 你幫我執行 給我驗證碼 . ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item>
     </channel>
