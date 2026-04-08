@@ -6,6 +6,12 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>掛接網站技能</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E6%8E%9B%E6%8E%A5%E7%B6%B2%E7%AB%99%E6%8A%80%E8%83%BD</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E6%8E%9B%E6%8E%A5%E7%B6%B2%E7%AB%99%E6%8A%80%E8%83%BD</guid>
+    <description><![CDATA[ 掛接網站技能 將外部網站內容自動抓取並整合到知識庫，再生成美觀 HTML 頁面的技能系統。 執行架構 外部資料（部落格、新聞、網頁） ↓ Jina Reader / Playwright 抓取 ↓ Claude Code CLI 生成 HTML ↓ 本地資料夾儲存 ↓ Cloudflare Tunnel 公開 ↓ 分享連結給用戶 運行邏輯 為什麼用 Claude Code CLI 寫 HTML？ 特色說明** Cinematic UI**Claude 生成的網頁特別美觀互動性強可以做成交互式頁面響應式設計手機電腦都適用省時高效一鍵生成完整頁面 為什麼用 HTML？ 優點說明不用下載 APP所有... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:11:47 GMT</pubDate>
+  </item><item>
     <title>區域網跨裝置算力共享</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%A8%E8%A3%9D%E7%BD%AE%E7%AE%97%E5%8A%9B%E5%85%B1%E4%BA%AB</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%A8%E8%A3%9D%E7%BD%AE%E7%AE%97%E5%8A%9B%E5%85%B1%E4%BA%AB</guid>
@@ -58,12 +64,6 @@
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-01</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-01</guid>
     <description><![CDATA[  2026-04-01T22:45:26.142Z [other:agent:main] agent=main source=auto-capture 你幫我安裝 2026-04-01T22:48:49.701Z [other:agent:main] agent=main source=auto-capture 你之前都可以幫我執行sudo的 2026-04-01T22:53:55.077Z [other:agent:main] agent=main source=auto-capture 你幫我執行 給我驗證碼 . ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
-  </item><item>
-    <title>2026-04-02</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-02</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-02</guid>
-    <description><![CDATA[  2026-04-02T00:49:22.008Z [entity:agent:main] agent=main source=auto-capture 存取權遭封鎖：授權錯誤 ￼ azureflamefilms@gmail.com Required parameter is missing: response_type 進一步瞭解此錯誤 如果你是此應用程式的開發人員，請參閱錯誤詳細資料。 錯誤代碼 400： invalid_request 2026-04-02T02:39:35.939Z [decision:agent:main] agent=main source=auto-capture... ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:01:22 GMT</pubDate>
   </item>
     </channel>
