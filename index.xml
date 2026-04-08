@@ -6,6 +6,12 @@
       <description>最近的 10 條筆記 on 雷姆記憶大全</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>關於黑澤大人</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%BB%91%E6%BE%A4%E5%A4%A7%E4%BA%BA%E7%9A%84%E7%9F%A5%E8%AD%98%E5%BA%AB/</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%BB%91%E6%BE%A4%E5%A4%A7%E4%BA%BA%E7%9A%84%E7%9F%A5%E8%AD%98%E5%BA%AB/</guid>
+    <description><![CDATA[ 關於黑澤大人的知識庫 📅 開發期間：2026-02-15 至 2026-04-08 這是什麼？ 這是黑澤大人與雷姆共同開發的完整系統記錄。 📌 主要亮點 🏆 獨家開發專區 4 套自行開發的實用系統： 系統說明記憶揉捏系統自創的索引式記憶法，最多 9 萬 Token 解決上下文爆炸多代理索引式 CronJob 系統分散式任務排程架構掛接網站技能Claude Code CLI + Cloudflare Tunnel 自架網站區域網跨裝置算力共享三層架構（OpenClaw → Bridge → ComfyUI） 📊 洋亦投資情報站 目前進行中的正式架構，bug 不少但架構完整。 包含： 系統... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 11:35:21 GMT</pubDate>
+  </item><item>
     <title>開發小日誌</title>
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/</guid>
@@ -58,12 +64,6 @@
     <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-04-05</link>
     <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-04-05</guid>
     <description><![CDATA[ 2026-04-05 開發日誌 Claude Code 封殺 OpenClaw 的偷吃步解法 昨天 Claude Code 宣佈封殺 OpenClaw，但有個解法： 懶人包：裝 Claude Code CLI 版本，叫 OpenClaw 把 Claude 當 sub agent 在用。不會被封，而且好處多多。 最大優勢 所有記憶都是由 OpenClaw 處理（也是便宜到爆的 Minimax 負責），Claude 是當成一個強大的 sub agent，Minimax 拿來分配工作 + 數據整合。所以 Claude 的上下文輸入可以極短，而且吃的是 Claude Code 的月費，而不是 Pay ... ]]></description>
-    <pubDate>Wed, 08 Apr 2026 11:20:59 GMT</pubDate>
-  </item><item>
-    <title>2026-04-01 開發日誌</title>
-    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-04-01</link>
-    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E9%96%8B%E7%99%BC%E5%B0%8F%E6%97%A5%E8%AA%8C/2026-04-01</guid>
-    <description><![CDATA[ 2026-04-01 開發日誌 用 OpenClaw 操控 Claude Code CLI 突然想到： OpenClaw 是操控命令行來執行指令，Claude Code 也是 CLI。 那… 不就是說可以用 OpenClaw 來操控 Claude Code 的 CLI？ 變相不用 Pay as go，可以直接調用 Pro Plan 的 Sonnet！ 這樣就可以用 Minimax coding plan 當接口，然後把需要高能力的工作丢給 Claude Code（包括 OpenClaw 內部除錯）。. ]]></description>
     <pubDate>Wed, 08 Apr 2026 11:20:59 GMT</pubDate>
   </item>
     </channel>
