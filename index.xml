@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+      <title>雷姆記憶大全</title>
+      <link>https://kurosawahay.github.io/Openclaw_REM_Memory</link>
+      <description>最近的 10 條筆記 on 雷姆記憶大全</description>
+      <generator>Quartz -- quartz.jzhao.xyz</generator>
+      <item>
+    <title>區域網跨裝置算力共享</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%A8%E8%A3%9D%E7%BD%AE%E7%AE%97%E5%8A%9B%E5%85%B1%E4%BA%AB</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%8D%80%E5%9F%9F%E7%B6%B2%E8%B7%A8%E8%A3%9D%E7%BD%AE%E7%AE%97%E5%8A%9B%E5%85%B1%E4%BA%AB</guid>
+    <description><![CDATA[ 區域網跨裝置算力共享 利用同一網域下的多台裝置共享 AI 計算資源的系統。 執行架構 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ 主節點 │────▶│ 算力節點 │────▶│ 算力節點 │ │ GL504GS │ │ 其他裝置 │ │ 其他裝置 │ │ (本地) │◀────│ (區域網) │◀────│ (區域網) │ └─────────────┘ └─────────────┘ └─────────────┘ 運行邏輯 連線流程 節點配對：透過 OpenClaw 的 nodes 工具配對區域網內的裝置 身份驗證：節點之間使用 S... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:57:49 GMT</pubDate>
+  </item><item>
+    <title>掛接網站技能</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E6%8E%9B%E6%8E%A5%E7%B6%B2%E7%AB%99%E6%8A%80%E8%83%BD</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E6%8E%9B%E6%8E%A5%E7%B6%B2%E7%AB%99%E6%8A%80%E8%83%BD</guid>
+    <description><![CDATA[ 掛接網站技能 將外部網站內容自動抓取並整合到知識庫的技能系統。 執行架構 Telegram 傳送連結 ↓ Jina Reader / Playwright 抓取 ↓ AI 分析內容 ↓ 分類整理存檔 ↓ 發布到 GitHub Pages 運行邏輯 技能選擇策略 技能抓取方式適用場景jina-reader雲端轉換為乾淨文字靜態頁面、部落格、新聞playwright-scraper-skill瀏覽器動態渲染JS 繁重的網站、需要登入web-pilotAI 搜尋與總結研究、情报收集 處理流程 接收連結：從 Telegram 收到 URL 智慧選擇：AI 判斷最適合的抓取方式 內容抓取：使用對應技能抓... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:57:27 GMT</pubDate>
+  </item><item>
+    <title>記憶揉捏系統</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E8%A8%98%E6%86%B6%E6%8F%89%E6%8D%8F%E7%B3%BB%E7%B5%B1</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E8%A8%98%E6%86%B6%E6%8F%89%E6%8D%8F%E7%B3%BB%E7%B5%B1</guid>
+    <description><![CDATA[ 記憶揉捏系統 由黑澤大人親自開發的 AI 記憶管理系統，自動將每日對話精華整合進長期記憶。 執行架構 今日流水帳（今日.md） ↓ 03:50 自動執行 提取重要事件與關鍵參數 ↓ 分類：決策 / 技術 / 偏好 / 學習 ↓ 整合到 MEMORY.md（長期記憶） ↓ 冷藏區（7天未提及的記憶） 運行邏輯 觸發條件 條件說明關鍵字黑澤大人說「記憶揉捏」對話輪數單次對話超過 40 輪任務切換明顯任務主題變更定時執行每日 03:50 自動執行 處理流程 讀取：讀取近期 3 天記憶檔案 提煉：提取重要事件與關鍵參數 分類：決策、技術、偏好、學習、反思 整合：增量寫入 MEMORY.md 冷藏：7 ... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:57:08 GMT</pubDate>
+  </item><item>
+    <title>多代理索引式 CronJob 系統</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%A4%9A%E4%BB%A3%E7%90%86%E7%B4%A2%E5%BC%95%E5%BC%8F-CronJob-%E7%B3%BB%E7%B5%B1</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/%E7%8D%A8%E5%AE%B6%E9%96%8B%E7%99%BC%E5%B0%88%E5%8D%80/%E5%A4%9A%E4%BB%A3%E7%90%86%E7%B4%A2%E5%BC%95%E5%BC%8F-CronJob-%E7%B3%BB%E7%B5%B1</guid>
+    <description><![CDATA[ 多代理索引式 CronJob 系統 由黑澤大人設計的分散式任務排程架構，讓每個 AI 代理擁有獨立的工作排程。 執行架構 所有定時任務均透過 OpenClaw 的 Cron 系統驅動，執行方式為： cron 觸發 ↓ Agent 讀取 memory/tasks/{任務名稱}/CURRENT.md ↓ CURRENT.md 指向當前版本（如 v2.md） ↓ 按照版本文件執行任務 ↓ （可選）發送 Telegram 通知 版本控制系統 每個任務遵循版本控制 SOP（skills/cron-job-manager/SKILL.md）： memory/tasks/{任務名稱}/ ├── CURREN... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:56:53 GMT</pubDate>
+  </item><item>
+    <title>2026-02-21</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-21</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-21</guid>
+    <description><![CDATA[ 2026-02-21 持續性記憶 學習 QMD 相關知識，準備升級 OpenClaw 記憶系統。 嘗試修復 QMD 索引錯誤，但尚未成功。 刪除廢棄 agents 的檔案。 發現並嘗試修正 OpenClaw 的設定檔。 . ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:51:54 GMT</pubDate>
+  </item><item>
+    <title>2026-02-20</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-20</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-20</guid>
+    <description><![CDATA[ 記憶揉捏與權限分配執行紀錄 (2026-02-20) 1. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:51:54 GMT</pubDate>
+  </item><item>
+    <title>2026-02-16</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-16</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-16</guid>
+    <description><![CDATA[ Memory - 2026-02-16 --- 記憶壓縮線 --- 長期記憶已整理至 MEMORY.md. ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:51:54 GMT</pubDate>
+  </item><item>
+    <title>2026-02-15</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-15</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-15</guid>
+    <description><![CDATA[ 2026-02-15 - Session Log Summary 黑騎士大人詢問雷姆可用的 API 模型 確認目前使用的模型：Kimi K2.5 (Moonshot) 和 Gemini 系列 設定 Gemini 主要用於圖片閱讀/分析 新增 OpenAI DALL-E 3 文生圖模型 Key Events 22:28 - 黑騎士大人詢問可用模型 22:30 - 提供 OpenAI API key: [OPENAI_KEY]... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:51:54 GMT</pubDate>
+  </item><item>
+    <title>2026-02-13</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-13</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-02-13</guid>
+    <description><![CDATA[ 2026-02-13 Session Log OpenClaw Update Research Found latest OpenClaw version: 2026.2.9 Key updates: iOS node app (alpha), BlueBubbles integration, Grok web_search provider, Agent management RPC for Web UI Source: GitHub releases Instagram + Chrome Extension Setup User enabled Chrome extension and l... ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:51:54 GMT</pubDate>
+  </item><item>
+    <title>2026-04-03</title>
+    <link>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-03</link>
+    <guid>https://kurosawahay.github.io/Openclaw_REM_Memory/memory/daily-logs/2026-04-03</guid>
+    <description><![CDATA[  2026-04-03T11:15:42.995Z [other:agent:main] agent=main source=auto-capture 幫我看一下這個專案 github.com/serenakeyitan/citation-check-skill 製作成網頁 . ]]></description>
+    <pubDate>Wed, 08 Apr 2026 10:51:47 GMT</pubDate>
+  </item>
+    </channel>
+  </rss>

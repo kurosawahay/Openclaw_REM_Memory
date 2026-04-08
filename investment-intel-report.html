@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 自動化投資情報站｜情報分析報告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.8;
+        }
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            height: 60px;
+        }
+        .nav-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            margin-left: 40px;
+        }
+        .nav-link {
+            padding: 8px 16px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            padding: 100px 40px 60px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: #666;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        .hero-tags {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tag {
+            background: #f5f5f5;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #333;
+        }
+        .page {
+            min-height: 100vh;
+            padding: 80px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .page:last-child {
+            border-bottom: none;
+        }
+        .page-num {
+            display: inline-block;
+            background: #1a1a1a;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .page h2 {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .page-source {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+        }
+        .page-source a {
+            color: #666;
+            text-decoration: underline;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #f8f8f8, #f0f0f0);
+            border-left: 4px solid #1a1a1a;
+            padding: 25px 30px;
+            margin: 30px 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .highlight p {
+            font-size: 1.15rem;
+            color: #333;
+            font-weight: 500;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .card {
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: #ccc;
+            transform: translateY(-3px);
+        }
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .quote {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .quote p {
+            font-style: italic;
+            color: #333;
+            font-size: 1.05rem;
+        }
+        .quote-author {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+            padding: 30px;
+            background: #fafafa;
+            border-radius: 16px;
+        }
+        .flow-step {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 18px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .flow-step small {
+            display: block;
+            font-weight: 400;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        .flow-arrow {
+            color: #ccc;
+            font-size: 1.5rem;
+        }
+        .stat-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .stat-box {
+            flex: 1;
+            min-width: 150px;
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        footer {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+            font-size: 0.85rem;
+            background: #fafafa;
+        }
+        @media (max-width: 768px) {
+            .nav {
+                padding: 0 20px;
+                overflow-x: auto;
+            }
+            .nav-links {
+                margin-left: 20px;
+            }
+            .page {
+                padding: 60px 20px;
+            }
+            .hero {
+                padding: 100px 20px 50px;
+            }
+            .flow {
+                flex-direction: column;
+            }
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-title">情報分析</div>
+        <div class="nav-links">
+            <a href="#p1" class="nav-link active">情報自動化</a>
+            <a href="#p2" class="nav-link">情緒投資</a>
+            <a href="#p3" class="nav-link">痛點商機</a>
+            <a href="#p4" class="nav-link">INBOX 系統</a>
+            <a href="#p5" class="nav-link">扣子平台</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>AI 自動化投資情報站</h1>
+        <p>六條對話 × 六個洞察 × 一頁掌握<br>找出人們習以為常但願意付費消除的日常小煩惱</p>
+        <div class="hero-tags">
+            <span class="tag">📊 情報蒐集</span>
+            <span class="tag">🗄️ 素材中心</span>
+            <span class="tag">🤖 AI 整理</span>
+            <span class="tag">📈 投資決策</span>
+        </div>
+    </section>
+
+    <section class="page" id="p1">
+        <span class="page-num">1</span>
+        <h2>AI 自動化情報蒐集</h2>
+        <p class="page-source">來源：<a href="https://x.com/mubeitech/status/2039859125962596560" target="_blank">@mubeitech</a></p>
+        
+        <p style="color: #444; font-size: 1.05rem; margin-bottom: 30px;">
+            自動化情報系統是投資人的情報作戰中心。透過設定關鍵字、KOL 追蹤、平台監控，AI 能代替人類完成 80% 的資訊過濾工作，讓投資者專注在決策本身。
+        </p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">📰</div>
+                <h3>DigiTimes</h3>
+                <p>產業情報、科技新聞、供應鏈動態。每日 08:00 自動蒐集關鍵產業資訊。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">𝕏</div>
+                <h3>X / Twitter</h3>
+                <p>追蹤 KOL、即時輿情分析、趨勢捕捉。關鍵字監控 + 情感分析。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <h3>Threads</h3>
+                <p>長文字洞察、創作者生態、內容策略分析。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💬</div>
+                <h3>專屬情報站</h3>
+                <p>針對投資情報的垂直領域內容聚合平台。</p>
+            </div>
+        </div>
+
+        <div class="flow">
+            <div class="flow-step">🔍 監控來源<small>設定關鍵字 + 帳號列表</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">📥 自動抓取<small>定時 / 即時雙模式</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">✂️ 內容過濾<small>AI 去重 + 質量評分</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">📤 推送到 INBOX<small>Telegram / 飛書通知</small></div>
+        </div>
+    </section>
+
+    <section class="page" id="p2">
+        <span class="page-num">2</span>
+        <h2>情緒管理與投資決策</h2>
+        <p class="page-source">來源：<a href="https://x.com/wherecall1/status/2040033871736271034" target="_blank">@wherecall1</a></p>
+
+        <div class="highlight">
+            <p>「行為金融學告訴我們，投資最大的敵人往往是人性。恐懼與貪婪，常讓我們在市場低點時恐慌殺出，在市場高點時盲目追高。」</p>
+        </div>
+
+        <p style="color: #444; font-size: 1.05rem; margin-bottom: 30px;">
+            AI 或許能扮演一個「冷靜的旁觀者」。AI 沒有情緒，它不會因為股市大跌而感到焦慮，也不會因為資產翻倍而過度興奮。
+        </p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">😰</div>
+                <h3>恐懼與貪婪</h3>
+                <p>市場低點時恐慌殺出，高點時盲目追高。這是人性，也是投資最大的敵人。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧊</div>
+                <h3>AI 冷靜旁觀者</h3>
+                <p>AI 不會因為股市大跌而焦慮，也不會因為資產翻倍而過度興奮。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📋</div>
+                <h3>AI 檢核清單</h3>
+                <p>在進行任何買賣決策前，試著詢問 AI：「類似升息循環中市場通常如何反應？」</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>本益比參照</h3>
+                <p>目前的本益比與過去 10 年平均值相比，處於什麼水位？AI 可以快速分析。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="page" id="p3">
+        <span class="page-num">3</span>
+        <h2>痛點即商機</h2>
+        <p class="page-source">來源：<a href="https://x.com/AleiahLock/status/2038295590354755683" target="_blank">@AleiahLock</a></p>
+
+        <div class="highlight">
+            <p>找出人們<strong>習以為常</strong>但<strong>願意付費消除</strong>的日常小煩惱</p>
+        </div>
+
+        <p style="color: #444; font-size: 1.05rem; margin-bottom: 30px;">
+            這是產品開發與服務設計的核心洞察。當你能找到人們每天都在經歷、卻一直忍受的小問題，你就找到了商機。
+        </p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">😩</div>
+                <h3>資訊過載焦慮</h3>
+                <p>每天面對海量資訊，不知道哪些值得關注。花費大量時間篩選，最終還是錯過重要情報。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📉</div>
+                <h3>投資決策困難</h3>
+                <p>想投資卻不知從何下手，害怕錯過時機又擔心踩雷。情緒波動導致頻繁交易虧損。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔄</div>
+                <h3>素材收集繁瑣</h3>
+                <p>看到有價值的文章、影片、想法，卻沒有一個統一的地方存放。散落在各個 App 裡再也找不到。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⏰</div>
+                <h3>時間碎片化</h3>
+                <p>靈感總是在不方便的時候出現。沒有快捷方式快速記錄，回頭就忘得一乾二淨。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="page" id="p4">
+        <span class="page-num">4</span>
+        <h2>INBOX 素材中心</h2>
+        <p class="page-source">來源：Threads 對話（<a href="https://www.threads.com/@iceck99/post/DWsnkFAAWlD" target="_blank">@iceck99</a> 與 權）</p>
+
+        <div class="quote">
+            <p>「這就是我希望能夠負責收集資訊、內容、圖片、影片連結，或各種我想記住的隨手素材與資訊的空間稱呼吧？(INBOX) 然後我只需要記住桌機或手機什麼快捷方式能最快讓我丟入此區域。客戶的工作無論任何東西，只要是我需要知道的，我都能夠丟進這個空間（區域）。然後我在整理，當然有 AI 整理更好。這好像是最適合所有人的記得方式。」</p>
+            <div class="quote-author">— 權</div>
+        </div>
+
+        <div class="flow">
+            <div class="flow-step">📱 一鍵丟入<small>手機快捷方式</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">🗄️ INBOX 統一收納<small>任何格式</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">🤖 AI 自動整理<small>分類標籤</small></div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">💼 客戶工作流<small>隨時調用</small></div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-num">80%</div>
+                <div class="stat-label">資訊可通過快捷方式快速錄入</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">∞</div>
+                <div class="stat-label">任何格式：文字/圖片/影片/連結</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">AI</div>
+                <div class="stat-label">自動分類與摘要整理</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page" id="p5">
+        <span class="page-num">5</span>
+        <h2>扣子 (Coze) AI 平台</h2>
+        <p class="page-source">來源：<a href="https://www.51aigc.cc/#/home?user_id=278307" target="_blank">51aigc.cc</a></p>
+
+        <p style="color: #444; font-size: 1.05rem; margin-bottom: 30px;">
+            扣子（Coze）是字節跳動旗下新一代一站式 AI Bot 開發平台。無論是否具備程式設計基礎，都能在平台上迅速構建基於 AI 模型的各類問答 Bot。
+        </p>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <h3>Agent Office</h3>
+                <p>深度職場理解，在處理複雜職場問題時能提供深度分析和洞察，不僅是標準答案。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💻</div>
+                <h3>Agent Coding</h3>
+                <p>一站式雲端開發平台，支援透過對話構建智慧體、工作流、網站等，提供一鍵部署功能。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎬</div>
+                <h3>視訊創作 Skill</h3>
+                <p>用自然語言描述需求，AI 自動生成視訊腳本、匹配素材、剪輯和配樂，音畫同步效果出色。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔗</div>
+                <h3>多平台發布</h3>
+                <p>一次建立，發布到豆包、微信、Discord、Telegram 等多個平台。</p>
+            </div>
+        </div>
+
+        <div class="highlight" style="margin-top: 30px;">
+            <p><strong>扣子空間 (Cozen Space)</strong><br>位元組跳動旗下 AI Agent 平台「扣子」的延續和增強，是一個通用 AI Agent 平台，強調與 AI 深度協同工作。</p>
+        </div>
+    </section>
+
+    <section class="page" id="p6">
+        <span class="page-num">6</span>
+        <h2>下一步行動</h2>
+        <p class="page-source">來源：Threads 對話（<a href="https://www.threads.com/@iceck99/post/DWsnkFAAWlD" target="_blank">@iceck99</a> 與 權）</p>
+
+        <div class="quote">
+            <p>「這他媽的不能讓別人都覺得我們兩個紙上談兵，尤其是陳孟宏那派的。這個東西我要給佑佑，讓他知道我們比陳孟宏來得有用。有些人情世故我沒和你講太多，你只要知道這世界都是競爭關係，還有利益關係，所以我很需要這東西。」</p>
+            <div class="quote-author">— 權</div>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>確立競爭優勢</h3>
+                <p>相較於紙上談兵，這是實際的執行方案。情報站就是我們的武器。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h3>展示給佑佑</h3>
+                <p>這個系統可以證明我們的價值，讓佑佑知道我們比陳孟宏來得有用。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>數據驅動決策</h3>
+                <p>AI 沒有情緒，可以建立基於 AI 的檢核清單，輔助投資決策。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🤝</div>
+                <h3>三方開會確認</h3>
+                <p>权說：「但我還是希望三方開會，你我涵勻。」需要進一步確認。</p>
+            </div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-num">3</div>
+                <div class="stat-label">核心模組</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">∞</div>
+                <div class="stat-label">擴展可能性</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">1</div>
+                <div class="stat-label">待三方開會</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>AI 自動化投資情報站 · 互動式情報分析報告<br>資料來源：X / Threads / 51aigc.cc｜Built by 雷姆</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                const navHeight = document.querySelector('.nav').offsetHeight;
+                window.scrollTo({
+                    top: target.offsetTop - navHeight,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(sections).indexOf(entry.target);
+                    navLinks.forEach((link, i) => {
+                        link.classList.toggle('active', i === index);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>

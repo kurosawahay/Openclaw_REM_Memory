@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device=device=1, initial-scale=1.0">
+    <title>OpenClaw 封殺事件 - Carousel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #f5f0e6;
+            --bg-pink: #f8e4e4;
+            --bg-mint: #e4f5f0;
+            --bg-lavender: #e8e4f5;
+            --accent-coral: #d4847c;
+            --accent-teal: #5a9a8a;
+            --accent-gold: #c9a86c;
+            --accent-rose: #b87878;
+            --text-dark: #2a2622;
+            --text-brown: #5c534a;
+            --border-brown: #d4c8b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            gap: 20px;
+        }
+        
+        .slide {
+            width: 600px;
+            height: 600px;
+            background: var(--bg-cream);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            border: 4px solid var(--text-dark);
+            box-shadow: 8px 8px 0 var(--accent-gold);
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--accent-coral);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .slide-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .slide-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+            letter-spacing: 2px;
+        }
+        
+        .slide-title span {
+            color: var(--accent-coral);
+        }
+        
+        .slide-content {
+            font-size: 18px;
+            text-align: center;
+            color: var(--text-brown);
+            line-height: 1.8;
+            max-width: 450px;
+        }
+        
+        .slide-link {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--accent-teal);
+            font-weight: 600;
+            word-break: break-all;
+            text-align: center;
+        }
+        
+        .decoration {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.5;
+        }
+        .decoration-1 { top: 20px; right: 20px; color: var(--accent-gold); }
+        .decoration-2 { bottom: 20px; left: 20px; color: var(--accent-gold); }
+        
+        .film-strip {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: var(--text-dark);
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10px;
+        }
+        .film-hole {
+            width: 8px;
+            height: 8px;
+            background: var(--bg-cream);
+            border-radius: 2px;
+        }
+        
+        @media (max-width: 620px) {
+            .slide { width: 100%; height: auto; min-height: 500px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1 -->
+    <div class="slide">
+        <span class="slide-number">1</span>
+        <span class="decoration decoration-1">✦</span>
+        <span class="decoration decoration-2">✦</span>
+        <div class="slide-icon">🔔</div>
+        <h2 class="slide-title"><span>Claude</span> 更新</h2>
+        <p class="slide-content">
+            Anthropic 宣布不再支援第三方串接平台的用量<br><br>
+            最近很紅的 <span style="color: var(--accent-coral);">OpenClaw（小龍蝦）</span> 直接被封殺
+        </p>
+        <div class="film-strip">
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+        </div>
+    </div>
+    
+    <!-- Page 2 -->
+    <div class="slide">
+        <span class="slide-number">2</span>
+        <span class="decoration decoration-1">✦</span>
+        <span class="decoration decoration-2">✦</span>
+        <div class="slide-icon">💡</div>
+        <h2 class="slide-title">我的<span>偷吃步</span></h2>
+        <p class="slide-content">
+            用 Claude Code 官方功能 <span style="color: var(--accent-teal);">Channels</span><br><br>
+            只要電腦開著、連著網<br>
+            就可以用手機 Telegram 直接遙控你的 AI<br><br>
+            可做到 80% OpenClaw 能做的事
+        </p>
+        <div class="film-strip">
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+        </div>
+    </div>
+    
+    <!-- Page 3 -->
+    <div class="slide">
+        <span class="slide-number">3</span>
+        <span class="decoration decoration-1">✦</span>
+        <span class="decoration decoration-2">✦</span>
+        <div class="slide-icon">🏠</div>
+        <h2 class="slide-title"><span>為什麼</span>沒事？</h2>
+        <p class="slide-content">
+            OpenClaw 直接執行 claude 命令<br>
+            → Claude Code CLI<br>
+            → Anthropic API<br><br>
+            <span style="color: var(--accent-teal);">這是官方路徑，不經過第三方</span><br><br>
+            用你的訂閱額度跑第三方才會被封
+        </p>
+        <div class="film-strip">
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+        </div>
+    </div>
+    
+    <!-- Page 4 -->
+    <div class="slide">
+        <span class="slide-number">4</span>
+        <span class="decoration decoration-1">✦</span>
+        <span class="decoration decoration-2">✦</span>
+        <div class="slide-icon">🎬</div>
+        <h2 class="slide-title"><span>網站</span>好看的原因</h2>
+        <p class="slide-content">
+            因為用了 <span style="color: var(--accent-coral);">Cinematic UI</span> 這個設計 Skill<br><br>
+            讓 AI 像電影導演一樣思考<br>
+            採用 <span style="color: var(--accent-gold);">Wes Anderson</span> 風格<br><br>
+            （《布達佩斯大飯店》導演）
+        </p>
+        <div class="film-strip">
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+        </div>
+    </div>
+    
+    <!-- Page 5 -->
+    <div class="slide">
+        <span class="slide-number">5</span>
+        <span class="decoration decoration-1">✦</span>
+        <span class="decoration decoration-2">✦</span>
+        <div class="slide-icon">📱</div>
+        <h2 class="slide-title"><span>詳細</span>教學</h2>
+        <p class="slide-content">
+            從建立 Telegram Bot 到連線測試<br><br>
+            照做 10 分鐘就能用<br><br>
+            小白也看得懂～
+        </p>
+        <p class="slide-link">https://trello.xacts.uk/openclaw-vs-claude-code/</p>
+        <div class="film-strip">
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+        </div>
+    </div>
+    
+    <!-- Page 6 -->
+    <div class="slide">
+        <span class="slide-number">6</span>
+        <span class="decoration decoration-1">✦</span>
+        <span class="decoration decoration-2">✦</span>
+        <div class="slide-icon">💬</div>
+        <h2 class="slide-title"><span>有問題</span>私訊我</h2>
+        <p class="slide-content">
+            OpenClaw / Claude Code 專家<br>
+            AI 自動化顧問<br><br>
+            🤖 OpenClaw expert<br>
+            📩 有問題歡迎私訊
+        </p>
+        <div style="margin-top: 20px; font-size: 48px;">✨</div>
+        <div class="film-strip">
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+            <span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span><span class="film-hole"></span>
+        </div>
+    </div>
+</body>
+</html>

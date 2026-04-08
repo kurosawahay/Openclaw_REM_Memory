@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 設計 Skills 指南 - Claude Code & Cinematic UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #0891b2;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg-secondary); color: var(--text-primary); line-height: 1.7; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        header { background: var(--bg-primary); padding: 20px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+        .logo-icon { font-size: 24px; }
+        .hero { padding: 48px 0 32px; text-align: center; background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); }
+        .hero h1 { font-size: 36px; margin-bottom: 12px; }
+        .hero h1 span { background: linear-gradient(135deg, #8b5cf6, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .tab-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 20px 0; background: var(--bg-primary); border-bottom: 1px solid var(--border-color); position: sticky; top: 60px; }
+        .tab-btn { padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+        .tab-btn.active { background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; border-color: transparent; }
+        .tab-content { display: none; padding: 32px 0; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; transition: all 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(139,92,246,0.1); border-color: var(--accent-purple); }
+        .card-icon { font-size: 32px; margin-bottom: 12px; }
+        .card h3 { font-size: 18px; margin-bottom: 8px; }
+        .card p { color: var(--text-secondary); font-size: 14px; }
+        .card-list { list-style: none; margin-top: 12px; }
+        .card-list li { padding: 6px 0; color: var(--text-secondary); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+        .card-list li::before { content: '✓'; color: var(--accent-green); font-weight: 600; }
+        .info-box { background: #f5f3ff; border-left: 4px solid var(--accent-purple); padding: 16px; border-radius: 0 8px 8px 0; margin: 16px 0; color: var(--text-secondary); }
+        .info-box.green { background: #f0fdf4; border-color: var(--accent-green); }
+        .info-box.blue { background: #f0f9ff; border-color: var(--accent-blue); }
+        .info-box.orange { background: #fffbeb; border-color: var(--accent-orange); }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+        .feature-item { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: center; }
+        .feature-item h4 { font-size: 14px; margin-bottom: 8px; color: var(--accent-purple); }
+        .feature-item p { font-size: 12px; color: var(--text-muted); }
+        code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: monospace; color: var(--accent-purple); }
+        .code-block { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; overflow-x: auto; margin: 12px 0; }
+        .phase-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; margin-right: 8px; }
+        .phase-1 { background: #ede9fe; color: #6d28d9; }
+        .phase-2 { background: #dbeafe; color: #1d4ed8; }
+        .phase-3 { background: #d1fae5; color: #059669; }
+        .phase-4 { background: #fef3c7; color: #d97706; }
+        footer { background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo"><span class="logo-icon">🎬</span> AI 設計 Skills 指南</div>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="container">
+            <h1><span>Cinematic UI</span> vs <span>Claude Code</span></h1>
+            <p>讓 AI 像電影導演一樣思考的設計框架</p>
+        </div>
+    </div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('intro')">🚀 簡介</button>
+        <button class="tab-btn" onclick="openTab('cinematic')">🎬 Cinematic UI</button>
+        <button class="tab-btn" onclick="openTab('workflow')">📋 工作流程</button>
+        <button class="tab-btn" onclick="openTab('install')">💾 安裝</button>
+        <button class="tab-btn" onclick="openTab('usage')">⚡ 使用</button>
+    </div>
+    <div class="container">
+        <!-- 簡介 -->
+        <div id="intro" class="tab-content active">
+            <h2 style="margin-bottom: 16px;">🚀 這是什麼？</h2>
+            <div class="info-box">
+                <strong>🎯 核心理念</strong><br>
+                大多數 AI 設計 Skills 是「選單式」的——給 AI 67 種風格、161 個配色、50 個模板，AI 只是「選購」。<br><br>
+                <strong>Cinematic UI 是「思考框架」——讓 AI 像電影導演一樣研究、分析、轉化為網頁設計。</strong>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3>傳統設計</h3>
+                    <p>AI 是選購員，從風格庫挑選</p>
+                    <ul class="card-list">
+                        <li>技術正確但可忘</li>
+                        <li>外觀標準化</li>
+                        <li>沒有獨特觀點</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎬</div>
+                    <h3>Cinematic UI</h3>
+                    <p>AI 是導演，研究電影創造</p>
+                    <ul class="card-list">
+                        <li>有觀點的網站</li>
+                        <li>電影感敘事</li>
+                        <li>獨一無二</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box green" style="margin-top: 24px;">
+                <strong>🎬 電影導演工作流</strong><br>
+                選擇導演 → 研究電影（燈光/構圖/節奏）→ 發展視覺論點 → 轉化為網頁敘事 → 實作
+            </div>
+        </div>
+        <!-- Cinematic UI -->
+        <div id="cinematic" class="tab-content">
+            <h2 style="margin-bottom: 16px;">🎬 Cinematic UI 詳細介紹</h2>
+            <div class="info-box">
+                <strong>讓 AI 像電影導演一樣思考的網站設計 Skill。研究真實電影語言、轉譯成頁面敘事與構圖。不是風格選單，是導演工作流。</strong>
+            </div>
+            <h3 style="margin: 20px 0 12px;">📚 內建資料庫</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4>200+ 導演</h4>
+                    <p>按類型分類，附經典電影與視覺風格描述</p>
+                </div>
+                <div class="feature-item">
+                    <h4>91+ 區塊模板</h4>
+                    <p>各種 Section 骨架選擇</p>
+                </div>
+                <div class="feature-item">
+                    <h4>55 種相機運鏡</h4>
+                    <p> entrance 和 reveal 行為 + CSS 實作</p>
+                </div>
+                <div class="feature-item">
+                    <h4>80 種構圖</h4>
+                    <p>布局組合和網格邏輯</p>
+                </div>
+                <div class="feature-item">
+                    <h4>50+ 背景技術</h4>
+                    <p>Hero 背景和氛圍層技術</p>
+                </div>
+                <div class="feature-item">
+                    <h4>1,486 網站 DNA</h4>
+                    <p>可按 mood/type/motion 搜尋</p>
+                </div>
+            </div>
+            <h3 style="margin: 20px 0 12px;">🛠️ 支援平台</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Claude Code</h3>
+                    <p>使用 CLAUDE.md</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💬</div>
+                    <h3>Codex / ChatGPT</h3>
+                    <p>使用 CODEX.md</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>Cursor</h3>
+                    <p>自動載入 .cursor/rules/</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌊</div>
+                    <h3>Windsurf</h3>
+                    <p>自動載入 .windsurf/rules/</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔶</div>
+                    <h3>Gemini</h3>
+                    <p>使用 GEMINI.md</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <h3>GitHub Copilot</h3>
+                    <p>自動載入 .github/</p>
+                </div>
+            </div>
+        </div>
+        <!-- 工作流程 -->
+        <div id="workflow" class="tab-content">
+            <h2 style="margin-bottom: 16px;">📋 4 階段工作流程</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="phase-badge phase-1">Phase 1</span>
+                    <h3>Decisions 決策</h3>
+                    <ul class="card-list">
+                        <li>完成起始問卷</li>
+                        <li>選擇導演 + 電影</li>
+                        <li>執行獨特性審計</li>
+                        <li>如有網路，研究該導演/電影</li>
+                    </ul>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">產出：decisions.md</p>
+                </div>
+                <div class="card">
+                    <span class="phase-badge phase-2">Phase 2</span>
+                    <h3>Storyboard 分鏡</h3>
+                    <ul class="card-list">
+                        <li>建立電影語法</li>
+                        <li>定義每頁場景論點</li>
+                        <li>鎖定 signature composition</li>
+                    </ul>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">產出：storyboard.md</p>
+                </div>
+                <div class="card">
+                    <span class="phase-badge phase-3">Phase 3</span>
+                    <h3>Compiled Spec 規格</h3>
+                    <ul class="card-list">
+                        <li>翻譯相機/互動/構圖</li>
+                        <li>紋理與 Typography</li>
+                        <li>建立共享系統</li>
+                    </ul>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">產出：compiled-spec.md</p>
+                </div>
+                <div class="card">
+                    <span class="phase-badge phase-4">Phase 4</span>
+                    <h3>Build & Verify 建構</h3>
+                    <ul class="card-list">
+                        <li>從規格實作</li>
+                        <li>加入 reduced-motion</li>
+                        <li>響應式驗證</li>
+                        <li>Anti-garbage 檢查</li>
+                    </ul>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">產出：HTML/CSS/JS</p>
+                </div>
+            </div>
+            <div class="info-box orange" style="margin-top: 24px;">
+                <strong>⚠️ 重要原則</strong><br>
+                Phase 2 內部順序（不可協商）：<br>
+                站點電影語法 → 每頁場景論點 → 每頁 signature composition → 共享系統
+            </div>
+        </div>
+        <!-- 安裝 -->
+        <div id="install" class="tab-content">
+            <h2 style="margin-bottom: 16px;">💾 安裝說明</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Claude Code 安裝</h3>
+                    <div class="code-block">git clone https://github.com/akseolabs-seo/cinematic-ui ~/.claude/skills/cinematic-ui</div>
+                    <p>路徑：~/.claude/skills/cinematic-ui/</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💬</div>
+                    <h3>Codex 安裝</h3>
+                    <div class="code-block">git clone https://github.com/akseolabs-seo/cinematic-ui $CODEX_HOME/skills/cinematic-ui</div>
+                    <p>路徑：$CODEX_HOME/skills/cinematic-ui/</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>Cursor 安裝</h3>
+                    <div class="code-block">git clone https://github.com/akseolabs-seo/cinematic-ui</div>
+                    <p>自動載入 .cursor/rules/</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌊</div>
+                    <h3>Windsurf 安裝</h3>
+                    <div class="code-block">git clone https://github.com/akseolabs-seo/cinematic-ui</div>
+                    <p>自動載入 .windsurf/rules/</p>
+                </div>
+            </div>
+            <div class="info-box green" style="margin-top: 24px;">
+                <strong>✅ 已安裝狀態</strong><br>
+                您的 Cinematic UI 已安裝在：~/.claude/skills/cinematic-ui/<br>
+                共 50+ 檔案，包含 references/ 資料庫
+            </div>
+            
+            <div class="info-box blue" style="margin-top: 16px;">
+                <strong>🎬 版本比較</strong>
+                <p>• <strong>v1（當前頁面）</strong>：標準資訊頁面</p>
+                <p>• <strong><a href="/ai-skills-v2/" style="color: #0891b2; text-decoration: underline;">v2（電影導演版）</a></strong>：使用 Cinematic UI 理念（Wes Anderson 風格）設計</p>
+            </div>
+        </div>
+        <!-- 使用 -->
+        <div id="usage" class="tab-content">
+            <h2 style="margin-bottom: 16px;">⚡ 如何使用</h2>
+            <div class="info-box blue">
+                <strong>🚀 啟動方式</strong><br>
+                在 Claude Code 中輸入：<code>/cinematic-ui</code>
+            </div>
+            <h3 style="margin: 20px 0 12px;">📝 使用流程</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">1️⃣</div>
+                    <h3>啟動 Skill</h3>
+                    <p>輸入 /cinematic-ui 開始</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">2️⃣</div>
+                    <h3>選擇電影</h3>
+                    <p>從 200+ 導演中選擇，或指定自己的導演+電影</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">3️⃣</div>
+                    <h3>研究電影</h3>
+                    <p>如有網路，AI 會研究該電影的燈光/構圖/節奏</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">4️⃣</div>
+                    <h3>執行工作流</h3>
+                    <p>依 Phase 1-4 完成 decisions.md → storyboard.md → compiled-spec.md → 網站</p>
+                </div>
+            </div>
+            <div class="info-box orange" style="margin-top: 24px;">
+                <strong>💡 設計原則</strong><br>
+                • 不使用預設的 Hero → Features → Stats → CTA 流程<br>
+                • 每頁必須有一個「Signature Composition」<br>
+                • 先追求單頁完美，再建共享系統<br>
+                • 每次新專案執行 Demo Uniqueness Protocol
+            </div>
+            <div class="info-box" style="margin-top: 16px;">
+                <strong>⚠️ 注意</strong><br>
+                這是 Claude Code 的技能，不適用於 OpenClaw。
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>🎬 Cinematic UI 技能指南</p>
+            <p style="margin-top: 8px; font-size: 12px;">由 OpenClaw 自動生成 | 2026-04-04</p>
+        </div>
+    </footer>
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

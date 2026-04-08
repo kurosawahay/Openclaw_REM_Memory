@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>青焰映畫工作室</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b6b;
+        }
+        .board-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .board-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .board-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #fafafa;
+            cursor: pointer;
+            user-select: none;
+        }
+        .board-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .board-toggle {
+            font-size: 0.8rem;
+            color: #999;
+            transition: transform 0.2s;
+        }
+        .board-item.open .board-toggle {
+            transform: rotate(180deg);
+        }
+        .board-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            background: #fff;
+        }
+        .board-item.open .board-content {
+            display: block;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 20px 0;
+        }
+        
+        .section-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 10px;
+        }
+        .board-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .board-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #0079bf;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .board-link:hover {
+            background: #006ba1;
+        }
+        .stats {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 青焰映畫工作室</h1>
+    
+    <div class="board-list">
+        <div class="board-item open">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">📋 青焰映畫工作室</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">主要業務看板：案主追蹤、案件管理、工作進度</p>
+                <a href="https://trello.com/b/owz63aBC/%E9%9D%92%E7%84%B0%E6%98%A0%E7%95%AB%E5%B7%A5%E4%BD%9C%E5%AE%A4" target="_blank">開啟 Trello</a>
+            </div>
+        </div>
+        
+        <div class="board-item">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">💡 創意想法</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">收集創意點子和新靈感</p>
+                <a href="https://trello.com/b/owz63aBC/%E5%88%9B%E6%84%8F%E6%83%B3%E6%B3%95" target="_blank">開啟 Trello</a>
+            </div>
+        </div>
+        
+        <div class="board-item">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">📊 案主進度追蹤</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">追蹤所有案主的案件進度</p>
+                <a href="https://trello.com/b/owz63aBC/%E6%A1%88%E4%B8%BB%E9%80%B2%E5%BA%A6%E8%BF%BD%E8%B9%9F" target="_blank">開啟 Trello</a>
+            </div>
+        </div>
+        
+        <div class="board-item">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">💰 帳款追蹤</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">管理帳款和付款進度</p>
+                <a href="https://trello.com/b/owz63aBC/%E5%B8%B3%E6%AC%BE%E8%BF%BD%E8%B9%9F" target="_blank">開啟 Trello</a>
+            </div>
+        </div>
+        
+        <div class="board-item">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">🎬 審片區</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">影片審核和確認</p>
+                <a href="https://trello.com/b/owz63aBC/%E5%AF%A9%E7%89%87%E5%8D%80" target="_blank">開啟 Trello</a>
+            </div>
+        </div>
+        
+        <div class="board-item">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">✂️ 影片需調整</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">需要修改的影片列表</p>
+                <a href="https://trello.com/b/owz63aBC/%E5%BD%B1%E7%89%87%E9%9C%80%E8%AA%BF%E6%95%B4" target="_blank">開啟 Trello</a>
+            </div>
+        </div>
+    </div>
+    
+    <p class="stats">最後更新：2026-03-28</p>
+    
+    <div style="height: 1px; background: #e0e0e0; margin: 20px 0;"></div>
+    
+    <p style="font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px;">其他工具</p>
+    
+    <div class="board-list">
+        <div class="board-item">
+            <div class="board-header" onclick="toggle(this.parentElement)">
+                <span class="board-title">📱 社群自動發文指南</span>
+                <span class="board-toggle">▼</span>
+            </div>
+            <div class="board-content">
+                <p class="board-desc">Facebook、Instagram、Threads 自動發文方法比較</p>
+                <a href="/social-auto/">開啟頁面</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggle(item) {
+            item.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

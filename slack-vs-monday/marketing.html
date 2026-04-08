@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack vs Monday - 社群行銷應用</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #0891b2;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg-secondary); color: var(--text-primary); line-height: 1.7; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        header { background: var(--bg-primary); padding: 20px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+        .hero { padding: 48px 0 32px; text-align: center; background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%); }
+        .hero h1 { font-size: 36px; margin-bottom: 12px; }
+        .hero h1 span { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .tab-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 20px 0; background: var(--bg-primary); border-bottom: 1px solid var(--border-color); position: sticky; top: 60px; }
+        .tab-btn { padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+        .tab-btn.active { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border-color: transparent; }
+        .tab-content { display: none; padding: 32px 0; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; transition: all 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        .card-icon { font-size: 32px; margin-bottom: 12px; }
+        .card h3 { font-size: 18px; margin-bottom: 8px; }
+        .card p { color: var(--text-secondary); font-size: 14px; }
+        .card-list { list-style: none; margin-top: 12px; }
+        .card-list li { padding: 6px 0; color: var(--text-secondary); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+        .card-list li::before { content: '✓'; color: var(--accent-green); font-weight: 600; }
+        .info-box { background: #f0f9ff; border-left: 4px solid var(--accent-blue); padding: 16px; border-radius: 0 8px 8px 0; margin: 16px 0; color: var(--text-secondary); }
+        .info-box.green { background: #f0fdf4; border-color: var(--accent-green); }
+        .info-box.orange { background: #fffbeb; border-color: var(--accent-orange); }
+        .info-box.pink { background: #fdf2f8; border-color: var(--accent-pink); }
+        .comparison-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        .comparison-table th, .comparison-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        .comparison-table th { background: #f8fafc; font-weight: 600; font-size: 13px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-blue { background: #dbeafe; color: #1d4ed8; }
+        .badge-green { background: #d1fae5; color: #059669; }
+        .badge-orange { background: #fef3c7; color: #d97706; }
+        .badge-pink { background: #fce7f3; color: #db2777; }
+        .step-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+        .step { background: var(--bg-primary); border: 2px solid var(--accent-blue); color: var(--accent-blue); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; }
+        .step-arrow { color: var(--text-muted); font-size: 20px; }
+        footer { background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo"><span class="logo-icon">📱</span> 社群行銷應用 - Slack vs Monday</div>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="container">
+            <h1>社群行銷 <span>工具比較</span></h1>
+            <p>從社群行銷團隊的真實工作情境出發，比較 Slack 與 Monday.com 的應用價值</p>
+        </div>
+    </div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('scenarios')">📌 應用場景</button>
+        <button class="tab-btn" onclick="openTab('slack-marketing')">💬 Slack 行銷</button>
+        <button class="tab-btn" onclick="openTab('monday-marketing')">📅 Monday 行銷</button>
+        <button class="tab-btn" onclick="openTab('comparison')">⚖️ 比較</button>
+    </div>
+    <div class="container">
+        <!-- 應用場景 Tab -->
+        <div id="scenarios" class="tab-content active">
+            <h2 style="margin-bottom: 16px;">📌 社群行銷常見挑戰</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📅</div>
+                    <h3>內容排程混亂</h3>
+                    <p>多平台發布時間不同，內容版本混亂難以追蹤</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h3>團隊協作困難</h3>
+                    <p>設計、文案、客服需要即時溝通但缺乏系統性追蹤</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔥</div>
+                    <h3>危機回應延遲</h3>
+                    <p>社群負面評論需要快速反應，但訊息容易被淹沒</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>數據整合困難</h3>
+                    <p>多平台數據無法統一檢視，難以評估成效</p>
+                </div>
+            </div>
+            <div class="info-box orange" style="margin-top: 24px;">
+                <strong>💡 解決關鍵：</strong>選擇適合的工具可以將這些挑戰轉化為可管理的流程。
+            </div>
+        </div>
+        <!-- Slack 行銷 Tab -->
+        <div id="slack-marketing" class="tab-content">
+            <h2 style="margin-bottom: 16px;">💬 Slack 在社群行銷的應用</h2>
+            <div class="info-box pink">
+                <strong>核心優勢：</strong>即時溝通、快速反應、整合所有行銷工具的通知
+            </div>
+            <h3 style="margin: 20px 0 12px;">🎯 實際應用範例</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>產品發布直播</h3>
+                    <ul class="card-list">
+                        <li>建立 #product-launch 頻道</li>
+                        <li>即時發布更新給所有團隊</li>
+                        <li>Huddles 快速討論決策</li>
+                        <li>螢幕共享進行創意審查</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔥</div>
+                    <h3>危機事件處理</h3>
+                    <ul class="card-list">
+                        <li>即時建立事件回應頻道</li>
+                        <li>所有相關團隊快速同步</li>
+                        <li>整合 Zendesk 通知</li>
+                        <li>記錄決策過程以供事後檢討</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h3>創意審查流程</h3>
+                    <ul class="card-list">
+                        <li>頻道分享設計稿與文案</li>
+                        <li>執行緒讨论修改意見</li>
+                        <li>使用 emoji 反應快速確認</li>
+                        <li>檔案集中管理不散落</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <h3>跨部門協調</h3>
+                    <ul class="card-list">
+                        <li>串接 Sales/Product 頻道</li>
+                        <li>自動化分享新功能資訊</li>
+                        <li>統一收所有工具通知</li>
+                        <li>搜尋歷史快速查詢</li>
+                    </ul>
+                </div>
+            </div>
+            <h3 style="margin: 24px 0 12px;">📋 常用 Slack 應用</h3>
+            <div class="comparison-table">
+                <table>
+                    <thead><tr><th>應用</th><th>功能</th></tr></thead>
+                    <tbody>
+                        <tr><td>Figma</td><td>設計稿即時通知與評論</td></tr>
+                        <tr><td>Google Workspace</td><td>文件、試算表協作</td></tr>
+                        <tr><td>Notion</td><td>知識庫與專案文件</td></tr>
+                        <tr><td>Zendesk</td><td>客服工單通知</td></tr>
+                        <tr><td>Hootsuite</td><td>排程發布提醒</td></tr>
+                        <tr><td> Sprout Social</td><td>社群數據報告</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Monday 行銷 Tab -->
+        <div id="monday-marketing" class="tab-content">
+            <h2 style="margin-bottom: 16px;">📅 Monday.com 在社群行銷的應用</h2>
+            <div class="info-box green">
+                <strong>核心優勢：</strong>結構化任務管理、視覺化進度追蹤、自動化工作流程
+            </div>
+            <h3 style="margin: 20px 0 12px;">🎯 實際應用範例</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📆</div>
+                    <h3>內容日曆管理</h3>
+                    <ul class="card-list">
+                        <li>建立每月內容行事曆</li>
+                        <li>追蹤各平台發布狀態</li>
+                        <li>顏色標籤區分內容類型</li>
+                        <li>截止日提醒與自動通知</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>貼文審核流程</h3>
+                    <ul class="card-list">
+                        <li>建立審核狀態欄位</li>
+                        <li>自動化指派給審核者</li>
+                        <li>狀態變更觸發通知</li>
+                        <li>所有版本保留可查詢</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>行銷活動追蹤</h3>
+                    <ul class="card-list">
+                        <li>Kanban 看板檢視進度</li>
+                        <li>Gantt 圖表規劃時程</li>
+                        <li>儀表板整合所有數據</li>
+                        <li>自動化報告寄送</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h3>網紅合作管理</h3>
+                    <ul class="card-list">
+                        <li>追蹤網紅名單與聯繫</li>
+                        <li>合作時程與交付物</li>
+                        <li>付款進度追蹤</li>
+                        <li>成效資料統一記錄</li>
+                    </ul>
+                </div>
+            </div>
+            <h3 style="margin: 24px 0 12px;">🔄 行銷工作流範本</h3>
+            <div class="step-flow">
+                <span class="step">靈感收集</span>
+                <span class="step-arrow">→</span>
+                <span class="step">內容規劃</span>
+                <span class="step-arrow">→</span>
+                <span class="step">創作製作</span>
+                <span class="step-arrow">→</span>
+                <span class="step">審核批准</span>
+                <span class="step-arrow">→</span>
+                <span class="step">排程發布</span>
+                <span class="step-arrow">→</span>
+                <span class="step">成效分析</span>
+            </div>
+            <div class="info-box">
+                <strong>💡 Monday.com 可以將整個流程自動化：</strong>狀態變更自動觸發下一步通知，截至日前自動提醒負責人。
+            </div>
+        </div>
+        <!-- 比較 Tab -->
+        <div id="comparison" class="tab-content">
+            <h2 style="margin-bottom: 16px;">⚖️ 社群行銷應用比較</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr><th>情境</th><th>Slack</th><th>Monday.com</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>及時危機處理</strong></td>
+                            <td><span class="badge badge-green">✅ 最適合</span> 即時訊息與討論</td>
+                            <td><span class="badge badge-orange">⚠️ 一般</span> 需要額外通知設定</td>
+                        </tr>
+                        <tr>
+                            <td><strong>內容排程管理</strong></td>
+                            <td><span class="badge badge-orange">⚠️ 需要整合</span> 需靠其他工具</td>
+                            <td><span class="badge badge-green">✅ 最適合</span> 行事曆與看板視圖</td>
+                        </tr>
+                        <tr>
+                            <td><strong>創意審查協作</strong></td>
+                            <td><span class="badge badge-green">✅ 最適合</span> 執行緒討論與檔案</td>
+                            <td><span class="badge badge-blue">➖ 普通</span> 可討論但較不直覺</td>
+                        </tr>
+                        <tr>
+                            <td><strong>跨部門協調</strong></td>
+                            <td><span class="badge badge-green">✅ 最適合</span> 統一收所有通知</td>
+                            <td><span class="badge badge-blue">➖ 普通</span> 需要手動同步</td>
+                        </tr>
+                        <tr>
+                            <td><strong>成效數據追蹤</strong></td>
+                            <td><span class="badge badge-orange">⚠️ 需要整合</span> 需靠儀表板工具</td>
+                            <td><span class="badge badge-green">✅ 最適合</span> 內建儀表板與圖表</td>
+                        </tr>
+                        <tr>
+                            <td><strong>自動化工作流</strong></td>
+                            <td><span class="badge badge-blue">➖ 基礎</span> 基本訊息自動化</td>
+                            <td><span class="badge badge-green">✅ 最適合</span> 無需程式碼設定</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="info-box green" style="margin-top: 24px;">
+                <strong>🎯 最佳實踐：</strong>大多數社群行銷團隊建議兩者搭配使用——Monday.com 負責任務管理與進度追蹤，Slack 負責即時溝通與快速協調。兩者透過 Webhooks 或 Zapier 串接，實現資訊同步。
+            </div>
+            <h3 style="margin: 24px 0 12px;">🔌 推薦串接方式</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3>Monday → Slack</h3>
+                    <ul class="card-list">
+                        <li>任務狀態變更 → Slack 通知</li>
+                        <li>截止日提醒 → Slack 頻道</li>
+                        <li>審核完成 → 自動傳給負責人</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3>Slack → Monday</h3>
+                    <ul class="card-list">
+                        <li>特定關鍵字 → 自動建任務</li>
+                        <li>頻道訊息 → 寫入Monday備註</li>
+                        <li>新粉絲問題 → 建立工單</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>📱 社群行銷工具比較 - Slack vs Monday.com</p>
+            <p style="margin-top: 8px; font-size: 12px;">由 Claude Code 生成 ✨</p>
+        </div>
+    </footer>
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

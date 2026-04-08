@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw - AI Agent 系統</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #0891b2;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        
+        header {
+            background: var(--bg-primary);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; }
+        .logo-icon { font-size: 28px; }
+        
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+        }
+        
+        .hero h1 { font-size: 42px; margin-bottom: 16px; }
+        .hero h1 span { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 24px; }
+        
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 60px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+        .tab-btn.active { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border-color: transparent; }
+        
+        .tab-content { display: none; padding: 32px 0; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        
+        .card-icon { font-size: 32px; margin-bottom: 12px; }
+        .card h3 { font-size: 18px; margin-bottom: 8px; }
+        .card p { color: var(--text-secondary); font-size: 14px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        
+        .stat-card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 32px; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+        
+        .info-box { background: #f0f9ff; border-left: 4px solid var(--accent-blue); padding: 16px; border-radius: 0 8px 8px 0; margin: 16px 0; color: var(--text-secondary); }
+        
+        .table-container { background: var(--bg-primary); border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background: #f8fafc; font-weight: 600; font-size: 13px; }
+        
+        footer { background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo"><span class="logo-icon">🦞</span> OpenClaw AI Agent</div>
+        </div>
+    </header>
+    
+    <div class="hero">
+        <div class="container">
+            <h1>歡迎使用 <span>OpenClaw</span></h1>
+            <p>開源的 AI Agent 系統，讓您透過訊息平台遠端控制電腦與自動化工作流程</p>
+        </div>
+    </div>
+    
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('intro')">🏠 介紹</button>
+        <button class="tab-btn" onclick="openTab('features')">⚡ 功能</button>
+        <button class="tab-btn" onclick="openTab('stats')">📊 優勢</button>
+        <button class="tab-btn" onclick="openTab('contact')">📞 聯繫</button>
+    </div>
+    
+    <div class="container">
+        <div id="intro" class="tab-content active">
+            <h2 style="margin-bottom: 16px;">🤖 關於 OpenClaw</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                OpenClaw 是一個強大的開源 AI Agent 系統，您可以透過 Telegram、Line、Discord 等訊息平台與 AI 代理互動，讓它幫您執行各種任務。
+            </p>
+            <div class="info-box">
+                <strong>🎯 核心特色</strong><br>
+                多平台整合、自動化工作流、記憶系統、スキル支援
+            </div>
+        </div>
+        
+        <div id="features" class="tab-content">
+            <h2 style="margin-bottom: 16px;">⚡ 強大功能</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">💬</div>
+                    <h3>多平台支援</h3>
+                    <p>Telegram、Line、Discord、WhatsApp 整合</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <h3>AI 代理</h3>
+                    <p>多個專業代理：雷姆、萬、蒼影等</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💾</div>
+                    <h3>記憶系統</h3>
+                    <p>長期記憶、對話記錄、知識庫</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔌</div>
+                    <h3>技能系統</h3>
+                    <p>支援 MCP、技能模組擴展</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>網站架設</h3>
+                    <p>快速部署靜態網站</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3>自動化</h3>
+                    <p>n8n 整合、工作流自動化</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="stats" class="tab-content">
+            <h2 style="margin-bottom: 16px;">📊 數據與優勢</h2>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-value">#1</div><div class="stat-label">GitHub AI 趨勢</div></div>
+                <div class="stat-card"><div class="stat-value">6+</div><div class="stat-label">訊息平台</div></div>
+                <div class="stat-card"><div class="stat-value">10+</div><div class="stat-label">專家代理</div></div>
+                <div class="stat-card"><div class="stat-value">MIT</div><div class="stat-label">開源授權</div></div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <tr><th>功能</th><th>OpenClaw</th><th>其他方案</th></tr>
+                    <tr><td>多平台整合</td><td>✅ 完整支援</td><td>⚠️ 有限</td></tr>
+                    <tr><td>記憶系統</td><td>✅ 長期記憶</td><td>❌ 基本</td></tr>
+                    <tr><td>自訂技能</td><td>✅ 彈性擴展</td><td>⚠️ 受限</td></tr>
+                    <tr><td>費用</td><td>✅ 開源免費</td><td>💰 付費訂閱</td></tr>
+                </table>
+            </div>
+        </div>
+        
+        <div id="contact" class="tab-content">
+            <h2 style="margin-bottom: 16px;">📞 聯繫我們</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>官方網站</h3>
+                    <p>openclaw.ai</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💬</div>
+                    <h3>Discord</h3>
+                    <p>加入社群討論</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h3>Telegram</h3>
+                    <p>@openclaw</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🐙</div>
+                    <h3>GitHub</h3>
+                    <p>openclaw/openclaw</p>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 24px;">
+                <strong>🚀 開始使用</strong><br>
+                現在就透過 Telegram 體驗 OpenClaw 的強大功能吧！
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>🦞 OpenClaw - 開源的 AI Agent 系統</p>
+            <p style="margin-top: 8px; font-size: 12px;">由 Claude Code 生成 ✨</p>
+        </div>
+    </footer>
+    
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation Check Skill - 引文驗證技能</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #0891b2;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg-secondary); color: var(--text-primary); line-height: 1.7; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        header { background: var(--bg-primary); padding: 20px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+        .hero { padding: 48px 0 32px; text-align: center; background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%); }
+        .hero h1 { font-size: 36px; margin-bottom: 12px; }
+        .hero h1 span { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .tab-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 20px 0; background: var(--bg-primary); border-bottom: 1px solid var(--border-color); position: sticky; top: 60px; }
+        .tab-btn { padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+        .tab-btn.active { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border-color: transparent; }
+        .tab-content { display: none; padding: 32px 0; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; transition: all 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        .card-icon { font-size: 32px; margin-bottom: 12px; }
+        .card h3 { font-size: 18px; margin-bottom: 8px; }
+        .card p { color: var(--text-secondary); font-size: 14px; }
+        .card-list { list-style: none; margin-top: 12px; }
+        .card-list li { padding: 6px 0; color: var(--text-secondary); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+        .card-list li::before { content: '✓'; color: var(--accent-green); font-weight: 600; }
+        .info-box { background: #f0f9ff; border-left: 4px solid var(--accent-blue); padding: 16px; border-radius: 0 8px 8px 0; margin: 16px 0; color: var(--text-secondary); }
+        .info-box.green { background: #f0fdf4; border-color: var(--accent-green); }
+        .info-box.orange { background: #fffbeb; border-color: var(--accent-orange); }
+        .info-box.red { background: #fef2f2; border-color: var(--accent-red); }
+        .status-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        .status-table th, .status-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        .status-table th { background: #f8fafc; font-weight: 600; font-size: 13px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-green { background: #d1fae5; color: #059669; }
+        .badge-orange { background: #fef3c7; color: #d97706; }
+        .badge-red { background: #fee2e2; color: #dc2626; }
+        .step-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 20px 0; justify-content: center; }
+        .step { background: var(--bg-primary); border: 2px solid var(--accent-blue); color: var(--accent-blue); padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px; }
+        .step-arrow { color: var(--text-muted); font-size: 24px; }
+        footer { background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">📚 Citation Check Skill</div>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="container">
+            <h1>Citation Check <span>引文驗證技能</span></h1>
+            <p>檢測、驗證並強制執行 LLM 輸出中的引用來源</p>
+        </div>
+    </div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('overview')">📋 總覽</button>
+        <button class="tab-btn" onclick="openTab('features')">⚡ 功能</button>
+        <button class="tab-btn" onclick="openTab('workflow')">🔄 運作流程</button>
+        <button class="tab-btn" onclick="openTab('modes')">🎯 驗證模式</button>
+        <button class="tab-btn" onclick="openTab('status')">📊 狀態說明</button>
+        <button class="tab-btn" onclick="openTab('install')">📥 安裝</button>
+    </div>
+    <div class="container">
+        <!-- 總覽 -->
+        <div id="overview" class="tab-content active">
+            <h2 style="margin-bottom: 16px;">📋 總覽</h2>
+            <div class="info-box green">
+                <strong>核心理念：</strong>大多數工具在生成後添加引用。此工具將引用設為生成約束——如果無法引用，就不應該產生聲明。
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>輕量級模組</h3>
+                    <p>專為研究、簡報和代理流程設計的精簡引用驗證層</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3>強制引用</h3>
+                    <p>驗證每個事實聲明是否有引用，並阻止缺失或虛構的引用</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>視覺支援</h3>
+                    <p>可讀取簡報、PDF、圖表和表格進行驗證</p>
+                </div>
+            </div>
+        </div>
+        <!-- 功能 -->
+        <div id="features" class="tab-content">
+            <h2 style="margin-bottom: 16px;">⚡ 核心功能</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">✅</div>
+                    <h3>事實聲明驗證</h3>
+                    <ul class="card-list">
+                        <li>檢查每個事實聲明是否有引用</li>
+                        <li>驗證引用來源確實存在</li>
+                        <li>確保引用與聲明一致</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔢</div>
+                    <h3>數值精確驗證</h3>
+                    <ul class="card-list">
+                        <li>96.555% ≠ 97%</li>
+                        <li>學術精確模式</li>
+                        <li>不接受四捨五入的數值</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>支援多種格式</h3>
+                    <ul class="card-list">
+                        <li>讀取簡報 (PPT)</li>
+                        <li>解析 PDF 文件</li>
+                        <li>分析圖表與表格</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <h3>雙重架構</h3>
+                    <ul class="card-list">
+                        <li>第一遍：擷取所有聲明</li>
+                        <li>第二遍：驗證每個聲明</li>
+                        <li>確保結果一致性</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 運作流程 -->
+        <div id="workflow" class="tab-content">
+            <h2 style="margin-bottom: 16px;">🔄 運作流程</h2>
+            <div class="step-flow">
+                <span class="step">LLM 輸出</span>
+                <span class="step-arrow">→</span>
+                <span class="step">擷取聲明</span>
+                <span class="step-arrow">→</span>
+                <span class="step">驗證引用</span>
+                <span class="step-arrow">→</span>
+                <span class="step">通過 → 發布</span>
+            </div>
+            <div class="info-box">
+                <strong>流程說明：</strong>系統採用兩次通過架構——先提取所有聲明，然後驗證。不再有不一致的結果。
+            </div>
+            <h3 style="margin: 20px 0 12px;">關鍵創新</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>聲明提取規則</h3>
+                    <p>明確的分類法——統計數據、比較、歸屬等</p>
+                </div>
+                <div class="card">
+                    <h3>狀態決策樹</h3>
+                    <p>確定性分類：已驗證 → 數值錯誤 → 幻覺</p>
+                </div>
+                <div class="card">
+                    <h3>強制搜索模板</h3>
+                    <p>運行所有查詢模式，而非臨時搜索</p>
+                </div>
+            </div>
+        </div>
+        <!-- 驗證模式 -->
+        <div id="modes" class="tab-content">
+            <h2 style="margin-bottom: 16px;">🎯 兩種驗證模式</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>網路搜索驗證</h3>
+                    <ul class="card-list">
+                        <li>搜尋網路權威來源</li>
+                        <li>驗證引用確實存在</li>
+                        <li>檢查來源是否陳述聲稱內容</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📄</div>
+                    <h3>文件僅驗證</h3>
+                    <ul class="card-list">
+                        <li>用戶提供來源文檔</li>
+                        <li>所有內容必須可追溯到這些文檔</li>
+                        <li>將任何外部知識標記為幻覺</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box orange" style="margin-top: 16px;">
+                <strong>觸發文件模式：</strong>「僅使用此文檔」/「僅驗證 PDF」
+            </div>
+        </div>
+        <!-- 狀態說明 -->
+        <div id="status" class="tab-content">
+            <h2 style="margin-bottom: 16px;">📊 驗證狀態說明</h2>
+            <div class="status-table">
+                <table>
+                    <thead>
+                        <tr><th>狀態</th><th>說明</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-green">✅ Verified</span></td>
+                            <td>與來源完全匹配</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-orange">⚠️ Numerical Error</span></td>
+                            <td>數值不匹配 (例：97% vs 96.555%)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-orange">⚠️ Unverified</span></td>
+                            <td>找不到權威來源</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-red">❌ Hallucination</span></td>
+                            <td>與來源矛盾或捏造</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-red">❌ Misleading</span></td>
+                            <td>斷章取義或缺少脈絡</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-red">❌ Citation Not Found</span></td>
+                            <td>引用的論文/報告不存在</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-red">❌ Not in Source</span></td>
+                            <td>聲明無法追溯到提供的文檔（文件模式）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="info-box red">
+                <strong>處理方式：</strong>如果檢查失敗，輸出應該被阻止或重新生成。
+            </div>
+        </div>
+        
+        <!-- 安裝說明 -->
+        <div id="install" class="tab-content">
+            <h2 style="margin-bottom: 16px;">📥 安裝與使用</h2>
+            <div class="info-box green">
+                <strong>⚠️ 重要提醒：</strong>請務必從 Releases 下載，不要使用 GitHub 的 "Code → Download ZIP" 按鈕！
+            </div>
+            
+            <h3 style="margin: 20px 0 12px;">🔧 安裝步驟</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">⬇️</div>
+                    <h3>下載技能</h3>
+                    <ul class="card-list">
+                        <li>前往 GitHub Releases</li>
+                        <li>下載 citation-check-skill.zip</li>
+                        <li>不要用 Code 的 Download ZIP</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⬆️</div>
+                    <h3>上傳到 Claude Code</h3>
+                    <ul class="card-list">
+                        <li>Profile → Settings</li>
+                        <li>Capabilities → Skills</li>
+                        <li>點擊 Add 新增技能</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>使用技能</h3>
+                    <ul class="card-list">
+                        <li>告訴 Claude：「use citation checker」</li>
+                        <li>或說：「use skills」</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 12px;">📋 支援平台</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Claude Code</h3>
+                    <p>Agent Skills 文件：<a href="https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/overview" target="_blank" style="color: var(--accent-blue);">官方文檔</a></p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <h3>ChatGPT (Codex)</h3>
+                    <p>Codex Skills：<a href="https://developers.openai.com/codex/skills" target="_blank" style="color: var(--accent-blue);">官方文檔</a></p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 12px;">🔗 相關連結</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>GitHub 倉庫</h3>
+                    <p><a href="https://github.com/serenakeyitan/citation-check-skill" target="_blank" style="color: var(--accent-blue);">github.com/serenakeyitan/citation-check-skill</a></p>
+                </div>
+                <div class="card">
+                    <h3>下載 Releases</h3>
+                    <p><a href="https://github.com/serenakeyitan/citation-check-skill/releases/latest" target="_blank" style="color: var(--accent-blue);">點擊下載技能</a></p>
+                </div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 24px;">
+                <strong>📝 授權：</strong>MIT License - 開源免費使用
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>📚 Citation Check Skill - 引文驗證技能</p>
+            <p style="margin-top: 8px; font-size: 12px;">由 Claude Code 生成 ✨</p>
+        </div>
+    </footer>
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

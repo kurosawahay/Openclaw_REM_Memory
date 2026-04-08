@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinematic UI v2 — 電影導演工作流</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #f5f0e6;
+            --bg-pink: #f8e4e4;
+            --bg-mint: #e4f5f0;
+            --bg-lavender: #e8e4f5;
+            --accent-coral: #d4847c;
+            --accent-teal: #5a9a8a;
+            --accent-gold: #c9a86c;
+            --accent-rose: #b87878;
+            --text-dark: #2a2622;
+            --text-brown: #5c534a;
+            --border-brown: #d4c8b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Header - Hotel grand entrance */
+        header { 
+            background: linear-gradient(135deg, var(--bg-pink) 0%, var(--bg-lavender) 100%);
+            padding: 40px 0;
+            border-bottom: 3px solid var(--accent-coral);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '✦';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            font-size: 24px;
+            color: var(--accent-gold);
+            opacity: 0.6;
+        }
+        header::after {
+            content: '✦';
+            position: absolute;
+            bottom: 20px;
+            right: 10%;
+            font-size: 24px;
+            color: var(--accent-gold);
+            opacity: 0.6;
+        }
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 12px; 
+            font-size: 28px; 
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .logo-icon { 
+            font-size: 36px; 
+            background: var(--accent-coral);
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: white;
+        }
+        
+        /* Hero - Grand Budapest inspired */
+        .hero { 
+            padding: 60px 0 40px; 
+            text-align: center;
+            background: var(--bg-cream);
+            position: relative;
+        }
+        .hero h1 { 
+            font-size: 42px; 
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+        .hero h1 span {
+            color: var(--accent-coral);
+        }
+        .hero p { 
+            font-size: 16px; 
+            color: var(--text-brown);
+            max-width: 600px; 
+            margin: 0 auto;
+            font-style: italic;
+        }
+        
+        /* Film strip decoration */
+        .film-strip {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px 0;
+            background: var(--text-dark);
+        }
+        .film-frame {
+            width: 60px;
+            height: 40px;
+            background: var(--bg-cream);
+            border: 2px solid var(--border-brown);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        /* Navigation - Tab buttons as title cards */
+        .tab-nav { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            padding: 24px 0;
+            background: var(--bg-mint);
+            border-bottom: 2px solid var(--accent-teal);
+        }
+        .tab-btn { 
+            padding: 12px 24px; 
+            background: var(--bg-cream);
+            border: 2px solid var(--border-brown);
+            border-radius: 4px;
+            font-size: 14px; 
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tab-btn:hover { 
+            background: var(--bg-lavender);
+            border-color: var(--accent-rose);
+            transform: translateY(-2px);
+        }
+        .tab-btn.active { 
+            background: var(--accent-coral); 
+            color: white;
+            border-color: var(--accent-rose);
+            box-shadow: 4px 4px 0 var(--text-dark);
+        }
+        
+        /* Content areas */
+        .tab-content { 
+            display: none; 
+            padding: 40px 0; 
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* Cards as frames */
+        .frames-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 20px; 
+        }
+        .frame-card { 
+            background: white;
+            border: 3px solid var(--text-dark);
+            border-radius: 4px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 6px 6px 0 var(--text-dark);
+        }
+        .frame-card:hover { 
+            transform: translateY(-4px) rotate(1deg);
+            box-shadow: 8px 8px 0 var(--text-dark);
+        }
+        .frame-icon { 
+            font-size: 36px; 
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+            background: var(--bg-pink);
+            padding: 12px;
+            border-radius: 50%;
+            width: 70px;
+            margin: 0 auto 16px;
+        }
+        .frame-card h3 { 
+            font-size: 18px; 
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 8px;
+        }
+        .frame-card p { 
+            color: var(--text-brown); 
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        /* Info boxes as scene cards */
+        .scene-card {
+            background: white;
+            border-left: 6px solid var(--accent-coral);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 4px 4px 0 var(--border-brown);
+        }
+        .scene-card.teal { border-color: var(--accent-teal); }
+        .scene-card.gold { border-color: var(--accent-gold); }
+        .scene-card.rose { border-color: var(--accent-rose); }
+        
+        .scene-card h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+        
+        /* Phase badges */
+        .phase { 
+            display: inline-block; 
+            padding: 6px 14px; 
+            border-radius: 4px;
+            font-size: 12px; 
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .phase-1 { background: var(--bg-pink); color: var(--accent-rose); }
+        .phase-2 { background: var(--bg-mint); color: var(--accent-teal); }
+        .phase-3 { background: var(--bg-lavender); color: #7c6ab8; }
+        .phase-4 { background: #fff8e4; color: var(--accent-gold); }
+        
+        /* Code blocks as documents */
+        .document {
+            background: var(--text-dark);
+            color: var(--bg-cream);
+            padding: 20px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 16px 0;
+            border: 3px solid var(--border-brown);
+            box-shadow: 4px 4px 0 var(--accent-gold);
+        }
+        
+        /* Feature list as menu */
+        .menu-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+        .menu-list li {
+            padding: 12px 16px;
+            background: white;
+            margin: 8px 0;
+            border: 2px solid var(--border-brown);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .menu-list li:hover {
+            background: var(--bg-lavender);
+            transform: translateX(8px);
+        }
+        .menu-icon {
+            font-size: 20px;
+        }
+        
+        /* Footer */
+        footer { 
+            background: var(--text-dark); 
+            color: var(--bg-cream);
+            padding: 32px 0; 
+            text-align: center;
+            margin-top: 40px;
+            border-top: 4px solid var(--accent-gold);
+        }
+        footer p { font-size: 14px; }
+        footer .credits { 
+            margin-top: 12px; 
+            font-size: 12px; 
+            color: var(--border-brown);
+            font-style: italic;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 28px; letter-spacing: 2px; }
+            .tab-btn { padding: 10px 16px; font-size: 12px; }
+            .frame-card { box-shadow: 4px 4px 0 var(--text-dark); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                Cinematic UI v2
+                <span class="logo-icon">✦</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="film-strip">
+        <div class="film-frame">🎬</div>
+        <div class="film-frame">🎬</div>
+        <div class="film-frame">🎬</div>
+        <div class="film-frame">🎬</div>
+        <div class="film-frame">🎬</div>
+    </div>
+    
+    <div class="hero">
+        <div class="container">
+            <h1><span>Cinematic</span> Design</h1>
+            <p>「電影不是 spec sheet，電影是研究輸入。」— 讓 AI 成為導演，網站是作品。</p>
+        </div>
+    </div>
+    
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('director')">🎬 導演選擇</button>
+        <button class="tab-btn" onclick="openTab('visual')">🎨 視覺語法</button>
+        <button class="tab-btn" onclick="openTab('phases')">📽️ 四階段</button>
+        <button class="tab-btn" onclick="openTab('demo')">🔄 獨特性</button>
+        <button class="tab-btn" onclick="openTab('install')">💾 安裝</button>
+    </div>
+    
+    <div class="container">
+        <!-- 導演選擇 -->
+        <div id="director" class="tab-content active">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🎬 選擇你的導演</h2>
+            
+            <div class="scene-card">
+                <h3>「電影是 brief，網站是 production。」</h3>
+                <p>Cinematic UI 不是給 AI 一個風格選單，而是讓 AI 選擇一位導演和一部電影，然後像導演一樣研究它。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📽️ 本網站採用的導演風格</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🏨</span>
+                    <h3>Wes Anderson</h3>
+                    <p>《布達佩斯大飯店》對稱構圖、粉色粉蠟配色、童話精密感</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎪</span>
+                    <h3>視覺元素</h3>
+                    <p>電影膠片邊框、等距幾何裝飾、對稱布局、金色裝飾線</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎨</span>
+                    <h3>配色邏輯</h3>
+                    <p>奶油白背景、薄荷綠點綴、珊瑚紅強調、金色邊框</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📷</span>
+                    <h3>構圖原則</h3>
+                    <p>中央對稱、邊框裝飾、層次深度、幾何切割</p>
+                </div>
+            </div>
+            
+            <div class="scene-card gold" style="margin-top: 24px;">
+                <h3>✨ 電影語言轉譯</h3>
+                <p>本網站的每個元素都呼應《布達佩斯大飯店》：電影膠片裝飾條如同電影片頭，卡片設計如同電影フレーム，對稱布局如同 Anderson 的簽名構圖。</p>
+            </div>
+        </div>
+        
+        <!-- 視覺語法 -->
+        <div id="visual" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🎨 電影語法翻譯</h2>
+            
+            <div class="scene-card teal">
+                <h3>什麼是「電影語法」？</h3>
+                <p>不是顏色代碼，而是電影如何用視覺說故事：燈光如何引導注意力、構圖如何建立關係、節奏如何控制情緒。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📋 元素對應表</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">💡</span>
+                    <h3>燈光</h3>
+                    <p>網站：漸層背景、光暈效果、陰影層次</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📐</span>
+                    <h3>構圖</h3>
+                    <p>網站：對稱布局、留白比例、視覺引導</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎞️</span>
+                    <h3>節奏</h3>
+                    <p>網站：滾動動畫、進場時序、停頓節點</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎭</span>
+                    <h3>質感</h3>
+                    <p>網站：紋理疊加、邊框裝飾、字體情緒</p>
+                </div>
+            </div>
+            
+            <div class="scene-card rose">
+                <h3>⚠️ 常見錯誤</h3>
+                <p>不要只copy顏色！要理解為什麼導演選擇這個配色、這個構圖。Gemma 4 網站是「選單式設計」，這個網站是「導演式設計」。</p>
+            </div>
+        </div>
+        
+        <!-- 四階段 -->
+        <div id="phases" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">📽️ 四階段工作流</h2>
+            
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="phase phase-1">Phase 1</span>
+                    <h3>Decisions 決策</h3>
+                    <ul class="menu-list">
+                        <li><span class="menu-icon">📋</span> 完成的起始問卷</li>
+                        <li><span class="menu-icon">🎬</span> 選擇導演 + 電影</li>
+                        <li><span class="menu-icon">🔍</span> 獨特性審計</li>
+                        <li><span class="menu-icon">🌐</span> 研究導演/電影</li>
+                    </ul>
+                    <p style="text-align: center; font-size: 12px; color: var(--text-brown);">產出：decisions.md</p>
+                </div>
+                
+                <div class="frame-card">
+                    <span class="phase phase-2">Phase 2</span>
+                    <h3>Storyboard 分鏡</h3>
+                    <ul class="menu-list">
+                        <li><span class="menu-icon">📖</span> 建立電影語法</li>
+                        <li><span class="menu-icon">🎭</span> 每頁場景論點</li>
+                        <li><span class="menu-icon">🖼️</span> Signature Composition</li>
+                    </ul>
+                    <p style="text-align: center; font-size: 12px; color: var(--text-brown);">產出：storyboard.md</p>
+                </div>
+                
+                <div class="frame-card">
+                    <span class="phase phase-3">Phase 3</span>
+                    <h3>Compiled Spec 規格</h3>
+                    <ul class="menu-list">
+                        <li><span class="menu-icon">📷</span> 相機翻譯</li>
+                        <li><span class="menu-icon">✋</span> 互動翻譯</li>
+                        <li><span class="menu-icon">🧱</span> 構圖/紋理/Typography</li>
+                    </ul>
+                    <p style="text-align: center; font-size: 12px; color: var(--text-brown);">產出：compiled-spec.md</p>
+                </div>
+                
+                <div class="frame-card">
+                    <span class="phase phase-4">Phase 4</span>
+                    <h3>Build & Verify 建構</h3>
+                    <ul class="menu-list">
+                        <li><span class="menu-icon">💻</span> 從規格實作</li>
+                        <li><span class="menu-icon">📱</span> reduced-motion + RWD</li>
+                        <li><span class="menu-icon">✅</span> Anti-garbage 驗證</li>
+                    </ul>
+                    <p style="text-align: center; font-size: 12px; color: var(--text-brown);">產出：HTML/CSS/JS</p>
+                </div>
+            </div>
+            
+            <div class="scene-card gold">
+                <h3>⚠️ Phase 2 內部順序（不可協商）</h3>
+                <p>站點電影語法 → 每頁場景論點 → 每頁 Signature Composition → 共享系統</p>
+            </div>
+        </div>
+        
+        <!-- 獨特性 -->
+        <div id="demo" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🔄 Demo Uniqueness Protocol</h2>
+            
+            <div class="scene-card">
+                <h3>防止重複的 Shell-ban 清單</h3>
+                <p>每次新專案開始前，AI 必須：</p>
+            </div>
+            
+            <ol style="margin: 16px 0; padding-left: 24px;">
+                <li style="margin: 12px 0;"><strong>歷史審計</strong> — 檢查過去所有輸出的視覺模式</li>
+                <li style="margin: 12px 0;"><strong>Shell-ban 清單</strong> — 明確列出「這次絕對不用」的設計</li>
+                <li style="margin: 12px 0;"><strong>新論點發展</strong> — 必須為這個專案發展新的視覺論點</li>
+            </ol>
+            
+            <div class="scene-card teal">
+                <h3>Anti-Grid Fallback</h3>
+                <p>網格允許作為「隱形對齊基礎設施」，但永遠不要作為「可見的默認構圖」。</p>
+            </div>
+            
+            <div class="scene-card rose">
+                <h3>Premium Calibration</h3>
+                <p>每個設計必須明確回答：「什麼是我們這次不做的事？」（what we will NOT do）</p>
+            </div>
+        </div>
+        
+        <!-- 安裝 -->
+        <div id="install" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">💾 安裝與使用</h2>
+            
+            <div class="scene-card">
+                <h3>Claude Code 安裝</h3>
+                <div class="document">
+git clone https://github.com/akseolabs-seo/cinematic-ui ~/.claude/skills/cinematic-ui
+                </div>
+                <p style="margin-top: 12px;">使用方式：在 Claude Code 中輸入 <code>/cinematic-ui</code></p>
+            </div>
+            
+            <div class="scene-card teal">
+                <h3>⚠️ 注意</h3>
+                <p>Cinematic UI 是 Claude Code 的技能。此網站（v2）是使用該 Skill 的方法論「手動執行」的結果。</p>
+            </div>
+            
+            <div class="scene-card gold">
+                <h3>📁 已安裝狀態</h3>
+                <p>您的 Cinematic UI 已安裝在：~/.claude/skills/cinematic-ui/</p>
+            </div>
+            
+            <div class="scene-card teal" style="margin-top: 16px;">
+                <h3>🔗 版本比較</h3>
+                <p><strong><a href="/ai-skills/" style="color: #5a9a8a; text-decoration: underline;">v1（標準版）</a></strong>：標準資訊頁面</p>
+                <p><strong>v2（當前頁面）</strong>：使用 Cinematic UI 理念（Wes Anderson 風格）設計</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>✦ Cinematic UI v2 — Wes Anderson Style ✦</p>
+            <p class="credits">Inspired by "The Grand Budapest Hotel" | Built with Cinematic Methodology</p>
+        </div>
+    </footer>
+    
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

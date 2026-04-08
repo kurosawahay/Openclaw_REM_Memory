@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr"><head><title>slack-integration</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;family=IBM Plex Mono:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="雷姆記憶大全"/><meta property="og:title" content="slack-integration"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="slack-integration"/><meta name="twitter:description" content="Slack Integration 技能 概述 Slack Integration 是 OpenClaw 系統中非常重要的一個通訊通道整合技能，它允許 AI 代理透過 Slack 與使用者進行互動。這個技能支援兩種連接模式：Socket Mode（預設，推薦使用）和 HTTP Events API。Socket Mode 是基於 WebSocket 的連接方式，不需要公開的 webhook 端點，非常適合在內網環境或沒有固定公網 IP 的情況下使用。而 HTTP Events API 則需要一個公開可訪問的 webhook 端點來接收 Slack 的事件訊息。 這個技能的核心價值在於讓黑澤大人..."/><meta property="og:description" content="Slack Integration 技能 概述 Slack Integration 是 OpenClaw 系統中非常重要的一個通訊通道整合技能，它允許 AI 代理透過 Slack 與使用者進行互動。這個技能支援兩種連接模式：Socket Mode（預設，推薦使用）和 HTTP Events API。Socket Mode 是基於 WebSocket 的連接方式，不需要公開的 webhook 端點，非常適合在內網環境或沒有固定公網 IP 的情況下使用。而 HTTP Events API 則需要一個公開可訪問的 webhook 端點來接收 Slack 的事件訊息。 這個技能的核心價值在於讓黑澤大人..."/><meta property="og:image:alt" content="Slack Integration 技能 概述 Slack Integration 是 OpenClaw 系統中非常重要的一個通訊通道整合技能，它允許 AI 代理透過 Slack 與使用者進行互動。這個技能支援兩種連接模式：Socket Mode（預設，推薦使用）和 HTTP Events API。Socket Mode 是基於 WebSocket 的連接方式，不需要公開的 webhook 端點，非常適合在內網環境或沒有固定公網 IP 的情況下使用。而 HTTP Events API 則需要一個公開可訪問的 webhook 端點來接收 Slack 的事件訊息。 這個技能的核心價值在於讓黑澤大人..."/><meta property="twitter:domain" content="kurosawahay.github.io/Openclaw_REM_Memory"/><meta property="og:url" content="https://kurosawahay.github.io/Openclaw_REM_Memory/黑澤大人的知識庫/獨家開發專區/slack-integration"/><meta property="twitter:url" content="https://kurosawahay.github.io/Openclaw_REM_Memory/黑澤大人的知識庫/獨家開發專區/slack-integration"/><link rel="icon" href="../../static/icon.png"/><meta name="description" content="Slack Integration 技能 概述 Slack Integration 是 OpenClaw 系統中非常重要的一個通訊通道整合技能，它允許 AI 代理透過 Slack 與使用者進行互動。這個技能支援兩種連接模式：Socket Mode（預設，推薦使用）和 HTTP Events API。Socket Mode 是基於 WebSocket 的連接方式，不需要公開的 webhook 端點，非常適合在內網環境或沒有固定公網 IP 的情況下使用。而 HTTP Events API 則需要一個公開可訪問的 webhook 端點來接收 Slack 的事件訊息。 這個技能的核心價值在於讓黑澤大人..."/><meta name="generator" content="Quartz"/><link href="../../index.css" rel="stylesheet" type="text/css" data-persist="true"/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL2hvbWUvaGF5Ly5vcGVuY2xhdy93b3Jrc3BhY2UvT2JzaWRpYW4vcXVhcnR6L2NvbXBvbmVudHMvc3R5bGVzIiwic291cmNlcyI6WyJtZXJtYWlkLmlubGluZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFHRjtFQUNFOzs7QUFLRjtFQUNFO0VBQ0E7OztBQUlKO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFOztBQUdGO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFJSjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7O0FBR0Y7RUFDRTs7QUFJRjtFQUNFO0VBQ0E7RUFDQSIsInNvdXJjZXNDb250ZW50IjpbIi5leHBhbmQtYnV0dG9uIHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbG9hdDogcmlnaHQ7XG4gIHBhZGRpbmc6IDAuNHJlbTtcbiAgbWFyZ2luOiAwLjNyZW07XG4gIHJpZ2h0OiAwOyAvLyBOT1RFOiByaWdodCB3aWxsIGJlIHNldCBpbiBtZXJtYWlkLmlubGluZS50c1xuICBjb2xvcjogdmFyKC0tZ3JheSk7XG4gIGJvcmRlci1jb2xvcjogdmFyKC0tZGFyayk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWxpZ2h0KTtcbiAgYm9yZGVyOiAxcHggc29saWQ7XG4gIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgb3BhY2l0eTogMDtcbiAgdHJhbnNpdGlvbjogMC4ycztcblxuICAmID4gc3ZnIHtcbiAgICBmaWxsOiB2YXIoLS1saWdodCk7XG4gICAgZmlsdGVyOiBjb250cmFzdCgwLjMpO1xuICB9XG5cbiAgJjpob3ZlciB7XG4gICAgY3Vyc29yOiBwb2ludGVyO1xuICAgIGJvcmRlci1jb2xvcjogdmFyKC0tc2Vjb25kYXJ5KTtcbiAgfVxuXG4gICY6Zm9jdXMge1xuICAgIG91dGxpbmU6IDA7XG4gIH1cbn1cblxucHJlIHtcbiAgJjpob3ZlciA+IC5leHBhbmQtYnV0dG9uIHtcbiAgICBvcGFjaXR5OiAxO1xuICAgIHRyYW5zaXRpb246IDAuMnM7XG4gIH1cbn1cblxuI21lcm1haWQtY29udGFpbmVyIHtcbiAgcG9zaXRpb246IGZpeGVkO1xuICBjb250YWluOiBsYXlvdXQ7XG4gIHotaW5kZXg6IDk5OTtcbiAgbGVmdDogMDtcbiAgdG9wOiAwO1xuICB3aWR0aDogMTAwdnc7XG4gIGhlaWdodDogMTAwdmg7XG4gIG92ZXJmbG93OiBoaWRkZW47XG4gIGRpc3BsYXk6IG5vbmU7XG4gIGJhY2tkcm9wLWZpbHRlcjogYmx1cig0cHgpO1xuICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDAsIDAsIDAuNSk7XG5cbiAgJi5hY3RpdmUge1xuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgfVxuXG4gICYgPiAjbWVybWFpZC1zcGFjZSB7XG4gICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1saWdodCk7XG4gICAgYm9yZGVyLXJhZGl1czogNXB4O1xuICAgIHBvc2l0aW9uOiBmaXhlZDtcbiAgICB0b3A6IDUwJTtcbiAgICBsZWZ0OiA1MCU7XG4gICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7XG4gICAgaGVpZ2h0OiA4MHZoO1xuICAgIHdpZHRoOiA4MHZ3O1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG5cbiAgICAmID4gLm1lcm1haWQtY29udGVudCB7XG4gICAgICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gICAgICB0cmFuc2Zvcm0tb3JpZ2luOiAwIDA7XG4gICAgICB0cmFuc2l0aW9uOiB0cmFuc2Zvcm0gMC4xcyBlYXNlO1xuICAgICAgb3ZlcmZsb3c6IHZpc2libGU7XG4gICAgICBtaW4taGVpZ2h0OiAyMDBweDtcbiAgICAgIG1pbi13aWR0aDogMjAwcHg7XG5cbiAgICAgIHByZSB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgYm9yZGVyOiBub25lO1xuICAgICAgfVxuXG4gICAgICBzdmcge1xuICAgICAgICBtYXgtd2lkdGg6IG5vbmU7XG4gICAgICAgIGhlaWdodDogYXV0bztcbiAgICAgIH1cbiAgICB9XG5cbiAgICAmID4gLm1lcm1haWQtY29udHJvbHMge1xuICAgICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgICAgYm90dG9tOiAyMHB4O1xuICAgICAgcmlnaHQ6IDIwcHg7XG4gICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgZ2FwOiA4cHg7XG4gICAgICBwYWRkaW5nOiA4cHg7XG4gICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodCk7XG4gICAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgYm9yZGVyLXJhZGl1czogNnB4O1xuICAgICAgYm94LXNoYWRvdzogMCAycHggNHB4IHJnYmEoMCwgMCwgMCwgMC4xKTtcbiAgICAgIHotaW5kZXg6IDI7XG5cbiAgICAgIC5tZXJtYWlkLWNvbnRyb2wtYnV0dG9uIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgICAgIHdpZHRoOiAzMnB4O1xuICAgICAgICBoZWlnaHQ6IDMycHg7XG4gICAgICAgIHBhZGRpbmc6IDA7XG4gICAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0KTtcbiAgICAgICAgY29sb3I6IHZhcigtLWRhcmspO1xuICAgICAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICAgICAgZm9udC1zaXplOiAxNnB4O1xuICAgICAgICBmb250LWZhbWlseTogdmFyKC0tYm9keUZvbnQpO1xuICAgICAgICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlO1xuXG4gICAgICAgICY6aG92ZXIge1xuICAgICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIH1cblxuICAgICAgICAmOmFjdGl2ZSB7XG4gICAgICAgICAgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKDFweCk7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBTdHlsZSB0aGUgcmVzZXQgYnV0dG9uIGRpZmZlcmVudGx5XG4gICAgICAgICY6bnRoLWNoaWxkKDIpIHtcbiAgICAgICAgICB3aWR0aDogYXV0bztcbiAgICAgICAgICBwYWRkaW5nOiAwIDEycHg7XG4gICAgICAgICAgZm9udC1zaXplOiAxNHB4O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9XG59XG4iXX0= */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" data-persist="true"/><script src="../../prescript.js" type="application/javascript" data-persist="true"></script><script type="application/javascript" data-persist="true">const fetchData = fetch("../../static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://kurosawahay.github.io/Openclaw_REM_Memory/index.xml"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image" content="https://kurosawahay.github.io/Openclaw_REM_Memory/黑澤大人的知識庫/獨家開發專區/slack-integration-og-image.webp"/><meta property="og:image:url" content="https://kurosawahay.github.io/Openclaw_REM_Memory/黑澤大人的知識庫/獨家開發專區/slack-integration-og-image.webp"/><meta name="twitter:image" content="https://kurosawahay.github.io/Openclaw_REM_Memory/黑澤大人的知識庫/獨家開發專區/slack-integration-og-image.webp"/><meta property="og:image:type" content="image/.webp"/></head><body data-slug="黑澤大人的知識庫/獨家開發專區/slack-integration"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h2 class="page-title"><a href="../..">雷姆記憶大全</a></h2><div class="spacer mobile-only"></div><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><div class="search"><button class="search-button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg><p>搜尋</p></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="搜尋些什麼" placeholder="搜尋些什麼"/><div class="search-layout" data-preview="true"></div></div></div></div></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="暗色模式"><title>暗色模式</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="亮色模式"><title>亮色模式</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="readermode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="readerIcon" fill="currentColor" stroke="currentColor" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round" width="64px" height="64px" viewBox="0 0 24 24" aria-label="閱讀模式"><title>閱讀模式</title><g transform="translate(-1.8, -1.8) scale(1.15, 1.2)"><path d="M8.9891247,2.5 C10.1384702,2.5 11.2209868,2.96705384 12.0049645,3.76669482 C12.7883914,2.96705384 13.8709081,2.5 15.0202536,2.5 L18.7549359,2.5 C19.1691495,2.5 19.5049359,2.83578644 19.5049359,3.25 L19.5046891,4.004 L21.2546891,4.00457396 C21.6343849,4.00457396 21.9481801,4.28672784 21.9978425,4.6528034 L22.0046891,4.75457396 L22.0046891,20.25 C22.0046891,20.6296958 21.7225353,20.943491 21.3564597,20.9931534 L21.2546891,21 L2.75468914,21 C2.37499337,21 2.06119817,20.7178461 2.01153575,20.3517706 L2.00468914,20.25 L2.00468914,4.75457396 C2.00468914,4.37487819 2.28684302,4.061083 2.65291858,4.01142057 L2.75468914,4.00457396 L4.50368914,4.004 L4.50444233,3.25 C4.50444233,2.87030423 4.78659621,2.55650904 5.15267177,2.50684662 L5.25444233,2.5 L8.9891247,2.5 Z M4.50368914,5.504 L3.50468914,5.504 L3.50468914,19.5 L10.9478955,19.4998273 C10.4513189,18.9207296 9.73864328,18.5588115 8.96709342,18.5065584 L8.77307039,18.5 L5.25444233,18.5 C4.87474657,18.5 4.56095137,18.2178461 4.51128895,17.8517706 L4.50444233,17.75 L4.50368914,5.504 Z M19.5049359,17.75 C19.5049359,18.1642136 19.1691495,18.5 18.7549359,18.5 L15.2363079,18.5 C14.3910149,18.5 13.5994408,18.8724714 13.0614828,19.4998273 L20.5046891,19.5 L20.5046891,5.504 L19.5046891,5.504 L19.5049359,17.75 Z M18.0059359,3.999 L15.0202536,4 L14.8259077,4.00692283 C13.9889509,4.06666544 13.2254227,4.50975805 12.7549359,5.212 L12.7549359,17.777 L12.7782651,17.7601316 C13.4923805,17.2719483 14.3447024,17 15.2363079,17 L18.0059359,16.999 L18.0056891,4.798 L18.0033792,4.75457396 L18.0056891,4.71 L18.0059359,3.999 Z M8.9891247,4 L6.00368914,3.999 L6.00599909,4.75457396 L6.00599909,4.75457396 L6.00368914,4.783 L6.00368914,16.999 L8.77307039,17 C9.57551536,17 10.3461406,17.2202781 11.0128313,17.6202194 L11.2536891,17.776 L11.2536891,5.211 C10.8200889,4.56369974 10.1361548,4.13636104 9.37521067,4.02745763 L9.18347055,4.00692283 L8.9891247,4 Z"></path></g></svg></button></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,b)=>{let folderOrder=[\&quot;\\u9ED1\\u6FA4\\u5927\\u4EBA\\u7684\\u77E5\\u8B58\\u5EAB\&quot;,\&quot;skills\&quot;,\&quot;claude-code\&quot;,\&quot;memory\&quot;,\&quot;\\u7368\\u5BB6\\u958B\\u767C\\u5C08\\u5340\&quot;],fileOrderMemory=[\&quot;\\u95DC\\u65BC\\u8A18\\u61B6\\u7CFB\\u7D71\&quot;,\&quot;\\u8A18\\u61B6\\u7D22\\u5F15\&quot;,\&quot;daily-logs\&quot;],fileOrderDev=[\&quot;\\u8A18\\u61B6\\u63C9\\u634F\\u7CFB\\u7D71\&quot;,\&quot;\\u591A\\u4EE3\\u7406\\u7D22\\u5F15\\u5F0F-CronJob-\\u7CFB\\u7D71\&quot;,\&quot;\\u5340\\u57DF\\u7DB2\\u8DE8\\u88DD\\u7F6E\\u7B97\\u529B\\u5171\\u4EAB\&quot;,\&quot;\\u639B\\u63A5\\u7DB2\\u7AD9\\u6280\\u80FD\&quot;];if(!a.isFolder&amp;&amp;!b.isFolder||a.isFolder&amp;&amp;b.isFolder){let aSlug=a.file?.slug??\&quot;\&quot;,bSlug=b.file?.slug??\&quot;\&quot;,aInClaudeCode=aSlug.includes(\&quot;claude-code\&quot;),bInClaudeCode=bSlug.includes(\&quot;claude-code\&quot;),aInMemory=aSlug.includes(\&quot;memory\&quot;),bInMemory=bSlug.includes(\&quot;memory\&quot;),aInDev=aSlug.includes(\&quot;\\u7368\\u5BB6\\u958B\\u767C\\u5C08\\u5340\&quot;),bInDev=bSlug.includes(\&quot;\\u7368\\u5BB6\\u958B\\u767C\\u5C08\\u5340\&quot;);if(aInClaudeCode&amp;&amp;bInClaudeCode){let aIdx2=[\&quot;Claude Code \\u5C08\\u6848\&quot;,\&quot;Slack \\u4ECB\\u7D39\\u9801\\u9762\&quot;,\&quot;\\u4E92\\u52D5\\u5F0F\\u60C5\\u5831\\u5831\\u544A\&quot;,\&quot;\\u6295\\u8CC7\\u60C5\\u5831\\u5831\\u544A\&quot;].indexOf(a.displayName),bIdx2=[\&quot;Claude Code \\u5C08\\u6848\&quot;,\&quot;Slack \\u4ECB\\u7D39\\u9801\\u9762\&quot;,\&quot;\\u4E92\\u52D5\\u5F0F\\u60C5\\u5831\\u5831\\u544A\&quot;,\&quot;\\u6295\\u8CC7\\u60C5\\u5831\\u5831\\u544A\&quot;].indexOf(b.displayName),aHasIdx2=aIdx2>=0,bHasIdx2=bIdx2>=0;if(aHasIdx2&amp;&amp;bHasIdx2)return aIdx2-bIdx2;if(aHasIdx2)return-1;if(bHasIdx2)return 1}if(aInMemory&amp;&amp;bInMemory){let aIdx2=fileOrderMemory.indexOf(a.displayName),bIdx2=fileOrderMemory.indexOf(b.displayName),aHasIdx2=aIdx2>=0,bHasIdx2=bIdx2>=0;if(aHasIdx2&amp;&amp;bHasIdx2)return aIdx2-bIdx2;if(aHasIdx2)return-1;if(bHasIdx2)return 1}if(aInDev&amp;&amp;bInDev){let aIdx2=fileOrderDev.indexOf(a.displayName),bIdx2=fileOrderDev.indexOf(b.displayName),aHasIdx2=aIdx2>=0,bHasIdx2=bIdx2>=0;if(aHasIdx2&amp;&amp;bHasIdx2)return aIdx2-bIdx2;if(aHasIdx2)return-1;if(bHasIdx2)return 1}let aIdx=folderOrder.indexOf(a.displayName),bIdx=folderOrder.indexOf(b.displayName),aHasIdx=aIdx>=0,bHasIdx=bIdx>=0;return aHasIdx&amp;&amp;bHasIdx?aIdx-bIdx:aHasIdx?-1:bHasIdx?1:a.displayName.localeCompare(b.displayName,\&quot;zh-TW\&quot;,{numeric:!0})}return a.isFolder&amp;&amp;!b.isFolder?-1:1}&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-48"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>探索</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-48" class="explorer-content" aria-expanded="false" role="group"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div></div><div class="center"><div class="page-header"><div class="popover-hint"><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="../../">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../黑澤大人的知識庫/">黑澤大人的知識庫</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../黑澤大人的知識庫/獨家開發專區/">獨家開發專區</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>slack integration</a></div></nav><h1 class="article-title">slack-integration</h1><p show-comma="true" class="content-meta"><time datetime="2026-04-08T08:48:19.443Z">2026年4月08日</time><span>閱讀時間約 15 分鐘</span></p></div></div><article class="popover-hint"><h1 id="slack-integration-技能">Slack Integration 技能<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#slack-integration-技能" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<h2 id="概述">概述<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#概述" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>Slack Integration 是 OpenClaw 系統中非常重要的一個通訊通道整合技能，它允許 AI 代理透過 Slack 與使用者進行互動。這個技能支援兩種連接模式：Socket Mode（預設，推薦使用）和 HTTP Events API。Socket Mode 是基於 WebSocket 的連接方式，不需要公開的 webhook 端點，非常適合在內網環境或沒有固定公網 IP 的情況下使用。而 HTTP Events API 則需要一個公開可訪問的 webhook 端點來接收 Slack 的事件訊息。</p>
+<p>這個技能的核心價值在於讓黑澤大人和其他團隊成員能夠透過 Slack 這個日常使用的通訊工具來與雷姆互動，無論是發送指令、查詢資訊還是進行複雜的任務管理。透過 Slack 的豐富功能，包括頻道訊息、私訊（DM）、Thread 討論、Reaction 反應等，雷姆能夠提供更加靈活和多元的服務。</p>
+<h2 id="功能描述">功能描述<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#功能描述" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="雙重連接模式">雙重連接模式<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#雙重連接模式" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Slack Integration 技能支援兩種不同的連接模式以適應不同的部署環境：</p>
+<p><strong>Socket Mode（預設，推薦）：</strong> 這是預設的連接方式，使用 WebSocket 與 Slack 建立持久連接。這種模式的優點是不需要公開的 webhook URL，所有的通訊都透過 WebSocket 進行，安全性和隱私性更高。設定相對簡單，只需要準備 App Token 和 Bot Token 即可。對於大多數場景，強烈建議使用這種模式。</p>
+<p><strong>HTTP Events API：</strong> 這種模式需要一個公開可訪問的 webhook 端點來接收 Slack 發送的事件通知。適合需要將 OpenClaw 部署在有固定公網 IP 的伺服器上的場景。設定相對複雜，需要配置 SSL 憑證和公開的 webhook URL。</p>
+<h3 id="完整的權限控制系統">完整的權限控制系統<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#完整的權限控制系統" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Slack Integration 提供了非常細緻的權限控制機制，確保只有授權的使用者才能與代理互動：</p>
+<p><strong>私訊政策（DM Policy）：</strong></p>
+<ul>
+<li><code>pairing</code>：這是預設選項。當未知使用者發送私訊時，會收到一次性的配對碼，系統管理員（黑澤大人）必須批准才能建立連線。這是最安全的選項，能夠有效防止未授權訪問。</li>
+<li><code>allowlist</code>：只有白名單中的使用者可以發送私訊。適合團隊成員相對固定的場景。</li>
+<li><code>open</code>：允許所有使用者發送私訊，但需要設置 <code>allowFrom: [&quot;*&quot;]</code>。風險較高，建議謹慎使用。</li>
+<li><code>disabled</code>：完全忽略所有私訊。適合只想透過頻道互動的場景。</li>
+</ul>
+<p><strong>頻道政策（Channel Policy）：</strong></p>
+<ul>
+<li><code>allowlist</code>：只有白名單中的頻道會被處理。這是預設選項，能夠精確控制哪些頻道可以與代理互動。</li>
+<li><code>open</code>：繞過白名單限制，但仍需透過 @mention 來觸發代理。</li>
+<li><code>disabled</code>：忽略所有頻道訊息。</li>
+</ul>
+<h3 id="每頻道獨立設定">每頻道獨立設定<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#每頻道獨立設定" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>除了全局設定之外，Slack Integration 還支援對每個 Slack 頻道進行獨立的設定。這意味著您可以為不同的頻道配置不同的行為模式：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="json" data-theme="github-light github-dark"><code data-language="json" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">{</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">  &quot;C0123456789&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: {</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;requireMention&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;allowFrom&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;U0123456789&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">],</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;skills&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;search&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">],</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;systemPrompt&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;Keep answers brief.&quot;</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></figure>
+<p>這種設定方式非常實用，例如：</p>
+<ul>
+<li>在一個技術討論頻道中，啟用搜尋技能，並設定簡短的回覆風格</li>
+<li>在一個管理頻道中，只允許特定使用者發送指令</li>
+<li>為不同的頻道預設不同的系統提示詞，影響代理的回覆風格</li>
+</ul>
+<h3 id="即時串流回覆">即時串流回覆<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#即時串流回覆" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Slack Integration 支援即時串流回覆功能，可以讓使用者在收到完整回覆之前就開始看到部分的回覆內容。這對於長回覆特別有用，能夠改善使用者體驗。串流模式分為幾種：</p>
+<ul>
+<li><code>off</code>：完全關閉串流，回覆會一次完整發送</li>
+<li><code>partial</code>（預設）：部分串流，會先發送開頭部分的內容</li>
+<li><code>block</code>：區塊串流，每次發送一個完整的區塊</li>
+<li><code>progress</code>：顯示進度指示器</li>
+</ul>
+<h3 id="thread-支援">Thread 支援<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#thread-支援" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Slack Integration 完全支援 Slack 的 Thread 功能，可以在一個訊息 thread 中進行多輪對話：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="json" data-theme="github-light github-dark"><code data-language="json" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">{</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">  &quot;replyToMode&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;off&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">  &quot;thread&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: {</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;historyScope&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;thread&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;initialHistoryLimit&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">20</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></figure>
+<p>這使得複雜的問題可以在 Thread 中逐步討論，而不會打擾頻道中的其他成員。</p>
+<h2 id="使用場景">使用場景<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#使用場景" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="團隊協作與知識管理">團隊協作與知識管理<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#團隊協作與知識管理" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>Slack Integration 最常見的使用場景是團隊協作。團隊成員可以在 Slack 頻道中 @mention 雷姆來搜尋知識庫、管理任務、或獲取資訊。例如，當團隊成員在討論一個技術問題時，可以直接詢問雷姆是否有相關的記錄或文檔，雷姆會根據上下文提供相關的記憶內容。</p>
+<h3 id="客服與支援">客服與支援<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#客服與支援" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>透過 Slack Integration，可以將雷姆設定為一個客服機器人，及時回覆頻道中客戶的問題。透過設定不同的技能和回覆風格，可以為不同的客戶提供定制化的服務。</p>
+<h3 id="工作流程自動化">工作流程自動化<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#工作流程自動化" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>結合 Slack 的 Slash Commands 和 OpenClaw 的技能系統，可以實現各種工作流程的自動化。例如，設定一個 <code>/report</code> 指令來自動生成每日的進度報告，或者設定一個 <code>/deploy</code> 指令來觸發部署流程。</p>
+<h3 id="私訊互動">私訊互動<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#私訊互動" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>除了頻道互動之外，Slack Integration 也支援私訊（DM）互動。透過 DM，使用者可以進行更私密的對話，例如：</p>
+<ul>
+<li>查詢個人相關的記憶或設定</li>
+<li>進行一對一的任務管理</li>
+<li>獲取個人化的資訊回覆</li>
+</ul>
+<h2 id="指令範例">指令範例<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#指令範例" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="基本互動">基本互動<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#基本互動" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<pre><code>@雷姆 幫我查詢今天的會議記錄
+</code></pre>
+<pre><code>@雷姆 总结一下这个项目的技术栈
+</code></pre>
+<h3 id="啟用特定技能">啟用特定技能<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#啟用特定技能" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<pre><code>@雷姆 [search] 查找关于 Docker 的文档
+</code></pre>
+<h3 id="私訊配對">私訊配對<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#私訊配對" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>當有新使用者發送私訊給雷姆時，會收到類似以下的配對碼訊息：</p>
+<pre><code>🔐 驗證請求
+請輸入配對碼以驗證您的身份。
+配對碼已發送給管理員審批。
+</code></pre>
+<h3 id="使用-thread">使用 Thread<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#使用-thread" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<pre><code>@雷姆 [thread] 幫我分析這段程式碼的邏輯
+</code></pre>
+<h2 id="設定方式">設定方式<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#設定方式" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="前提條件">前提條件<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#前提條件" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>在開始設定 Slack Integration 之前，您需要準備以下內容：</p>
+<ol>
+<li><strong>Slack App</strong>：需要在 Slack API Dashboard 創建一個新的 Slack App</li>
+<li><strong>App Token</strong> (<code>xapp-...</code>)：需要具有 <code>connections:write</code> 權限 scope</li>
+<li><strong>Bot Token</strong> (<code>xoxb-...</code>)：需要具有相關的 bot scopes</li>
+</ol>
+<h3 id="設定步驟">設定步驟<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#設定步驟" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>第一步：創建 Slack App</strong></p>
+<ol>
+<li>前往 <a href="https://api.slack.com/apps" class="external">https://api.slack.com/apps<svg aria-hidden="true" class="external-icon" style="max-width:0.8em;max-height:0.8em;" viewBox="0 0 512 512"><path d="M320 0H288V64h32 82.7L201.4 265.4 178.7 288 224 333.3l22.6-22.6L448 109.3V192v32h64V192 32 0H480 320zM32 32H0V64 480v32H32 456h32V480 352 320H424v32 96H64V96h96 32V32H160 32z"></path></svg></a> 創建新的 Slack App</li>
+<li>選擇 “From an app manifest” 或 “From scratch”</li>
+<li>設定名稱和要關聯的工作區</li>
+</ol>
+<p><strong>第二步：設定權限 Scopes</strong></p>
+<p>在 “OAuth &amp; Permissions” 頁面，添加以下 Bot Token Scopes：</p>
+<pre><code>app_mentions:read, channels:history, channels:read, chat:write,
+groups:history, groups:read, im:history, im:read, im:write,
+mpim:history, mpim:read, mpim:write, reactions:read, reactions:write,
+files:read, files:write, emoji:read, pins:read, pins:write, users:read
+</code></pre>
+<p><strong>第三步：設定 Event Subscriptions</strong></p>
+<p>在 “Event Subscriptions” 頁面，訂閱以下 Bot Events：</p>
+<pre><code>app_mention, channel_rename, member_joined_channel, member_left_channel,
+message.channels, message.groups, message.im, message.mpim,
+pin_added, pin_removed, reaction_added, reaction_removed
+</code></pre>
+<p><strong>第四步：設定 OpenClaw 配置</strong></p>
+<p>在 <code>openclaw.json</code> 中添加以下配置：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="json" data-theme="github-light github-dark"><code data-language="json" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">{</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">  &quot;channels&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: {</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;slack&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: {</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">      &quot;enabled&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">      &quot;mode&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;socket&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">      &quot;appToken&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;xapp-your-app-token&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">      &quot;botToken&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;xoxb-your-bot-token&quot;</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  },</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">  &quot;plugins&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: {</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;allow&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: [</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;slack&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">],</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">    &quot;entries&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: {</span></span>
+<span data-line><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">      &quot;slack&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: { </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">&quot;enabled&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;"> }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">    }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  }</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">}</span></span></code></pre></figure>
+<h3 id="新增-slack-帳號">新增 Slack 帳號<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#新增-slack-帳號" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>如果您需要添加多個 Slack 帳號，可以使用以下命令：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="bash" data-theme="github-light github-dark"><code data-language="bash" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> channels</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> add</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> slack</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> --app-token</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> &quot;xapp-...&quot;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> --bot-token</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> &quot;xoxb-...&quot;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> --account</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> &lt;</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">nam</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">e</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">></span></span></code></pre></figure>
+<p>然後重啟 Gateway 使設定生效：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="bash" data-theme="github-light github-dark"><code data-language="bash" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">openclaw</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> gateway</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> restart</span></span></code></pre></figure>
+<h2 id="注意事項">注意事項<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#注意事項" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="安全性考量">安全性考量<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#安全性考量" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ol>
+<li><strong>Token 安全</strong>：App Token 和 Bot Token 都是敏感資訊，切勿將它們提交到公開的程式碼倉庫或與他人分享</li>
+<li><strong>環境變數</strong>：建議使用環境變數來存儲 token，而不是直接在配置文件中寫入</li>
+<li><strong>權限最小化</strong>：只授予必要的權限scope，不要添加不必要的權限</li>
+<li><strong>DM Policy 選擇</strong>：、生產環境中建議使用 <code>pairing</code> 或 <code>allowlist</code> 模式，避免完全開放私訊權限</li>
+</ol>
+<h3 id="常見問題排查">常見問題排查<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#常見問題排查" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>問題：訊息沒有收到回覆</strong></p>
+<ul>
+<li>檢查頻道是否在白名單中</li>
+<li>確認是否使用了 @mention 來觸發代理</li>
+<li>檢查 <code>requireMention</code> 設定是否正確</li>
+<li>查看 OpenClaw logs 確認是否有錯誤訊息</li>
+</ul>
+<p><strong>問題：無法建立 Socket 連接</strong></p>
+<ul>
+<li>確認 App Token 正確且具有 <code>connections:write</code> 權限</li>
+<li>檢查網路連接是否正常</li>
+<li>查看 OpenClaw logs 中是否有錯誤訊息</li>
+<li>確認 Slack App 已經正確安裝到工作區</li>
+</ul>
+<p><strong>問題：權限不足</strong></p>
+<ul>
+<li>確認已添加所有必要的 Scopes</li>
+<li>重新安裝 App 以確保權限生效</li>
+<li>檢查 Bot User 是否已啟用</li>
+<li>確認 Event Subscriptions 已啟用並驗證</li>
+</ul>
+<h3 id="生產環境建議">生產環境建議<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#生產環境建議" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ol>
+<li><strong>監控</strong>：定期檢查連接狀態和訊息處理延遲</li>
+<li><strong>日誌</strong>：保留足夠的日誌以便排查問題，建議設置日誌輪轉</li>
+<li><strong>備份</strong>：定期備份配置和 token 資訊</li>
+<li><strong>更新</strong>：關注 Slack API 的變化，及時更新權限和配置</li>
+<li><strong>測試</strong>：在正式環境部署前，先在測試環境驗證功能正常</li>
+</ol>
+<h2 id="優缺點">優缺點<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#優缺點" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="優點">優點<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#優點" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ol>
+<li><strong>雙模式連接</strong>：支援 Socket Mode 和 HTTP Events API，適合各種部署環境</li>
+<li><strong>細緻的權限控制</strong>：提供 DM 和頻道的完整權限管理</li>
+<li><strong>每頻道設定</strong>：可以為不同頻道配置不同的行為和技能</li>
+<li><strong>Thread 支援</strong>：支援多輪對話，方便複雜問題的討論</li>
+<li><strong>串流回覆</strong>：支援即時串流，改善長回覆的使用者體驗</li>
+<li><strong>與 Slack 深度整合</strong>：支援所有 Slack 功能包括 Reaction、Pin 等</li>
+</ol>
+<h3 id="缺點">缺點<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#缺點" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ol>
+<li><strong>設定複雜</strong>：需要配置 Slack App、Scopes、Events 等，對新手不夠友善</li>
+<li><strong>依賴 Slack API</strong>：需要穩定的網路連接來與 Slack 通訊</li>
+<li><strong>Token 管理</strong>：需要妥善管理 App Token 和 Bot Token，安全性要求較高</li>
+<li><strong>Socket Mode 限制</strong>：需要 App Token 具有 connections:write 權限</li>
+</ol>
+<h3 id="與其他通訊工具比較">與其他通訊工具比較<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#與其他通訊工具比較" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>相較於 Telegram 通訊，Slack Integration 的優勢在於：</p>
+<ul>
+<li>支援更複雜的頻道架構和權限管理</li>
+<li>與企業工作流程整合更緊密</li>
+<li>支援更多的檔案和多媒體格式</li>
+</ul>
+<p>劣勢在於：</p>
+<ul>
+<li>設定複雜度較高</li>
+<li>需要企業帳號才能使用完整功能</li>
+<li>行動端體驗相對一般</li>
+</ul>
+<h2 id="問題與解決">問題與解決<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#問題與解決" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="常見問題一socket-mode-連接失敗">常見問題一：Socket Mode 連接失敗<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#常見問題一socket-mode-連接失敗" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>問題描述</strong>：嘗試連接 Slack 時出現連接失敗的錯誤訊息</p>
+<p><strong>解決方案</strong>：</p>
+<ol>
+<li>確認 App Token 正確且具有 <code>connections:write</code> 權限</li>
+<li>檢查網路是否能夠訪問 Slack 的 WebSocket 端點</li>
+<li>確認 Slack App 已經正確安裝到工作區</li>
+<li>查看詳細錯誤訊息並根據提示修復</li>
+</ol>
+<h3 id="常見問題二訊息無法觸發回覆">常見問題二：訊息無法觸發回覆<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#常見問題二訊息無法觸發回覆" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>問題描述</strong>：發送訊息到頻道但沒有收到回覆</p>
+<p><strong>解決方案</strong>：</p>
+<ol>
+<li>確認頻道 ID 在白名單中（如果使用 allowlist 模式）</li>
+<li>確認使用了正確的 @mention 格式</li>
+<li>檢查 <code>requireMention</code> 設定是否為 true</li>
+<li>確認 Bot User 已經加入該頻道</li>
+</ol>
+<h3 id="常見問題三權限被拒絕">常見問題三：權限被拒絕<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#常見問題三權限被拒絕" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>問題描述</strong>：操作時出現權限不足的錯誤</p>
+<p><strong>解決方案</strong>：</p>
+<ol>
+<li>檢查所有必要的 Scopes 是否已經添加</li>
+<li>重新安裝 Slack App 以刷新權限</li>
+<li>確認 Bot User 已經啟用</li>
+<li>檢查 Event Subscriptions 是否已經啟用並驗證</li>
+</ol>
+<h3 id="常見問題四串流回覆中斷">常見問題四：串流回覆中斷<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#常見問題四串流回覆中斷" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p><strong>問題描述</strong>：使用串流回覆時，訊息發送不完整</p>
+<p><strong>解決方案</strong>：</p>
+<ol>
+<li>檢查網路連接穩定性</li>
+<li>嘗試降低串流速度或關閉串流</li>
+<li>檢查 Slack 的速率限制</li>
+<li>確認訊息內容沒有觸發 Slack 的內容審查</li>
+</ol>
+<hr/>
+<p><em>更新日期：2026-04-08</em>
+<em>分類：系統與整合</em></p></article><hr/><div class="page-footer"></div></div><div class="right sidebar"><div class="graph"><h3>關係圖譜</h3><div class="graph-outer"><div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div><button class="global-graph-icon" aria-label="Global Graph"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+                s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+                c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+                C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+                c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+                v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+                s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+                C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+                S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+                s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+                s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></button></div><div class="global-graph-outer"><div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div></div></div><div class="toc desktop-only"><button type="button" class="toc-header" aria-controls="toc-24" aria-expanded="true"><h3>目錄</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><ul id="list-1" class="toc-content overflow"><li class="depth-0"><a href="#slack-integration-技能" data-for="slack-integration-技能">Slack Integration 技能</a></li><li class="depth-1"><a href="#概述" data-for="概述">概述</a></li><li class="depth-1"><a href="#功能描述" data-for="功能描述">功能描述</a></li><li class="depth-2"><a href="#雙重連接模式" data-for="雙重連接模式">雙重連接模式</a></li><li class="depth-2"><a href="#完整的權限控制系統" data-for="完整的權限控制系統">完整的權限控制系統</a></li><li class="depth-2"><a href="#每頻道獨立設定" data-for="每頻道獨立設定">每頻道獨立設定</a></li><li class="depth-2"><a href="#即時串流回覆" data-for="即時串流回覆">即時串流回覆</a></li><li class="depth-2"><a href="#thread-支援" data-for="thread-支援">Thread 支援</a></li><li class="depth-1"><a href="#使用場景" data-for="使用場景">使用場景</a></li><li class="depth-2"><a href="#團隊協作與知識管理" data-for="團隊協作與知識管理">團隊協作與知識管理</a></li><li class="depth-2"><a href="#客服與支援" data-for="客服與支援">客服與支援</a></li><li class="depth-2"><a href="#工作流程自動化" data-for="工作流程自動化">工作流程自動化</a></li><li class="depth-2"><a href="#私訊互動" data-for="私訊互動">私訊互動</a></li><li class="depth-1"><a href="#指令範例" data-for="指令範例">指令範例</a></li><li class="depth-2"><a href="#基本互動" data-for="基本互動">基本互動</a></li><li class="depth-2"><a href="#啟用特定技能" data-for="啟用特定技能">啟用特定技能</a></li><li class="depth-2"><a href="#私訊配對" data-for="私訊配對">私訊配對</a></li><li class="depth-2"><a href="#使用-thread" data-for="使用-thread">使用 Thread</a></li><li class="depth-1"><a href="#設定方式" data-for="設定方式">設定方式</a></li><li class="depth-2"><a href="#前提條件" data-for="前提條件">前提條件</a></li><li class="depth-2"><a href="#設定步驟" data-for="設定步驟">設定步驟</a></li><li class="depth-2"><a href="#新增-slack-帳號" data-for="新增-slack-帳號">新增 Slack 帳號</a></li><li class="depth-1"><a href="#注意事項" data-for="注意事項">注意事項</a></li><li class="depth-2"><a href="#安全性考量" data-for="安全性考量">安全性考量</a></li><li class="depth-2"><a href="#常見問題排查" data-for="常見問題排查">常見問題排查</a></li><li class="depth-2"><a href="#生產環境建議" data-for="生產環境建議">生產環境建議</a></li><li class="depth-1"><a href="#優缺點" data-for="優缺點">優缺點</a></li><li class="depth-2"><a href="#優點" data-for="優點">優點</a></li><li class="depth-2"><a href="#缺點" data-for="缺點">缺點</a></li><li class="depth-2"><a href="#與其他通訊工具比較" data-for="與其他通訊工具比較">與其他通訊工具比較</a></li><li class="depth-1"><a href="#問題與解決" data-for="問題與解決">問題與解決</a></li><li class="depth-2"><a href="#常見問題一socket-mode-連接失敗" data-for="常見問題一socket-mode-連接失敗">常見問題一：Socket Mode 連接失敗</a></li><li class="depth-2"><a href="#常見問題二訊息無法觸發回覆" data-for="常見問題二訊息無法觸發回覆">常見問題二：訊息無法觸發回覆</a></li><li class="depth-2"><a href="#常見問題三權限被拒絕" data-for="常見問題三權限被拒絕">常見問題三：權限被拒絕</a></li><li class="depth-2"><a href="#常見問題四串流回覆中斷" data-for="常見問題四串流回覆中斷">常見問題四：串流回覆中斷</a></li><li class="overflow-end"></li></ul></div></div><footer class><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.5.2</a> © 2026</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></div></body><script type="application/javascript" data-persist="true">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script><script type="module" data-persist="true">function E(a,e){if(!a)return;function t(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function n(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}a?.addEventListener("click",t),window.addCleanup(()=>a?.removeEventListener("click",t)),document.addEventListener("keydown",n),window.addCleanup(()=>document.removeEventListener("keydown",n))}function f(a){for(;a.firstChild;)a.removeChild(a.firstChild)}var m=class{constructor(e,t){this.container=e;this.content=t;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),t=this.onMouseMove.bind(this),n=this.onMouseUp.bind(this),o=this.onTouchStart.bind(this),r=this.onTouchMove.bind(this),i=this.onTouchEnd.bind(this),s=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",t),document.addEventListener("mouseup",n),this.container.addEventListener("touchstart",o,{passive:!1}),document.addEventListener("touchmove",r,{passive:!1}),document.addEventListener("touchend",i),window.addEventListener("resize",s),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",t),()=>document.removeEventListener("mouseup",n),()=>this.container.removeEventListener("touchstart",o),()=>document.removeEventListener("touchmove",r),()=>document.removeEventListener("touchend",i),()=>window.removeEventListener("resize",s))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let t=this.createButton("+",()=>this.zoom(.1)),n=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(n),e.appendChild(o),e.appendChild(t),this.container.appendChild(e)}createButton(e,t){let n=document.createElement("button");return n.textContent=e,n.className="mermaid-control-button",n.addEventListener("click",t),window.addCleanup(()=>n.removeEventListener("click",t)),n}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}onTouchStart(e){if(e.touches.length!==1)return;this.isDragging=!0;let t=e.touches[0];this.startPan={x:t.clientX-this.currentPan.x,y:t.clientY-this.currentPan.y}}onTouchMove(e){if(!this.isDragging||e.touches.length!==1)return;e.preventDefault();let t=e.touches[0];this.currentPan={x:t.clientX-this.startPan.x,y:t.clientY-this.startPan.y},this.updateTransform()}onTouchEnd(){this.isDragging=!1}zoom(e){let t=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),n=this.content.getBoundingClientRect(),o=n.width/2,r=n.height/2,i=t-this.scale;this.currentPan.x-=o*i,this.currentPan.y-=r*i,this.scale=t,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){let t=this.content.querySelector("svg").getBoundingClientRect(),n=t.width/this.scale,o=t.height/this.scale;this.scale=1,this.currentPan={x:(this.container.clientWidth-n)/2,y:(this.container.clientHeight-o)/2},this.updateTransform()}},T=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],y;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;y||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let t=y.default,n=new WeakMap;for(let r of e)n.set(r,r.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let c=n.get(s);c&&(s.innerHTML=c)}let r=T.reduce((s,c)=>(s[c]=window.getComputedStyle(document.documentElement).getPropertyValue(c),s),{}),i=document.documentElement.getAttribute("saved-theme")==="dark";t.initialize({startOnLoad:!1,securityLevel:"loose",theme:i?"dark":"base",themeVariables:{fontFamily:r["--codeFont"],primaryColor:r["--light"],primaryTextColor:r["--darkgray"],primaryBorderColor:r["--tertiary"],lineColor:r["--darkgray"],secondaryColor:r["--secondary"],tertiaryColor:r["--tertiary"],clusterBkg:r["--light"],edgeLabelBackground:r["--highlight"]}}),await t.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let r=0;r<e.length;r++){let v=function(){let g=l.querySelector("#mermaid-space"),h=l.querySelector(".mermaid-content");if(!h)return;f(h);let w=i.querySelector("svg").cloneNode(!0);h.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new m(g,h)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},i=e[r],s=i.parentElement,c=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(c),L=c.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),E(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript" data-persist="true"></script><script src="../../postscript.js" type="module" data-persist="true"></script></html>

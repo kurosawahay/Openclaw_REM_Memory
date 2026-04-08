@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slack vs Monday.com — 專案管理工具比較</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --slack:      #4A154B;
+      --slack-lt:   #611f69;
+      --slack-acc:  #E01E5A;
+      --monday:     #FF3D57;
+      --monday-lt:  #FF6B7A;
+      --monday-acc: #0085FF;
+      --neutral:    #1E1E2E;
+      --muted:      #6B7280;
+      --border:     #E5E7EB;
+      --bg:         #FFFFFF;
+      --bg2:        #F9FAFB;
+      --card-sh:    0 2px 12px rgba(0,0,0,.08);
+      --card-sh-hv: 0 8px 30px rgba(0,0,0,.14);
+      --radius:     14px;
+      --transition: .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: var(--bg);
+      color: var(--neutral);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #4A154B 0%, #1a0020 50%, #0a0030 100%);
+      color: #fff;
+      text-align: center;
+      padding: 72px 24px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(224,30,90,.25) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 50% at 80% 40%, rgba(0,133,255,.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      animation: fadeDown .7s ease both;
+    }
+
+    .logo-badge {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    .logo-slack  { background: #4A154B; }
+    .logo-monday { background: #FF3D57; }
+
+    .vs-circle {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: 2px solid rgba(255,255,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      animation: fadeDown .7s .1s ease both;
+    }
+
+    .hero p {
+      margin-top: 12px;
+      font-size: 1.05rem;
+      opacity: .75;
+      max-width: 540px;
+      margin-inline: auto;
+      animation: fadeDown .7s .2s ease both;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 28px;
+      font-size: .85rem;
+      opacity: .6;
+      animation: fadeDown .7s .3s ease both;
+      flex-wrap: wrap;
+    }
+
+    /* ── Tab Nav ── */
+    .tabs-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 10px 16px;
+      max-width: 900px;
+      margin: 0 auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 8px 18px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      white-space: nowrap;
+    }
+    .tab-btn:hover  { background: var(--bg2); color: var(--neutral); }
+    .tab-btn.active {
+      background: var(--neutral);
+      color: #fff;
+    }
+
+    /* ── Main Layout ── */
+    .main { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; }
+
+    /* ── Sections ── */
+    .section {
+      display: none;
+      animation: fadeUp .4s ease both;
+    }
+    .section.active { display: block; }
+
+    /* ── Section Header ── */
+    .section-header {
+      margin-bottom: 32px;
+    }
+    .section-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .tag-overview  { background: #EFF6FF; color: #1D4ED8; }
+    .tag-slack     { background: #F5F0FF; color: #6D28D9; }
+    .tag-monday    { background: #FFF1F2; color: #BE123C; }
+    .tag-compare   { background: #F0FDF4; color: #166534; }
+    .tag-api       { background: #FFF7ED; color: #C2410C; }
+    .tag-conclusion{ background: #F8FAFC; color: #334155; border: 1px solid var(--border); }
+
+    .section-header h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .section-header p {
+      margin-top: 8px;
+      color: var(--muted);
+      max-width: 640px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--card-sh);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--card-sh-hv);
+      transform: translateY(-2px);
+    }
+
+    .card-grid { display: grid; gap: 20px; }
+    .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .card p, .card li {
+      font-size: .92rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .card ul { list-style: none; padding: 0; }
+    .card ul li { padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; }
+    .card ul li::before { content: '▸'; color: inherit; flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Feature Icon Dot ── */
+    .icon-dot {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ── Brand accent variants ── */
+    .accent-slack   { color: var(--slack-lt); }
+    .accent-monday  { color: var(--monday); }
+    .dot-slack   { background: #F5F0FF; }
+    .dot-monday  { background: #FFF1F2; }
+    .dot-blue    { background: #EFF6FF; }
+    .dot-green   { background: #F0FDF4; }
+    .dot-amber   { background: #FFFBEB; }
+    .dot-gray    { background: #F1F5F9; }
+
+    /* ── Product Hero Card ── */
+    .product-hero {
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.12);
+      pointer-events: none;
+    }
+    .product-hero-slack   { background: linear-gradient(135deg, #4A154B, #8B5CF6); }
+    .product-hero-monday  { background: linear-gradient(135deg, #FF3D57, #FF6B00); }
+
+    .product-hero h2 { font-size: 1.6rem; font-weight: 800; position: relative; z-index: 1; }
+    .product-hero p  { opacity: .85; margin-top: 8px; font-size: .95rem; position: relative; z-index: 1; max-width: 520px; }
+    .product-hero .tag-line {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      margin-bottom: 12px;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-item {
+      flex: 1;
+      min-width: 120px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+    .stat-item .stat-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      display: block;
+      line-height: 1.1;
+    }
+    .stat-item .stat-label {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── Comparison Table ── */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    .compare-table th {
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      color: var(--muted);
+      border-bottom: 2px solid var(--border);
+    }
+    .compare-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: var(--bg2); }
+    .compare-table .col-feature { font-weight: 600; width: 28%; }
+    .compare-table .col-slack   { color: var(--slack-lt); }
+    .compare-table .col-monday  { color: #C2410C; }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+    .pill-green  { background: #DCFCE7; color: #166534; }
+    .pill-yellow { background: #FEF9C3; color: #854D0E; }
+    .pill-red    { background: #FEE2E2; color: #991B1B; }
+    .pill-blue   { background: #DBEAFE; color: #1E40AF; }
+
+    /* ── Score Bars ── */
+    .score-row { margin-bottom: 18px; }
+    .score-row .score-label {
+      display: flex; justify-content: space-between;
+      font-size: .85rem; font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .score-track {
+      height: 8px;
+      background: var(--bg2);
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .score-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
+    .fill-slack   { background: linear-gradient(90deg, #611f69, #8B5CF6); }
+    .fill-monday  { background: linear-gradient(90deg, #FF3D57, #FF8C00); }
+
+    /* ── API Code Block ── */
+    .code-block {
+      background: #0F0F1A;
+      border-radius: 10px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      margin: 16px 0;
+      position: relative;
+    }
+    .code-block pre {
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      font-size: .82rem;
+      line-height: 1.6;
+      color: #E2E8F0;
+      white-space: pre;
+    }
+    .code-lang {
+      position: absolute; top: 10px; right: 14px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      color: #64748B;
+    }
+    .tok-key   { color: #7C3AED; }
+    .tok-str   { color: #10B981; }
+    .tok-cmt   { color: #6B7280; font-style: italic; }
+    .tok-fn    { color: #F59E0B; }
+    .tok-num   { color: #60A5FA; }
+    .tok-punc  { color: #94A3B8; }
+
+    /* ── Step List ── */
+    .step-list { list-style: none; counter-reset: steps; }
+    .step-list li {
+      counter-increment: steps;
+      display: flex; gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--neutral);
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content h4 { font-size: .95rem; font-weight: 700; margin-bottom: 4px; }
+    .step-content p  { font-size: .87rem; color: var(--muted); }
+
+    /* ── Recommendation Cards ── */
+    .rec-card {
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 2px solid transparent;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+    .rec-card:hover {
+      box-shadow: var(--card-sh-hv);
+      transform: translateY(-2px);
+    }
+    .rec-slack {
+      background: linear-gradient(135deg, #FAF5FF, #F5F0FF);
+      border-color: #DDD6FE;
+    }
+    .rec-monday {
+      background: linear-gradient(135deg, #FFF1F2, #FFF7ED);
+      border-color: #FCA5A5;
+    }
+    .rec-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+
+    /* ── Conclusion Score ── */
+    .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 560px) { .verdict-grid { grid-template-columns: 1fr; } }
+
+    .verdict-card {
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      border: 2px solid transparent;
+    }
+    .verdict-slack  { background: linear-gradient(160deg,#F5F0FF,#EDE9FE); border-color: #C4B5FD; }
+    .verdict-monday { background: linear-gradient(160deg,#FFF1F2,#FFE4E6); border-color: #FCA5A5; }
+
+    .verdict-score {
+      font-size: 3rem;
+      font-weight: 900;
+      display: block;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .verdict-slack  .verdict-score { color: #6D28D9; }
+    .verdict-monday .verdict-score { color: #BE123C; }
+
+    .verdict-title  { font-size: 1.1rem; font-weight: 800; margin: 8px 0; }
+    .verdict-desc   { font-size: .83rem; color: var(--muted); }
+
+    /* ── Notice Banner ── */
+    .notice {
+      background: linear-gradient(90deg, #EFF6FF, #F0FDF4);
+      border: 1px solid #BFDBFE;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: .88rem;
+      display: flex; gap: 12px; align-items: flex-start;
+      margin-top: 28px;
+    }
+    .notice-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+    .notice p { color: #1E40AF; line-height: 1.5; }
+    .notice strong { color: var(--neutral); }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 32px 20px;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero { padding: 48px 16px 40px; }
+      .main { padding: 28px 14px 60px; }
+      .product-hero { padding: 24px; }
+      .code-block { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════ HERO ════════════════ -->
+<div class="hero">
+  <div class="hero-logos">
+    <div class="logo-badge logo-slack">&#x1F4AC;</div>
+    <div class="vs-circle">VS</div>
+    <div class="logo-badge logo-monday">&#x1F4CB;</div>
+  </div>
+  <h1>Slack vs Monday.com</h1>
+  <p>兩大主流協作工具深度比較，找出最適合您團隊的選擇</p>
+  <div class="hero-meta">
+    <span>&#x1F4C5; 2026 年最新評測</span>
+    <span>&#x1F3E2; 適用企業、中小型團隊</span>
+    <span>&#x1F50C; 含 API 整合指南</span>
+  </div>
+</div>
+
+<!-- ════════════════ TAB NAV ════════════════ -->
+<div class="tabs-wrapper">
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="overview"   role="tab">&#x1F4CA; 總覽</button>
+    <button class="tab-btn"        data-tab="slack"      role="tab">&#x1F4AC; Slack 介紹</button>
+    <button class="tab-btn"        data-tab="monday"     role="tab">&#x1F4CB; Monday 介紹</button>
+    <button class="tab-btn"        data-tab="compare"    role="tab">&#x2696;&#xFE0F; 比較</button>
+    <button class="tab-btn"        data-tab="api"        role="tab">&#x1F50C; API 整合</button>
+    <button class="tab-btn"        data-tab="conclusion" role="tab">&#x2705; 結論</button>
+  </nav>
+</div>
+
+<!-- ════════════════ MAIN ════════════════ -->
+<main class="main">
+
+  <!-- ──────── 總覽 ──────── -->
+  <section id="tab-overview" class="section active">
+    <div class="section-header">
+      <span class="section-tag tag-overview">Overview</span>
+      <h2>兩大工具總覽</h2>
+      <p>Slack 與 Monday.com 在協作市場各佔一方，但定位截然不同。讓我們先從大局切入。</p>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-num accent-slack">3,200<small style="font-size:1rem">萬</small></span>
+        <span class="stat-label">Slack 日活用戶</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num accent-monday">22.5<small style="font-size:1rem">萬</small></span>
+        <span class="stat-label">Monday 企業客戶</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" style="color:#059669">2,600<small style="font-size:1rem">+</small></span>
+        <span class="stat-label">Slack 整合數量</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" style="color:#D97706">200<small style="font-size:1rem">+</small></span>
+        <span class="stat-label">Monday 整合數量</span>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card">
+        <h3><span class="icon-dot dot-slack" style="color:#6D28D9">&#x1F4AC;</span> <span class="accent-slack">Slack</span> — 即時溝通核心</h3>
+        <p style="margin-bottom:12px">由 Salesforce 旗下所有，以<strong>頻道式即時通訊</strong>為核心，擅長打造開放的企業溝通文化。</p>
+        <ul>
+          <li class="accent-slack">即時訊息、執行緒討論</li>
+          <li class="accent-slack">語音 / 視訊通話（Huddles）</li>
+          <li class="accent-slack">Canvas 文件共作</li>
+          <li class="accent-slack">強大的機器人與 Workflow</li>
+          <li class="accent-slack">超過 2,600 種第三方整合</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="icon-dot dot-monday" style="color:#BE123C">&#x1F4CB;</span> <span class="accent-monday">Monday.com</span> — 視覺化專案管理</h3>
+        <p style="margin-bottom:12px">以<strong>工作看板（Board）</strong>為核心，提供甘特圖、時間軸等多種視圖，適合全面追蹤專案進度。</p>
+        <ul>
+          <li class="accent-monday">看板、甘特圖、時間軸</li>
+          <li class="accent-monday">自動化工作流程</li>
+          <li class="accent-monday">CRM / 行銷模組</li>
+          <li class="accent-monday">儀表板與 KPI 追蹤</li>
+          <li class="accent-monday">客製化欄位與表單</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3>&#x1F3AF; 核心定位差異</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:12px;">
+        <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:10px">
+          <div style="font-size:2rem;margin-bottom:8px">&#x1F4AC;</div>
+          <div style="font-weight:700;color:var(--slack-lt)">Slack</div>
+          <div style="font-size:.82rem;color:var(--muted);margin-top:4px">溝通優先<br>「我們在聊什麼？」</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:10px">
+          <div style="font-size:2rem;margin-bottom:8px">&#x1F504;</div>
+          <div style="font-weight:700">最佳組合</div>
+          <div style="font-size:.82rem;color:var(--muted);margin-top:4px">兩者互補<br>可透過 API 整合</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg2);border-radius:10px">
+          <div style="font-size:2rem;margin-bottom:8px">&#x1F4CB;</div>
+          <div style="font-weight:700;color:var(--monday)">Monday</div>
+          <div style="font-size:.82rem;color:var(--muted);margin-top:4px">任務優先<br>「我們做了什麼？」</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── Slack 介紹 ──────── -->
+  <section id="tab-slack" class="section">
+    <div class="section-header">
+      <span class="section-tag tag-slack">Slack</span>
+      <h2>Slack 深度介紹</h2>
+      <p>改變現代工作溝通方式的即時通訊平台，自 2013 年推出後迅速席捲全球企業。</p>
+    </div>
+
+    <div class="product-hero product-hero-slack" style="margin-bottom:24px">
+      <div class="tag-line">&#x26A1; Salesforce 旗下產品</div>
+      <h2>&#x1F4AC; Slack — Where Work Happens</h2>
+      <p>以頻道（Channel）為基礎的工作溝通平台，將電子郵件的碎片化通訊整合為有序、可搜尋的對話串。</p>
+    </div>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:20px">
+      <div class="card">
+        <h3><span class="icon-dot dot-slack" style="color:#6D28D9">&#x1F4E2;</span> 頻道管理</h3>
+        <ul>
+          <li>公開 / 私有 / 共享頻道</li>
+          <li>執行緒（Thread）回覆</li>
+          <li>頻道書籤與置頂</li>
+          <li>跨企業 Slack Connect</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-blue" style="color:#1D4ED8">&#x1F916;</span> 自動化</h3>
+        <ul>
+          <li>Workflow Builder 無碼自動化</li>
+          <li>Slackbot 自訂回應</li>
+          <li>排程訊息發送</li>
+          <li>表單收集資料</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-green" style="color:#166534">&#x1F50C;</span> 整合生態</h3>
+        <ul>
+          <li>Google Workspace / Microsoft 365</li>
+          <li>GitHub、Jira、Zoom</li>
+          <li>Salesforce CRM 原生整合</li>
+          <li>開放 API + Webhooks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-amber" style="color:#B45309">&#x1F399;&#xFE0F;</span> 語音 / 視訊</h3>
+        <ul>
+          <li>Slack Huddles 即時音頻</li>
+          <li>視訊通話（最多 50 人）</li>
+          <li>螢幕分享</li>
+          <li>錄製 Clips 影片留言</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-slack" style="color:#6D28D9">&#x1F4C4;</span> Canvas 文件</h3>
+        <ul>
+          <li>頻道內嵌文件協作</li>
+          <li>支援 Markdown / 富文本</li>
+          <li>版本歷史</li>
+          <li>@提及連結整合</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-gray" style="color:#475569">&#x1F512;</span> 安全合規</h3>
+        <ul>
+          <li>企業金鑰管理 (EKM)</li>
+          <li>SSO / SAML 2.0</li>
+          <li>資料駐留地選擇</li>
+          <li>HIPAA、SOC2 Type II 合規</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>&#x1F4B0; 定價方案</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:16px">
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-weight:800;font-size:1.1rem">免費</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$0 / 月</div>
+          <div style="font-size:.8rem;color:var(--muted)">90 天訊息歷史<br>10 個整合</div>
+        </div>
+        <div style="border:2px solid #C4B5FD;border-radius:10px;padding:16px;text-align:center;background:#FAF5FF">
+          <div style="font-weight:800;font-size:1.1rem;color:#6D28D9">Pro</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$7.25 / 人月</div>
+          <div style="font-size:.8rem;color:var(--muted)">完整訊息歷史<br>無限整合</div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-weight:800;font-size:1.1rem">Business+</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$12.50 / 人月</div>
+          <div style="font-size:.8rem;color:var(--muted)">進階合規<br>24/7 支援</div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;background:var(--bg2)">
+          <div style="font-weight:800;font-size:1.1rem">Enterprise</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">聯繫洽詢</div>
+          <div style="font-size:.8rem;color:var(--muted)">EKM、進階管理<br>資料駐留</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── Monday 介紹 ──────── -->
+  <section id="tab-monday" class="section">
+    <div class="section-header">
+      <span class="section-tag tag-monday">Monday.com</span>
+      <h2>Monday.com 深度介紹</h2>
+      <p>以視覺化看板為核心的工作操作系統（Work OS），協助團隊全面管理專案、流程與資源。</p>
+    </div>
+
+    <div class="product-hero product-hero-monday" style="margin-bottom:24px">
+      <div class="tag-line">&#x1F680; 納斯達克上市公司 (MNDY)</div>
+      <h2>&#x1F4CB; Monday.com — Your Work OS</h2>
+      <p>不僅是專案管理工具，而是可高度客製化的工作操作系統，支援從軟體開發到行銷活動的所有場景。</p>
+    </div>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:20px">
+      <div class="card">
+        <h3><span class="icon-dot dot-monday" style="color:#BE123C">&#x1F4CA;</span> 多種視圖</h3>
+        <ul>
+          <li>看板（Kanban）</li>
+          <li>甘特圖（Gantt）</li>
+          <li>時間軸 / 日曆</li>
+          <li>地圖、表單視圖</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-blue" style="color:#1D4ED8">&#x26A1;</span> 工作流程</h3>
+        <ul>
+          <li>250+ 自動化模板</li>
+          <li>條件觸發 + 動作</li>
+          <li>跨看板自動化</li>
+          <li>Zapier / Make 整合</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-green" style="color:#166534">&#x1F4C8;</span> 儀表板</h3>
+        <ul>
+          <li>即時 KPI 追蹤</li>
+          <li>多看板彙整視圖</li>
+          <li>工作負載分析</li>
+          <li>自訂 Widget</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-amber" style="color:#B45309">&#x1F3E2;</span> 垂直解決方案</h3>
+        <ul>
+          <li>monday CRM</li>
+          <li>monday Dev（敏捷開發）</li>
+          <li>monday Service（服務台）</li>
+          <li>行銷 / HR 模組</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-monday" style="color:#BE123C">&#x1F465;</span> 資源管理</h3>
+        <ul>
+          <li>人員工作量分配</li>
+          <li>時程衝突警示</li>
+          <li>時間追蹤</li>
+          <li>預算管理</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon-dot dot-gray" style="color:#475569">&#x1F512;</span> 企業級安全</h3>
+        <ul>
+          <li>ISO 27001 / SOC 2 Type II</li>
+          <li>GDPR、HIPAA 合規</li>
+          <li>IP 白名單</li>
+          <li>進階稽核日誌</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>&#x1F4B0; 定價方案</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-top:16px">
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-weight:800;font-size:1.1rem">Free</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$0 / 月</div>
+          <div style="font-size:.8rem;color:var(--muted)">最多 2 人<br>3 個看板</div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-weight:800;font-size:1.1rem">Basic</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$9 / 人月</div>
+          <div style="font-size:.8rem;color:var(--muted)">無限看板<br>5GB 儲存</div>
+        </div>
+        <div style="border:2px solid #FCA5A5;border-radius:10px;padding:16px;text-align:center;background:#FFF1F2">
+          <div style="font-weight:800;font-size:1.1rem;color:#BE123C">Standard</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$12 / 人月</div>
+          <div style="font-size:.8rem;color:var(--muted)">時間軸、甘特圖<br>自動化（250次/月）</div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+          <div style="font-weight:800;font-size:1.1rem">Pro</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">$19 / 人月</div>
+          <div style="font-size:.8rem;color:var(--muted)">私有看板<br>自動化（25,000次/月）</div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;background:var(--bg2)">
+          <div style="font-weight:800;font-size:1.1rem">Enterprise</div>
+          <div style="color:var(--muted);font-size:.8rem;margin:4px 0 8px">聯繫洽詢</div>
+          <div style="font-size:.8rem;color:var(--muted)">進階安全<br>無限自動化</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── 比較 ──────── -->
+  <section id="tab-compare" class="section">
+    <div class="section-header">
+      <span class="section-tag tag-compare">Comparison</span>
+      <h2>功能深度比較</h2>
+      <p>從核心功能、協作效率到價格性比，全方位對比兩款工具的異同。</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="margin-bottom:20px">&#x1F4CA; 各項能力評分（滿分 10）</h3>
+
+      <div class="score-row">
+        <div class="score-label"><span>即時溝通</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">
+          <span style="width:60px;color:var(--slack-lt);font-weight:700">Slack</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-slack" data-width="95" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">9.5</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem;margin-top:6px">
+          <span style="width:60px;color:#BE123C;font-weight:700">Monday</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-monday" data-width="40" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">4.0</span>
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-label"><span>專案管理</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">
+          <span style="width:60px;color:var(--slack-lt);font-weight:700">Slack</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-slack" data-width="42" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">4.2</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem;margin-top:6px">
+          <span style="width:60px;color:#BE123C;font-weight:700">Monday</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-monday" data-width="93" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">9.3</span>
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-label"><span>自動化能力</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">
+          <span style="width:60px;color:var(--slack-lt);font-weight:700">Slack</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-slack" data-width="78" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">7.8</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem;margin-top:6px">
+          <span style="width:60px;color:#BE123C;font-weight:700">Monday</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-monday" data-width="85" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">8.5</span>
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-label"><span>整合生態</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">
+          <span style="width:60px;color:var(--slack-lt);font-weight:700">Slack</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-slack" data-width="97" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">9.7</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem;margin-top:6px">
+          <span style="width:60px;color:#BE123C;font-weight:700">Monday</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-monday" data-width="70" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">7.0</span>
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-label"><span>視覺化報表</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">
+          <span style="width:60px;color:var(--slack-lt);font-weight:700">Slack</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-slack" data-width="30" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">3.0</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem;margin-top:6px">
+          <span style="width:60px;color:#BE123C;font-weight:700">Monday</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-monday" data-width="92" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">9.2</span>
+        </div>
+      </div>
+
+      <div class="score-row" style="margin-bottom:0">
+        <div class="score-label"><span>學習曲線（易用性）</span></div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem">
+          <span style="width:60px;color:var(--slack-lt);font-weight:700">Slack</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-slack" data-width="88" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">8.8</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;font-size:.82rem;margin-top:6px">
+          <span style="width:60px;color:#BE123C;font-weight:700">Monday</span>
+          <div class="score-track" style="flex:1"><div class="score-fill fill-monday" data-width="75" style="width:0%"></div></div>
+          <span style="width:24px;font-weight:700">7.5</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="overflow-x:auto">
+      <h3 style="margin-bottom:16px">&#x1F4CB; 功能對照表</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>功能項目</th>
+            <th>&#x1F4AC; Slack</th>
+            <th>&#x1F4CB; Monday.com</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-feature">核心定位</td>
+            <td class="col-slack">即時溝通平台</td>
+            <td class="col-monday">視覺化工作 OS</td>
+          </tr>
+          <tr>
+            <td class="col-feature">任務管理</td>
+            <td><span class="pill pill-yellow">基礎</span> 可建立任務但功能有限</td>
+            <td><span class="pill pill-green">完整</span> 豐富欄位與多視圖</td>
+          </tr>
+          <tr>
+            <td class="col-feature">即時通訊</td>
+            <td><span class="pill pill-green">優秀</span> 頻道 + 執行緒</td>
+            <td><span class="pill pill-yellow">基礎</span> 任務留言為主</td>
+          </tr>
+          <tr>
+            <td class="col-feature">甘特圖 / 時間軸</td>
+            <td><span class="pill pill-red">無</span></td>
+            <td><span class="pill pill-green">完整</span> Standard 以上</td>
+          </tr>
+          <tr>
+            <td class="col-feature">語音 / 視訊</td>
+            <td><span class="pill pill-green">內建</span> Huddles</td>
+            <td><span class="pill pill-yellow">需整合</span> Zoom/Teams</td>
+          </tr>
+          <tr>
+            <td class="col-feature">自動化</td>
+            <td><span class="pill pill-blue">Workflow Builder</span></td>
+            <td><span class="pill pill-green">250+ 模板</span> 更直觀</td>
+          </tr>
+          <tr>
+            <td class="col-feature">API 類型</td>
+            <td>REST + Events API</td>
+            <td>GraphQL API</td>
+          </tr>
+          <tr>
+            <td class="col-feature">免費方案限制</td>
+            <td>90 天歷史 / 10 整合</td>
+            <td>最多 2 人 / 3 看板</td>
+          </tr>
+          <tr>
+            <td class="col-feature">行動 App</td>
+            <td><span class="pill pill-green">iOS / Android</span></td>
+            <td><span class="pill pill-green">iOS / Android</span></td>
+          </tr>
+          <tr>
+            <td class="col-feature">全文搜尋</td>
+            <td><span class="pill pill-green">強大</span> 完整訊息歷史</td>
+            <td><span class="pill pill-yellow">中等</span> 專案內搜尋</td>
+          </tr>
+          <tr>
+            <td class="col-feature">外部協作</td>
+            <td>Slack Connect</td>
+            <td>訪客帳號</td>
+          </tr>
+          <tr>
+            <td class="col-feature">入門費用（5人）</td>
+            <td>約 $36.25 / 月</td>
+            <td>約 $60 / 月</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ──────── API 整合 ──────── -->
+  <section id="tab-api" class="section">
+    <div class="section-header">
+      <span class="section-tag tag-api">API Integration</span>
+      <h2>API 整合建議</h2>
+      <p>透過 API 將兩者打通，實現「Slack 接收通知，Monday 管理任務」的最佳工作流。</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="margin-bottom:16px">&#x1F3D7;&#xFE0F; 建議整合架構</h3>
+      <div style="background:var(--bg2);border-radius:10px;padding:20px;text-align:center;font-size:.88rem;line-height:2">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px">
+          <div style="background:#4A154B;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700">&#x1F4AC; Slack</div>
+          <div style="color:var(--muted)">&#x2194; Webhooks / Bot</div>
+          <div style="background:#0F0F1A;color:#10B981;padding:10px 20px;border-radius:8px;font-weight:700;font-family:monospace">&#x1F527; Integration Layer</div>
+          <div style="color:var(--muted)">&#x2194; GraphQL API</div>
+          <div style="background:#FF3D57;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700">&#x1F4CB; Monday</div>
+        </div>
+        <div style="margin-top:12px;color:var(--muted);font-size:.8rem">可使用 Node.js / Python 或 Zapier / Make 作為中介層</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="margin-bottom:4px"><span style="color:#6D28D9">&#x1F4AC;</span> Slack API — 發送訊息至頻道</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:0">當 Monday 任務狀態更新時，自動通知 Slack 頻道</p>
+      <div class="code-block">
+        <span class="code-lang">JavaScript</span>
+        <pre><span class="tok-cmt">// 安裝: npm install @slack/web-api</span>
+<span class="tok-key">import</span> <span class="tok-punc">{</span> WebClient <span class="tok-punc">}</span> <span class="tok-key">from</span> <span class="tok-str">'@slack/web-api'</span><span class="tok-punc">;</span>
+
+<span class="tok-key">const</span> slack <span class="tok-punc">=</span> <span class="tok-key">new</span> <span class="tok-fn">WebClient</span><span class="tok-punc">(</span>process<span class="tok-punc">.</span>env<span class="tok-punc">.</span>SLACK_BOT_TOKEN<span class="tok-punc">);</span>
+
+<span class="tok-cmt">// 當 Monday 任務完成時通知 Slack</span>
+<span class="tok-key">async function</span> <span class="tok-fn">notifyTaskComplete</span><span class="tok-punc">(</span>task<span class="tok-punc">) {</span>
+  <span class="tok-key">await</span> slack<span class="tok-punc">.</span>chat<span class="tok-punc">.</span><span class="tok-fn">postMessage</span><span class="tok-punc">({</span>
+    channel<span class="tok-punc">:</span> <span class="tok-str">'#project-updates'</span><span class="tok-punc">,</span>
+    blocks<span class="tok-punc">: [{</span>
+      type<span class="tok-punc">:</span> <span class="tok-str">'section'</span><span class="tok-punc">,</span>
+      text<span class="tok-punc">: {</span> type<span class="tok-punc">:</span> <span class="tok-str">'mrkdwn'</span><span class="tok-punc">,</span> text<span class="tok-punc">:</span> <span class="tok-str">`&#x2705; *任務完成*: ${task.name}`</span> <span class="tok-punc">},</span>
+      accessory<span class="tok-punc">: {</span>
+        type<span class="tok-punc">:</span> <span class="tok-str">'button'</span><span class="tok-punc">,</span>
+        text<span class="tok-punc">: {</span> type<span class="tok-punc">:</span> <span class="tok-str">'plain_text'</span><span class="tok-punc">,</span> text<span class="tok-punc">:</span> <span class="tok-str">'在 Monday 查看'</span> <span class="tok-punc">},</span>
+        url<span class="tok-punc">:</span> task<span class="tok-punc">.</span>url
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">}]</span>
+  <span class="tok-punc">});</span>
+<span class="tok-punc">}</span></pre>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="margin-bottom:4px"><span style="color:#BE123C">&#x1F4CB;</span> Monday API — 查詢看板任務</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:0">使用 GraphQL 讀取看板上的所有未完成任務</p>
+      <div class="code-block">
+        <span class="code-lang">GraphQL</span>
+        <pre><span class="tok-cmt"># 查詢看板的所有項目與狀態</span>
+<span class="tok-key">query</span> <span class="tok-fn">GetBoardItems</span><span class="tok-punc">(</span><span class="tok-str">$boardId</span><span class="tok-punc">:</span> ID<span class="tok-punc">!) {</span>
+  boards<span class="tok-punc">(</span>ids<span class="tok-punc">: [</span><span class="tok-str">$boardId</span><span class="tok-punc">]) {</span>
+    name
+    items_page<span class="tok-punc">(</span>limit<span class="tok-punc">:</span> <span class="tok-num">50</span><span class="tok-punc">) {</span>
+      items <span class="tok-punc">{</span>
+        id
+        name
+        state
+        column_values <span class="tok-punc">{</span>
+          id
+          text
+          value
+        <span class="tok-punc">}</span>
+        assignees <span class="tok-punc">{</span>
+          name
+          email
+        <span class="tok-punc">}</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span></pre>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="margin-bottom:4px"><span style="color:#0369A1">&#x1F517;</span> Webhook 整合 — Monday &#x2192; Slack</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:0">使用 Node.js Express 接收 Monday Webhook 並推送 Slack 通知</p>
+      <div class="code-block">
+        <span class="code-lang">JavaScript</span>
+        <pre><span class="tok-key">import</span> express <span class="tok-key">from</span> <span class="tok-str">'express'</span><span class="tok-punc">;</span>
+<span class="tok-key">const</span> app <span class="tok-punc">=</span> <span class="tok-fn">express</span><span class="tok-punc">();</span>
+app<span class="tok-punc">.</span><span class="tok-fn">use</span><span class="tok-punc">(</span>express<span class="tok-punc">.</span><span class="tok-fn">json</span><span class="tok-punc">());</span>
+
+<span class="tok-cmt">// Monday Webhook 端點</span>
+app<span class="tok-punc">.</span><span class="tok-fn">post</span><span class="tok-punc">(</span><span class="tok-str">'/webhook/monday'</span><span class="tok-punc">, async (</span>req<span class="tok-punc">,</span> res<span class="tok-punc">) =&gt; {</span>
+  <span class="tok-key">const</span> <span class="tok-punc">{</span> event <span class="tok-punc">}</span> <span class="tok-punc">=</span> req<span class="tok-punc">.</span>body<span class="tok-punc">;</span>
+
+  <span class="tok-cmt">// 狀態欄位變更事件</span>
+  <span class="tok-key">if</span> <span class="tok-punc">(</span>event<span class="tok-punc">.</span>type <span class="tok-punc">===</span> <span class="tok-str">'change_column_value'</span><span class="tok-punc">) {</span>
+    <span class="tok-key">const</span> msg <span class="tok-punc">=</span> <span class="tok-str">`&#x1F4CA; *${event.pulseId}* 狀態更新為 *${event.value.label.text}*`</span><span class="tok-punc">;</span>
+    <span class="tok-key">await</span> <span class="tok-fn">notifySlack</span><span class="tok-punc">(</span>msg<span class="tok-punc">);</span>
+  <span class="tok-punc">}</span>
+
+  res<span class="tok-punc">.</span><span class="tok-fn">json</span><span class="tok-punc">({</span> challengeAnswer<span class="tok-punc">:</span> req<span class="tok-punc">.</span>body<span class="tok-punc">.</span>challenge <span class="tok-punc">});</span>
+<span class="tok-punc">});</span></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px">&#x1F4D8; 整合設定步驟</h3>
+      <ol class="step-list">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>建立 Slack App 並取得 Bot Token</h4>
+            <p>前往 api.slack.com/apps 建立應用程式，啟用 <code>chat:write</code> 權限範疇，安裝至工作區後取得 Bot Token。</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>取得 Monday API Token</h4>
+            <p>在 Monday.com 個人資料設定中找到「開發人員」→「API Token v2」，複製後保存至環境變數。</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>設定 Monday Webhook</h4>
+            <p>在看板設定中新增 Webhook，指向您的伺服器端點。選擇觸發事件（如：狀態變更、新增項目）。</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>部署中介服務</h4>
+            <p>可使用 Vercel Functions、AWS Lambda 或 Railway 部署無伺服器函數，處理 Webhook 並轉發通知。</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>（進階）使用 Make / Zapier 無碼整合</h4>
+            <p>不需寫程式可直接使用 Make.com 建立 Monday → Slack 自動化流程，適合非技術團隊快速上手。</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ──────── 結論 ──────── -->
+  <section id="tab-conclusion" class="section">
+    <div class="section-header">
+      <span class="section-tag tag-conclusion">Conclusion</span>
+      <h2>最終結論與建議</h2>
+      <p>根據不同團隊情境，為您提供最適合的工具選擇建議。</p>
+    </div>
+
+    <div class="verdict-grid" style="margin-bottom:24px">
+      <div class="verdict-card verdict-slack">
+        <span class="verdict-score">8.5</span>
+        <div class="verdict-title accent-slack">&#x1F4AC; Slack</div>
+        <div class="verdict-desc">溝通協作首選<br>整合生態無可匹敵</div>
+      </div>
+      <div class="verdict-card verdict-monday">
+        <span class="verdict-score">8.8</span>
+        <div class="verdict-title accent-monday">&#x1F4CB; Monday.com</div>
+        <div class="verdict-desc">專案管理王者<br>視覺化追蹤無出其右</div>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2" style="margin-bottom:20px">
+      <div class="rec-card card rec-slack">
+        <h3 class="accent-slack">選 Slack，如果您的團隊…</h3>
+        <ul>
+          <li>重視即時、非正式的跨部門溝通</li>
+          <li>大量使用 GitHub、Jira 等開發工具</li>
+          <li>需要頻繁的語音 Huddle 討論</li>
+          <li>工程師與技術人員佔多數</li>
+          <li>已使用 Salesforce CRM</li>
+          <li>預算較有限（人均費用較低）</li>
+        </ul>
+      </div>
+
+      <div class="rec-card card rec-monday">
+        <h3 class="accent-monday">選 Monday.com，如果您的團隊…</h3>
+        <ul>
+          <li>需要嚴謹的任務追蹤與進度管理</li>
+          <li>行銷、活動、或非技術類專案為主</li>
+          <li>管理層需要視覺化儀表板報告</li>
+          <li>有跨部門資源管理需求</li>
+          <li>需要客戶關係或服務台功能</li>
+          <li>偏好低程式碼的自動化設定</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="margin-bottom:16px">&#x1F52E; 最佳實踐：兩者並用</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+        <div style="padding:16px;background:var(--bg2);border-radius:10px;border-left:3px solid #6D28D9">
+          <div style="font-weight:700;margin-bottom:6px">&#x1F4E2; Slack 負責</div>
+          <div style="font-size:.83rem;color:var(--muted)">即時通知、日常溝通、頻道討論、技術整合通知</div>
+        </div>
+        <div style="padding:16px;background:var(--bg2);border-radius:10px;border-left:3px solid #FF3D57">
+          <div style="font-weight:700;margin-bottom:6px">&#x1F4CB; Monday 負責</div>
+          <div style="font-size:.83rem;color:var(--muted)">任務建立、進度追蹤、甘特排程、KPI 儀表板</div>
+        </div>
+        <div style="padding:16px;background:var(--bg2);border-radius:10px;border-left:3px solid #059669">
+          <div style="font-weight:700;margin-bottom:6px">&#x1F517; API 橋接</div>
+          <div style="font-size:.83rem;color:var(--muted)">Monday 事件自動推送 Slack 通知，Slack 指令建立 Monday 任務</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice">
+      <span class="notice-icon">&#x1F4A1;</span>
+      <p><strong>專家建議：</strong>對於 20 人以上的成長型團隊，建議採用「Monday 作為專案中心、Slack 作為溝通中心」的雙工具策略，並透過 API 或 Make.com 自動化橋接，可將溝通效率提升約 30-40%，同時保有完整的任務可追蹤性。</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="footer">
+  <p>Slack vs Monday.com 比較報告 &mdash; 2026 年版 &middot; 僅供參考，定價與功能以官方網站為準</p>
+</footer>
+
+<script>
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabMap = {
+    overview:   'tab-overview',
+    slack:      'tab-slack',
+    monday:     'tab-monday',
+    compare:    'tab-compare',
+    api:        'tab-api',
+    conclusion: 'tab-conclusion',
+  };
+
+  function animateScores() {
+    document.querySelectorAll('.score-fill[data-width]').forEach(bar => {
+      const w = bar.dataset.width;
+      bar.style.width = '0%';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { bar.style.width = w + '%'; });
+      });
+    });
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+      btn.classList.add('active');
+      const section = document.getElementById(tabMap[btn.dataset.tab]);
+      if (section) {
+        section.classList.add('active');
+        window.scrollTo({ top: document.querySelector('.tabs-wrapper').offsetTop - 4, behavior: 'smooth' });
+        if (btn.dataset.tab === 'compare') setTimeout(animateScores, 100);
+      }
+    });
+  });
+
+  // Animate scores if compare tab is shown on load (it isn't by default, but future-proofing)
+  if (document.getElementById('tab-compare').classList.contains('active')) {
+    setTimeout(animateScores, 300);
+  }
+</script>
+</body>
+</html>

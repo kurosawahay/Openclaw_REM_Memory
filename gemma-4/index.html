@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemma 4 完整指南 - 本機部署與選擇</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #0891b2;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg-secondary); color: var(--text-primary); line-height: 1.7; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        header { background: var(--bg-primary); padding: 20px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; }
+        .logo-icon { font-size: 24px; }
+        .hero { padding: 48px 0 32px; text-align: center; background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%); }
+        .hero h1 { font-size: 36px; margin-bottom: 12px; }
+        .hero h1 span { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .tab-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 20px 0; background: var(--bg-primary); border-bottom: 1px solid var(--border-color); position: sticky; top: 60px; }
+        .tab-btn { padding: 10px 20px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+        .tab-btn.active { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border-color: transparent; }
+        .tab-content { display: none; padding: 32px 0; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; transition: all 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59,130,246,0.1); border-color: var(--accent-blue); }
+        .card-icon { font-size: 32px; margin-bottom: 12px; }
+        .card h3 { font-size: 18px; margin-bottom: 8px; }
+        .card p { color: var(--text-secondary); font-size: 14px; }
+        .card-list { list-style: none; margin-top: 12px; }
+        .card-list li { padding: 6px 0; color: var(--text-secondary); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+        .card-list li::before { content: '✓'; color: var(--accent-green); font-weight: 600; }
+        .info-box { background: #f0f9ff; border-left: 4px solid var(--accent-blue); padding: 16px; border-radius: 0 8px 8px 0; margin: 16px 0; color: var(--text-secondary); }
+        .info-box.green { background: #f0fdf4; border-color: var(--accent-green); }
+        .info-box.orange { background: #fffbeb; border-color: var(--accent-orange); }
+        .info-box.purple { background: #faf5ff; border-color: var(--accent-purple); }
+        .specs-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        .specs-table th, .specs-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        .specs-table th { background: #f8fafc; font-weight: 600; font-size: 13px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-green { background: #d1fae5; color: #059669; }
+        .badge-blue { background: #dbeafe; color: #1d4ed8; }
+        .badge-orange { background: #fef3c7; color: #d97706; }
+        .badge-purple { background: #ede9fe; color: #6d28d9; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+        .comparison-table { width: 100%; border-collapse: collapse; background: var(--bg-primary); border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        .comparison-table th, .comparison-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+        .comparison-table th { background: #f8fafc; font-weight: 600; font-size: 12px; }
+        footer { background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo"><span class="logo-icon">🔬</span> Gemma 4 完整指南</div>
+        </div>
+    </header>
+    <div class="hero">
+        <div class="container">
+            <h1>Google <span>Gemma 4</span> 本機部署指南</h1>
+            <p>4 種模型版本、硬體需求、價格選擇完整比較</p>
+        </div>
+    </div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('models')">📊 模型版本</button>
+        <button class="tab-btn" onclick="openTab('my-pc')">💻 我的電腦</button>
+        <button class="tab-btn" onclick="openTab('mac')">🍎 Mac Mini</button>
+        <button class="tab-btn" onclick="openTab('perplexity')">🔍 Perplexity</button>
+        <button class="tab-btn" onclick="openTab('compare')">🧠 智慧比較</button>
+        <button class="tab-btn" onclick="openTab('alternatives')">🔄 替代方案</button>
+    </div>
+    <div class="container">
+        <!-- 模型版本 -->
+        <div id="models" class="tab-content active">
+            <h2 style="margin-bottom: 16px;">📊 Gemma 4 模型版本</h2>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-value">4</div><div class="stat-label">模型版本</div></div>
+                <div class="stat-card"><div class="stat-value">#3</div><div class="stat-label">世界開源排名</div></div>
+                <div class="stat-card"><div class="stat-value">256K</div><div class="stat-label">最大上下文</div></div>
+                <div class="stat-card"><div class="stat-value">140+</div><div class="stat-label">支援語言</div></div>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h3>E2B (有效 2B)</h3>
+                    <p>行動裝置專用，低RAM消耗</p>
+                    <ul class="card-list">
+                        <li>128K 上下文</li>
+                        <li>離線語音辨識</li>
+                        <li>Android 原生支援</li>
+                        <li>RAM: ~2GB</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📲</div>
+                    <h3>E4B (有效 4B)</h3>
+                    <p>邊緣運算，IoT 裝置</p>
+                    <ul class="card-list">
+                        <li>128K 上下文</li>
+                        <li>離線語音/視覺</li>
+                        <li>Raspberry Pi 可跑</li>
+                        <li>RAM: ~4GB</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>26B MoE (專家混合)</h3>
+                    <p>高速延遲，活躍3.8B參數</p>
+                    <ul class="card-list">
+                        <li>256K 上下文</li>
+                        <li>高效能推論</li>
+                        <li>單卡 H100 可跑</li>
+                        <li>RAM: ~16GB</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💪</div>
+                    <h3>31B Dense (密集)</h3>
+                    <p>最高品質，可微調</p>
+                    <ul class="card-list">
+                        <li>256K 上下文</li>
+                        <li>#3 開源模型</li>
+                        <li>單卡 H100 可跑</li>
+                        <li>RAM: ~32GB</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 我的電腦 -->
+        <div id="my-pc" class="tab-content">
+            <h2 style="margin-bottom: 16px;">💻 黑澤大人的電腦能跑什麼？</h2>
+            <div class="info-box green">
+                <strong>🎮 您的硬體規格：</strong>
+                <ul style="margin-top: 8px; margin-left: 20px;">
+                    <li>CPU：Intel i7-8750H (6核12緒, 2.2GHz)</li>
+                    <li>RAM：15GB (可用約 8GB)</li>
+                    <li>顯示卡：<strong>NVIDIA GTX 1070 8GB</strong></li>
+                    <li>CUDA：12.2 (驅動 535.288.01)</li>
+                </ul>
+            </div>
+            
+            <h3 style="margin: 20px 0 12px;">✅ 可運行的模型（GTX 1070 實測）</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h3>E2B - 完全可跑</h3>
+                    <p class="badge badge-green">✅ 流暢運行</p>
+                    <ul class="card-list">
+                        <li>RAM 需求：~2GB</li>
+                        <li>VRAM 需求：~2GB (Q4)</li>
+                        <li>預期速度：50+ tokens/s</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📲</div>
+                    <h3>E4B - 完全可跑</h3>
+                    <p class="badge badge-green">✅ 流暢運行</p>
+                    <ul class="card-list">
+                        <li>RAM 需求：~4GB</li>
+                        <li>VRAM 需求：~4GB (Q4)</li>
+                        <li>預期速度：30-40 tokens/s</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3>26B MoE - 可跑</h3>
+                    <p class="badge badge-blue">✅ 量化版可行</p>
+                    <ul class="card-list">
+                        <li>VRAM 需求：~6-8GB (Q4/Q8)</li>
+                        <li>需使用量化版本 (Q4/Q8)</li>
+                        <li>預期速度：15-25 tokens/s</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💪</div>
+                    <h3>31B - 勉強可行</h3>
+                    <p class="badge badge-orange">⚠️ Q4 量化</p>
+                    <ul class="card-list">
+                        <li>VRAM 需求：~7GB (Q4)</li>
+                        <li>需使用 Q4 量化版本</li>
+                        <li>預期速度：10-15 tokens/s</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 16px;">
+                <strong>💡 建議運行工具：</strong>
+                <ul style="margin-top: 8px; margin-left: 20px;">
+                    <li><strong>LM Studio</strong> - 簡單易用，支援量化模型</li>
+                    <li><strong>llama.cpp (GGUF)</strong> - 高效能 CPU+GPU</li>
+                    <li><strong>Ollama</strong> - 一行指令啟動</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Mac Mini -->
+        <div id="mac" class="tab-content">
+            <h2 style="margin-bottom: 16px;">🍎 預算 6 萬元的 Mac Mini 選擇</h2>
+            <div class="info-box">
+                <strong>💰 台灣官網價格（2025）</strong>
+            </div>
+            <div class="specs-table">
+                <table>
+                    <thead><tr><th>型號</th><th>規格</th><th>價格 (TWD)</th><th>可跑模型</th></tr></thead>
+                    <tbody>
+                        <tr><td>M4</td><td>10CPU/10GPU, 16GB</td><td>$33,900</td><td>E2B, E4B</td></tr>
+                        <tr><td>M4 Pro</td><td>12CPU/16GPU, 24GB</td><td>$46,900</td><td>E4B, 26B (Q)</td></tr>
+                        <tr><td>M4 Pro</td><td>14CPU/20GPU, 48GB</td><td>$53,900</td><td>26B, 31B (Q)</td></tr>
+                        <tr><td>M2 Pro</td><td>12CPU/19GPU, 16GB</td><td>$48,900</td><td>E2B, E4B</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 style="margin: 20px 0 12px;">🎯 6 萬預算推薦</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🥇</div>
+                    <h3>M4 Pro 14/20 GPU + 48GB</h3>
+                    <p class="badge badge-green">✅ 最佳選擇</p>
+                    <ul class="card-list">
+                        <li>價格：$53,900</li>
+                        <li>可跑：26B, 31B 量化版</li>
+                        <li>完整 AI 工作站體驗</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🥈</div>
+                    <h3>M4 Pro 12/16 GPU + 24GB</h3>
+                    <p class="badge badge-blue">👍 夠用</p>
+                    <ul class="card-list">
+                        <li>價格：$46,900</li>
+                        <li>可跑：E4B + 26B Q</li>
+                        <li>CP 值最高</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Perplexity -->
+        <div id="perplexity" class="tab-content">
+            <h2 style="margin-bottom: 16px;">🔍 Perplexity Computer 介紹</h2>
+            <div class="info-box purple">
+                <strong>🎯 這是什麼？</strong>Perplexity 推出的 AI 代理系統，能操作你的電腦完成任務（訂機票、填表單等）。
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">☁️</div>
+                    <h3>Perplexity Computer (雲端)</h3>
+                    <ul class="card-list">
+                        <li>雲端 AI 代理</li>
+                        <li>調用 20+ 個前沿模型</li>
+                        <li>自動完成多步驟任務</li>
+                        <li>2026年2月發布</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <h3>Personal Computer (本地)</h3>
+                    <ul class="card-list">
+                        <li>Mac Mini + AI 軟體</li>
+                        <li>專用桌面 AI 助手</li>
+                        <li>可存取你的檔案</li>
+                        <li>2026年3月發布</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="margin: 20px 0 12px;">⚡ 主要功能</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>🎯 自動化任務</h3>
+                    <p>預訂機票、填寫表單、搜尋資訊</p>
+                </div>
+                <div class="card">
+                    <h3>🔗 跨平台操作</h3>
+                    <p>操作你常用的所有介面</p>
+                </div>
+                <div class="card">
+                    <h3>📁 檔案存取</h3>
+                    <p>讀取並管理你的檔案</p>
+                </div>
+                <div class="card">
+                    <h3>🧠 多模型協調</h3>
+                    <p>調用 20+ 個 AI 模型協作</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 20px 0 12px;">💰 費用與平台</h3>
+            <div class="specs-table">
+                <table>
+                    <thead><tr><th>方案</th><th>價格</th><th>功能</th></tr></thead>
+                    <tbody>
+                        <tr><td>免費版</td><td>免費</td><td>基本搜尋</td></tr>
+                        <tr><td>Pro</td><td>$20/月</td><td>無限制 Pro 搜尋</td></tr>
+                        <tr><td>Enterprise</td><td>聯繫報價</td><td>企業方案</td></tr>
+                        <tr><td>Windows/Mac</td><td>免費下載</td><td>桌面應用</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="info-box orange" style="margin-top: 16px;">
+                <strong>📝 與 Gemma 4 的關係：</strong>Perplexity 使用多種模型（包括可能整合 Gemma），而 Gemma 4 是開源模型，你可以自行部署類似的本機 AI 系統。
+            </div>
+        </div>
+        <!-- 替代方案 -->
+        <div id="alternatives" class="tab-content">
+            <h2 style="margin-bottom: 16px;">🔄 6 萬元的替代選擇</h2>
+            <div class="info-box orange">
+                <strong>💡 不買 Mac Mini 的其他選擇（同等預算）</strong>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🖥️</div>
+                    <h3>桌上型電腦 DIY (GTX 1070 等級)</h3>
+                    <ul class="card-list">
+                        <li>顯示卡：二手 GTX 1070 8GB ~$4,000</li>
+                        <li>CPU：Intel i5 12400 ~$5,000</li>
+                        <li>32GB RAM：~$4,000</li>
+                        <li>主機板+PSU：~$6,000</li>
+                        <li>機殼+SSD：~$4,000</li>
+                        <li>總計：~$23,000</li>
+                    </ul>
+                    <p style="margin-top: 8px; color: var(--accent-green);">✅ 可跑 26B, 31B 量化模型</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💻</div>
+                    <h3>電競筆電 (二手)</h3>
+                    <ul class="card-list">
+                        <li>RTX 4060/4070 Laptop</li>
+                        <li>16GB+ RAM</li>
+                        <li>價格：$35,000-50,000</li>
+                        <li>攜帶方便</li>
+                    </ul>
+                    <p style="margin-top: 8px; color: var(--accent-blue);">⚠️ 注意電池健康度</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">☁️</div>
+                    <h3>雲端 GPU 租用</h3>
+                    <ul class="card-list">
+                        <li>RunPod / Lambda Labs</li>
+                        <li>約 $0.3-0.5/小時</li>
+                        <li>RTX 4090 等級</li>
+                    </ul>
+                    <p style="margin-top: 8px; color: var(--text-muted);">💰 6萬可用 150-200小時</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🟢</div>
+                    <h3>AMD 桌上型</h3>
+                    <ul class="card-list">
+                        <li>AMD 780M 內顯（约 RTX 2050 等級）</li>
+                        <li>5600G + 32GB RAM</li>
+                        <li>約 $20,000</li>
+                        <li>可跑 E4B 模型</li>
+                    </ul>
+                    <p style="margin-top: 8px; color: var(--accent-orange);">⚠️ 需量化版本</p>
+                </div>
+            </div>
+        </div>
+        <!-- 本機 vs API -->
+        <div id="compare" class="tab-content">
+            <h2 style="margin-bottom: 16px;">⚖️ Gemma 4 本機部署 vs 線上 API 智慧比較</h2>
+            
+            <div class="info-box green">
+                <strong>📊 Gemma 4 效能排名（基於 Arena AI）</strong>
+                <ul style="margin-top: 8px; margin-left: 20px;">
+                    <li>Gemma 4 31B：世界 #3 開源模型</li>
+                    <li>Gemma 4 26B：世界 #6 開源模型</li>
+                    <li>接近 Claude 4.5 Sonnet 等級</li>
+                    <li>Agent 基準測試：#2（僅次於 Claude Opus 4.6）</li>
+                </ul>
+            </div>
+            
+            <h3 style="margin: 24px 0 12px;">🧠 智慧程度比較表</h3>
+            <div class="comparison-table">
+                <table>
+                    <thead><tr><th>模型</th><th>智慧等級</th><th>相當於</th><th>本機可行</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Claude Opus 4.6</strong></td><td><span class="badge badge-purple">頂級</span></td><td>最强</td><td>❌ 需頂級GPU</td></tr>
+                        <tr><td><strong>Claude Sonnet 4.6</strong></td><td><span class="badge badge-blue">高</span></td><td>頂級</td><td>❌ 需頂級GPU</td></tr>
+                        <tr><td><strong>Gemma 4 31B</strong></td><td><span class="badge badge-blue">高</span></td><td>接近 Claude Sonnet</td><td>✅ 單卡 H100/GTX 1070</td></tr>
+                        <tr><td><strong>Gemma 4 26B MoE</strong></td><td><span class="badge badge-blue">中高</span></td><td>GPT-4 等級</td><td>✅ 消費級 GPU</td></tr>
+                        <tr><td><strong>GPT-4o</strong></td><td><span class="badge badge-blue">高</span></td><td>頂級</td><td>❌ 僅 API</td></tr>
+                        <tr><td><strong>Gemma 3 27B</strong></td><td><span class="badge badge-green">中</span></td><td>GPT-3.5 等級</td><td>✅ 中階 GPU</td></tr>
+                        <tr><td><strong>Gemma 4 E4B</strong></td><td><span class="badge badge-green">中</span></td><td>GPT-3.5 等級</td><td>✅ 筆電/手機</td></tr>
+                        <tr><td><strong>Gemma 4 E2B</strong></td><td><span class="badge badge-orange">基礎</span></td><td>強化版小模型</td><td>✅ 任何裝置</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 style="margin: 24px 0 12px;">💰 成本比較</h3>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🏠</div>
+                    <h3>本機部署 (GTX 1070 + Gemma 4 31B)</h3>
+                    <ul class="card-list">
+                        <li>首年硬體攤提：~$30,000</li>
+                        <li>電費：~$1,000/年</li>
+                        <li>可離線、隱私保障</li>
+                        <li>智慧等級：接近 Claude Sonnet</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">☁️</div>
+                    <h3>線上 API (Claude Sonnet)</h3>
+                    <ul class="card-list">
+                        <li>輸入：~$3/百萬 tokens</li>
+                        <li>輸出：~$15/百萬 tokens</li>
+                        <li>每日 100K tokens ≈ $4.5/月</li>
+                        <li>智慧等級：頂級</li>
+                        <li>⚠️ 資料上傳雲端</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="info-box purple" style="margin-top: 16px;">
+                <strong>💡 關鍵發現：</strong>Gemma 4 31B 智慧程度接近 Claude Sonnet 4.6，但費用僅約 4%（便宜 96%）！
+            </div>
+            
+            <div class="comparison-table" style="margin-top: 24px;">
+                <table>
+                    <thead><tr><th>面向</th><th>本機 Gemma 4</th><th>線上 API (GPT/Claude)</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>費用</strong></td><td class="badge badge-green">一次性</td><td class="badge badge-orange">按量計費</td></tr>
+                        <tr><td><strong>智慧程度</strong></td><td>接近頂級（#3 開源）</td><td>頂級</td></tr>
+                        <tr><td><strong>延遲</strong></td><td>✅ 無網路延遲</td><td>⚠️ 取決於網速</td></tr>
+                        <tr><td><strong>隱私</strong></td><td>✅ 資料不離開設備</td><td>⚠️ 資料上傳雲端</td></tr>
+                        <tr><td><strong>離線</strong></td><td>✅ 可離線使用</td><td>❌ 需要網路</td></tr>
+                        <tr><td><strong>自訂微調</strong></td><td>✅ 完全控制</td><td>⚠️ 受限 API</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>🔬 Gemma 4 本機部署指南</p>
+            <p style="margin-top: 8px; font-size: 12px;">資料來源：Google DeepMind, Apple, EveryMac.com | 由 Claude Code 生成 ✨</p>
+        </div>
+    </footer>
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

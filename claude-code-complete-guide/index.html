@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code 完整教學 - MCP + ECC + 圖片生成</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #f5f0e6;
+            --bg-pink: #f8e4e4;
+            --bg-mint: #e4f5f0;
+            --bg-lavender: #e8e4f5;
+            --accent-coral: #d4847c;
+            --accent-teal: #5a9a8a;
+            --accent-gold: #c9a86c;
+            --accent-rose: #b87878;
+            --text-dark: #2a2622;
+            --text-brown: #5c534a;
+            --border-brown: #d4c8b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+        
+        header { 
+            background: linear-gradient(135deg, var(--bg-pink) 0%, var(--bg-lavender) 100%);
+            padding: 40px 0;
+            border-bottom: 3px solid var(--accent-coral);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '✦';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            font-size: 24px;
+            color: var(--accent-gold);
+            opacity: 0.6;
+        }
+        header::after {
+            content: '✦';
+            position: absolute;
+            bottom: 20px;
+            right: 10%;
+            font-size: 24px;
+            color: var(--accent-gold);
+            opacity: 0.6;
+        }
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 12px; 
+            font-size: 28px; 
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .logo-icon { 
+            font-size: 36px; 
+            background: var(--accent-coral);
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: white;
+        }
+        
+        .hero { 
+            padding: 60px 0 40px; 
+            text-align: center;
+            background: var(--bg-cream);
+        }
+        .hero h1 { 
+            font-size: 42px; 
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .hero h1 span {
+            color: var(--accent-coral);
+        }
+        .hero p { 
+            font-size: 16px; 
+            color: var(--text-brown);
+            max-width: 600px; 
+            margin: 0 auto;
+            font-style: italic;
+        }
+        
+        .film-strip {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px 0;
+            background: var(--text-dark);
+        }
+        .film-frame {
+            width: 60px;
+            height: 40px;
+            background: var(--bg-cream);
+            border: 2px solid var(--border-brown);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .tab-nav { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            padding: 24px 0;
+            background: var(--bg-mint);
+            border-bottom: 2px solid var(--accent-teal);
+        }
+        .tab-btn { 
+            padding: 12px 24px; 
+            background: var(--bg-cream);
+            border: 2px solid var(--border-brown);
+            border-radius: 4px;
+            font-size: 14px; 
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tab-btn:hover { 
+            background: var(--bg-lavender);
+            border-color: var(--accent-rose);
+            transform: translateY(-2px);
+        }
+        .tab-btn.active { 
+            background: var(--accent-coral); 
+            color: white;
+            border-color: var(--accent-rose);
+            box-shadow: 4px 4px 0 var(--text-dark);
+        }
+        
+        .tab-content { 
+            display: none; 
+            padding: 40px 0; 
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .frames-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 20px; 
+        }
+        .frame-card { 
+            background: white;
+            border: 3px solid var(--text-dark);
+            border-radius: 4px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 6px 6px 0 var(--text-dark);
+        }
+        .frame-card:hover { 
+            transform: translateY(-4px) rotate(1deg);
+            box-shadow: 8px 8px 0 var(--text-dark);
+        }
+        .frame-icon { 
+            font-size: 36px; 
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+            background: var(--bg-pink);
+            padding: 12px;
+            border-radius: 50%;
+            width: 70px;
+            margin: 0 auto 16px;
+        }
+        .frame-card h3 { 
+            font-size: 18px; 
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 8px;
+        }
+        .frame-card p { 
+            color: var(--text-brown); 
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .scene-card {
+            background: white;
+            border-left: 6px solid var(--accent-coral);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 4px 4px 0 var(--border-brown);
+        }
+        .scene-card.teal { border-color: var(--accent-teal); }
+        .scene-card.gold { border-color: var(--accent-gold); }
+        .scene-card.rose { border-color: var(--accent-rose); }
+        
+        .scene-card h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+        
+        .menu-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+        .menu-list li {
+            padding: 12px 16px;
+            background: white;
+            margin: 8px 0;
+            border: 2px solid var(--border-brown);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .menu-list li:hover {
+            background: var(--bg-lavender);
+            transform: translateX(8px);
+        }
+        .menu-icon {
+            font-size: 20px;
+        }
+        
+        .code-block {
+            background: var(--text-dark);
+            color: var(--bg-cream);
+            padding: 16px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: var(--bg-pink);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--accent-rose);
+        }
+        
+        .link-text {
+            color: var(--accent-teal);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        
+        footer { 
+            background: var(--text-dark); 
+            color: var(--bg-cream);
+            padding: 32px 0; 
+            text-align: center;
+            margin-top: 40px;
+            border-top: 4px solid var(--accent-gold);
+        }
+        footer p { font-size: 14px; }
+        footer .credits { 
+            margin-top: 12px; 
+            font-size: 12px; 
+            color: var(--border-brown);
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 28px; letter-spacing: 2px; }
+            .tab-btn { padding: 10px 16px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                Claude Code 完整教學
+                <span class="logo-icon">✦</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="film-strip">
+        <div class="film-frame">🤖</div>
+        <div class="film-frame">🎨</div>
+        <div class="film-frame">📦</div>
+        <div class="film-frame">⚡</div>
+        <div class="film-frame">✨</div>
+    </div>
+    
+    <div class="hero">
+        <div class="container">
+            <h1><span>Claude Code</span> 終極指南</h1>
+            <p>從小白到高手的完整攻略：MCP、ECC、圖片生成一次學會</p>
+        </div>
+    </div>
+    
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('what')">🤖 基礎篇</button>
+        <button class="tab-btn" onclick="openTab('mcp')">🔌 MCP 教學</button>
+        <button class="tab-btn" onclick="openTab('nanobanana')">🎨 圖片生成</button>
+        <button class="tab-btn" onclick="openTab('ecc')">📦 ECC 大全</button>
+        <button class="tab-btn" onclick="openTab('skills')">🔥 10 大技能</button>
+        <button class="tab-btn" onclick="openTab('hidden')">⚡ 隱藏指令</button>
+    </div>
+    
+    <div class="container">
+        <!-- 基礎篇 -->
+        <div id="what" class="tab-content active">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🤖 Claude Code 是什麼？</h2>
+            
+            <div class="scene-card">
+                <h3>🚀 簡單說</h3>
+                <p>Claude Code 是 Anthropic 出的 AI 程式碼助手，你可以用對話方式叫它幫你寫程式、查資料、自動化工作。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📋 基本操作</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">💻</span>
+                    <h3>終端機開啟</h3>
+                    <p>在終端機輸入 <span class="highlight">claude</span> 就能開始對話</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📝</span>
+                    <h3>下指令</h3>
+                    <p>用自然語言描述你要什麼，它就會幫你做</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📁</span>
+                    <h3>檔案操作</h3>
+                    <p>可以讀寫檔案、執行命令、搜尋程式碼</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">⚡</span>
+                    <h3>自動化</h3>
+                    <p>設定 hooks 和 skills 讓它自動完成重複工作</p>
+                </div>
+            </div>
+            
+            <div class="scene-card gold" style="margin-top: 24px;">
+                <h3>💡 為什麼要學 Claude Code？</h3>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">✅</span> 免費（用 API Key 或 Pro 訂閱）</li>
+                    <li><span class="menu-icon">✅</span> 本機運行，資料不外洩</li>
+                    <li><span class="menu-icon">✅</span> 可外接各種工具（MCP）</li>
+                    <li><span class="menu-icon">✅</span> 可自動化任何重複工作</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- MCP 教學 -->
+        <div id="mcp" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🔌 MCP 是什麼？</h2>
+            
+            <div class="scene-card">
+                <h3>🌉 MCP = Model Context Protocol</h3>
+                <p>簡單說就是讓 AI 可以接外部工具的橋樑。</p>
+                <p style="margin-top: 12px;">Claude Code 本身只能讀寫檔案、跑終端機，裝了 MCP server 之後，它就能做更多事：</p>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">📂</span> 查文件</li>
+                    <li><span class="menu-icon">📓</span> 讀 Notion</li>
+                    <li><span class="menu-icon">🌐</span> 操作瀏覽器</li>
+                    <li><span class="menu-icon">🎨</span> 生成圖片</li>
+                </ul>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🛠️ 安裝 MCP 的方式</h3>
+            <div class="code-block">
+# 方式一：直接用 claude mcp add
+claude mcp add 伺服器名稱 -- 指令
+
+# 方式二：透過 npx 安裝
+claude mcp add nanobanana-mcp -- npx -y @ycse/nanobanana-mcp -e GOOGLE_AI_API_KEY=你的key
+            </div>
+            
+            <div class="scene-card teal">
+                <h3>⚠️ 注意</h3>
+                <p>每次新增 MCP 後需要<strong>重開 Claude Code</strong>才能使用新工具。</p>
+            </div>
+        </div>
+        
+        <!-- 圖片生成 -->
+        <div id="nanobanana" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🎨 用 AI 生成 IG 圖文</h2>
+            
+            <div class="scene-card">
+                <h3>🍌 NanoBanana MCP</h3>
+                <p>把 Google Gemini 的圖片生成模型接進 Claude Code，等於讓你的 AI 助手多了一隻會畫圖的手。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📥 安裝步驟</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">1️⃣</span>
+                    <h3>申請 API Key</h3>
+                    <p>去 <span class="link-text">aistudio.google.com</span> 申請 Gemini API Key</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">2️⃣</span>
+                    <h3>安裝 MCP</h3>
+                    <p>在 Claude Code 輸入安裝指令（見下）</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">3️⃣</span>
+                    <h3>重開軟體</h3>
+                    <p>關掉重開，讓新工具生效</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">4️⃣</span>
+                    <h3>開始生圖</h3>
+                    <p>用指令生圖、修圖、對話微調</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">⌨️ 安裝指令</h3>
+            <div class="code-block">
+claude mcp add nanobanana-mcp -- npx -y @ycse/nanobanana-mcp -e GOOGLE_AI_API_KEY=你的key
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🎯 可用工具</h3>
+            <div class="scene-card">
+                <ul class="menu-list">
+                    <li><span class="menu-icon">📐</span> <strong>set_aspect_ratio</strong> — 設定圖片比例</li>
+                    <li><span class="menu-icon">🔄</span> <strong>set_model</strong> — 切 flash（快）或 pro（精細）</li>
+                    <li><span class="menu-icon">🎨</span> <strong>gemini_generate_image</strong> — 生圖</li>
+                    <li><span class="menu-icon">✏️</span> <strong>gemini_edit_image</strong> — 改圖</li>
+                    <li><span class="menu-icon">💬</span> <strong>gemini_chat</strong> — 多輪對話微調</li>
+                </ul>
+            </div>
+            
+            <div class="scene-card rose" style="margin-top: 20px;">
+                <h3>✨ 進階：IG Carousel Skill</h3>
+                <p>作者還寫了一個 /ig-carousel Skill，只要打一句話：</p>
+                <div class="code-block">/ig-carousel Claude Code 教學 — 科技綠暗底</div>
+                <p>它就會自動：</p>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">✅</span> 設定 1:1 比例</li>
+                    <li><span class="menu-icon">✅</span> 中文翻英文 prompt</li>
+                    <li><span class="menu-icon">✅</span> 套上品牌排版</li>
+                    <li><span class="menu-icon">✅</span> 清除 C2PA metadata（IG 不會顯示「Made with AI」）</li>
+                </ul>
+            </div>
+            
+            <div class="scene-card" style="margin-top: 20px;">
+                <h3>📝 適用場景</h3>
+                <p><strong>適合：</strong> 快速出圖、風格一致的系列圖、每天要發文但沒時間開設計軟體</p>
+                <p style="margin-top: 12px;"><strong>不太適合：</strong> 像素級精準排版、品牌設計稿、複雜文字佈局（AI 文字偶爾會有錯字）</p>
+            </div>
+        </div>
+        
+        <!-- ECC 大全 -->
+        <div id="ecc" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">📦 Everything Claude Code (ECC)</h2>
+            
+            <div class="scene-card gold">
+                <h3>🎯 什麼是 ECC？</h3>
+                <p><strong>就是前人幫你踩完雷的攻略說明書！</strong></p>
+                <p style="margin-top: 12px;">這是一個 50K+ stars ⭐、Anthropic Hackathon 冠軍的開源套件，把各種好用技能、規則、自動化脚本整理好，讓你直接套用。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📊 ECC 內建什麼？</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🤖</span>
+                    <h3>38 Agents</h3>
+                    <p>專業子代理（程式碼審查、架構設計、TDD 等）</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">⚡</span>
+                    <h3>156 Skills</h3>
+                    <p>工作流定義（Python、Go、Django、Laravel 等）</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">⌨️</span>
+                    <h3>72 Commands</h3>
+                    <p>指令（/plan、/tdd、/security-scan 等）</h3>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📐</span>
+                    <h3>34 Rules</h3>
+                    <p>語言規範（TypeScript、Python、Go、Swift、PHP）</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🔑 核心功能</h3>
+            <div class="scene-card">
+                <ul class="menu-list">
+                    <li><span class="menu-icon">🧠</span> <strong>連續學習</strong> — 自動從對話中提取模式變成技能</li>
+                    <li><span class="menu-icon">💾</span> <strong>記憶持久化</strong> — 跨 session 自動保存/載入上下文</li>
+                    <li><span class="menu-icon">🎯</span> <strong>Token 優化</strong> — 模型選擇、Prompt 精簡</li>
+                    <li><span class="menu-icon">🛡️</span> <strong>安全掃描</strong> — AgentShield 漏洞檢測</li>
+                    <li><span class="menu-icon">🔄</span> <strong>Continuous Learning</strong> — 自動從錯誤中學習</li>
+                </ul>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📥 安裝方式</h3>
+            <div class="code-block">
+# 方式一：Plugin 方式（推薦）
+/plugin marketplace add affaan-m/everything-claude-code
+/plugin install everything-claude-code@everything-claude-code
+
+# 方式二：手動安裝
+git clone https://github.com/affaan-m/everything-claude-code.git
+cd everything-claude-code
+./install.sh --profile full
+            </div>
+            
+            <div class="scene-card teal" style="margin-top: 20px;">
+                <h3>🔗 官方連結</h3>
+                <p>ECC 官網：<span class="link-text">ecc.tools</span></p>
+                <p>GitHub：<span class="link-text">github.com/affaan-m/everything-claude-code</span></p>
+            </div>
+            
+            <div class="scene-card rose" style="margin-top: 20px;">
+                <h3>💡 為什麼要用 ECC？</h3>
+                <p>就像玩遊戲有人幫你寫好攻略，ECC 把：</p>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">✅</span> 別人踩過的坑 → 變成 Rules</li>
+                    <li><span class="menu-icon">✅</span> 常用工作流 → 變成 Skills</li>
+                    <li><span class="menu-icon">✅</span> 最佳實踐 → 變成 Agents</li>
+                    <li><span class="menu-icon">✅</span> 自動化脚本 → 變成 Hooks</li>
+                </ul>
+                <p style="margin-top: 12px;">你不用從頭摸索，直接站在巨人的肩膀上！</p>
+            </div>
+        </div>
+        
+        <!-- 10 大技能 -->
+        <div id="skills" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🔥 10 大讓你偷懶的 Skills</h2>
+            
+            <div class="scene-card gold">
+                <h3>💡 這些 Skills 讓 Claude Code 變身全能助手</h3>
+                <p>不用開其他軟體，一句話就完成複雜任務！</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🎨 設計相關</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🎨</span>
+                    <h3>brand-guidelines</h3>
+                    <p>品牌配色字型一鍵套用到所有文件</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：行銷設計、品牌素材</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🖼️</span>
+                    <h3>canvas-design</h3>
+                    <p>不開 Canva，AI 直接設計海報圖片</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：社群貼文、廣告素材</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎭</span>
+                    <h3>algorithmic-art</h3>
+                    <p>用演算法生成獨一無二的藝術圖</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：創意視覺、獨特圖案</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎬</span>
+                    <h3>slack-gif-creator</h3>
+                    <p>一鍵做出 GIF 動圖不用開軟體</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：表情包、動態貼紙</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🛠️ 開發相關</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🧩</span>
+                    <h3>skill-creator</h3>
+                    <p>自己打造 Skill，教 Claude 學你的流程</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：自訂自動化、工作流</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🌐</span>
+                    <h3>web-artifacts-builder</h3>
+                    <p>零基礎做互動網頁不用寫程式</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：原型網頁、簡易應用</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🔌</span>
+                    <h3>mcp-builder</h3>
+                    <p>把外部 API 串進 Claude 無限擴充</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：串接服務、自動化</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📝 文件相關</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">📄</span>
+                    <h3>doc-coauthoring</h3>
+                    <p>AI 協作寫文件，大綱到完稿全包</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：報告、文件、提案</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📧</span>
+                    <h3>internal-comms</h3>
+                    <p>公告會議紀錄內部信，說一句就出</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：公司內部通知</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎨</span>
+                    <h3>theme-factory</h3>
+                    <p>介面主題風格隨你換自己定義</p>
+                    <p style="margin-top: 8px; font-size: 12px; color: var(--accent-teal);">適用：主題設計、個人化</p>
+                </div>
+            </div>
+            
+            <div class="scene-card teal" style="margin-top: 24px;">
+                <h3>📥 如何使用這些 Skills？</h3>
+                <div class="code-block">
+# 在 Claude Code 中輸入
+/skill-name
+
+# 例如
+/brand-guidelines
+/canvas-design
+/skill-creator
+                </div>
+            </div>
+            
+            <div class="scene-card rose" style="margin-top: 20px;">
+                <h3>💡 小技巧</h3>
+                <p>這些 Skills 可以組合使用！例如：</p>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">✅</span> brand-guidelines + canvas-design = 品牌風格海報</li>
+                    <li><span class="menu-icon">✅</span> skill-creator + mcp-builder = 自訂工作流</li>
+                    <li><span class="menu-icon">✅</span> doc-coauthoring + internal-comms = 完整會議紀錄</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 隱藏指令 -->
+        <div id="hidden" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">⚡ 10 個隱藏指令</h2>
+            
+            <div class="scene-card">
+                <h3>🔓 源碼洩漏事件</h3>
+                <p>2026 年 3 月 31 日，Anthropic 意外在 npm 發布 Claude Code 2.1.88 時附上完整 source map，導致 512,000 行 TypeScript 原始碼公開，揭露了 44 個未公開功能！</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🚀 第一步：啟動與規劃</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">📂</span>
+                    <h3>/init</h3>
+                    <p>自動掃描整個程式碼倉庫，生成 CLAUDE.md 專案說明檔，省下 20% Token</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📋</span>
+                    <h3>/plan</h3>
+                    <p>切到只讀規劃模式，先把功能怎麼實現、分幾步、改哪些文件推演清楚</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">⇆</span>
+                    <h3>Shift + Tab</h3>
+                    <p>在普通模式/自動接受模式/規劃模式間一鍵輪轉</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">💰 第二步：上下文管理</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">💵</span>
+                    <h3>/context</h3>
+                    <p>查詢現在 Token 使用程度，看看錢花在哪</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🗜️</span>
+                    <h3>/compact</h3>
+                    <p>提前壓縮對話，50% 就跑一次，省得模型「失憶」</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🧹</span>
+                    <h3>/clear</h3>
+                    <p>乾淨開局，切換任務前清除上下文，拒絕污染</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">💬</span>
+                    <h3>/btw</h3>
+                    <p>純淨插話（3/11 剛出，200 萬點閱），問完問題直接消除不佔 Token</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🔧 第三步：執行糾偏</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">↩️</span>
+                    <h3>/rewind</h3>
+                    <p>按兩下 Esc，代碼和對話分別退回，換方向不用重新解釋</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🧠</span>
+                    <h3>Ultra think</h3>
+                    <p>在 Prompt 裡加上這句，強制 AI 啟動最深層推理</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">💎</span>
+                    <h3>/model opusplan</h3>
+                    <p>隱藏命令！規劃用 Opus 4.6，寫代碼自動切回 Sonnet 4.6，省錢防限速</p>
+                </div>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">⚙️ 第四步：自動化與 Agent</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🔍</span>
+                    <h3>/simplify</h3>
+                    <p>啟動三個平行 Agent 從復用/品質/效率三個角度審查代碼</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🌐</span>
+                    <h3>/chrome</h3>
+                    <p>Claude 自己啟動瀏覽器、導航、點擊、填表單、測試、修復</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🔄</span>
+                    <h3>/loop [時間] [任務]</h3>
+                    <p>定時重複執行任務，如 /loop 5m 檢查部署狀態，最長 3 天後過期</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">📊</span>
+                    <h3>/insights</h3>
+                    <p>掃描一個月使用歷史，生成 HTML 報告，推薦自定義命令和 Skills</p>
+                </div>
+            </div>
+            
+            <div class="scene-card gold" style="margin-top: 24px;">
+                <h3>💡 追更新撇步</h3>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">👀</span> 盯緊 GitHub Changelog：github.com/anthropics/claude-code/blob/main/CHANGELOG.md</li>
+                    <li><span class="menu-icon">🐦</span> 關注開發團隊 Twitter，消息比官方快</li>
+                    <li><span class="menu-icon">🛡️</span> 建立安全意識，不要忽略工具的潛在風險</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>✦ Claude Code 完整教學 ✦</p>
+            <p class="credits">用 Cinematic UI 技術打造 | 2026-04-05</p>
+        </div>
+    </footer>
+    
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

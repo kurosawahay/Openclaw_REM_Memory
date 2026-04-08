@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 封殺事件 - 小白也能懂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #f5f0e6;
+            --bg-pink: #f8e4e4;
+            --bg-mint: #e4f5f0;
+            --bg-lavender: #e8e4f5;
+            --accent-coral: #d4847c;
+            --accent-teal: #5a9a8a;
+            --accent-gold: #c9a86c;
+            --accent-rose: #b87878;
+            --text-dark: #2a2622;
+            --text-brown: #5c534a;
+            --border-brown: #d4c8b8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+        
+        header { 
+            background: linear-gradient(135deg, var(--bg-pink) 0%, var(--bg-lavender) 100%);
+            padding: 40px 0;
+            border-bottom: 3px solid var(--accent-coral);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '✦';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            font-size: 24px;
+            color: var(--accent-gold);
+            opacity: 0.6;
+        }
+        header::after {
+            content: '✦';
+            position: absolute;
+            bottom: 20px;
+            right: 10%;
+            font-size: 24px;
+            color: var(--accent-gold);
+            opacity: 0.6;
+        }
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 12px; 
+            font-size: 28px; 
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .logo-icon { 
+            font-size: 36px; 
+            background: var(--accent-coral);
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: white;
+        }
+        
+        .hero { 
+            padding: 60px 0 40px; 
+            text-align: center;
+            background: var(--bg-cream);
+        }
+        .hero h1 { 
+            font-size: 42px; 
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .hero h1 span {
+            color: var(--accent-coral);
+        }
+        .hero p { 
+            font-size: 16px; 
+            color: var(--text-brown);
+            max-width: 600px; 
+            margin: 0 auto;
+            font-style: italic;
+        }
+        
+        .film-strip {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px 0;
+            background: var(--text-dark);
+        }
+        .film-frame {
+            width: 60px;
+            height: 40px;
+            background: var(--bg-cream);
+            border: 2px solid var(--border-brown);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .tab-nav { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            padding: 24px 0;
+            background: var(--bg-mint);
+            border-bottom: 2px solid var(--accent-teal);
+        }
+        .tab-btn { 
+            padding: 12px 24px; 
+            background: var(--bg-cream);
+            border: 2px solid var(--border-brown);
+            border-radius: 4px;
+            font-size: 14px; 
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tab-btn:hover { 
+            background: var(--bg-lavender);
+            border-color: var(--accent-rose);
+            transform: translateY(-2px);
+        }
+        .tab-btn.active { 
+            background: var(--accent-coral); 
+            color: white;
+            border-color: var(--accent-rose);
+            box-shadow: 4px 4px 0 var(--text-dark);
+        }
+        
+        .tab-content { 
+            display: none; 
+            padding: 40px 0; 
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .frames-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 20px; 
+        }
+        .frame-card { 
+            background: white;
+            border: 3px solid var(--text-dark);
+            border-radius: 4px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 6px 6px 0 var(--text-dark);
+        }
+        .frame-card:hover { 
+            transform: translateY(-4px) rotate(1deg);
+            box-shadow: 8px 8px 0 var(--text-dark);
+        }
+        .frame-icon { 
+            font-size: 36px; 
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+            background: var(--bg-pink);
+            padding: 12px;
+            border-radius: 50%;
+            width: 70px;
+            margin: 0 auto 16px;
+        }
+        .frame-card h3 { 
+            font-size: 18px; 
+            margin-bottom: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 8px;
+        }
+        .frame-card p { 
+            color: var(--text-brown); 
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .scene-card {
+            background: white;
+            border-left: 6px solid var(--accent-coral);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 4px 4px 0 var(--border-brown);
+        }
+        .scene-card.teal { border-color: var(--accent-teal); }
+        .scene-card.gold { border-color: var(--accent-gold); }
+        .scene-card.rose { border-color: var(--accent-rose); }
+        
+        .scene-card h3 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+        
+        .menu-list {
+            list-style: none;
+            margin: 16px 0;
+        }
+        .menu-list li {
+            padding: 12px 16px;
+            background: white;
+            margin: 8px 0;
+            border: 2px solid var(--border-brown);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .menu-list li:hover {
+            background: var(--bg-lavender);
+            transform: translateX(8px);
+        }
+        .menu-icon {
+            font-size: 20px;
+        }
+        
+        .highlight {
+            background: var(--bg-pink);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--accent-rose);
+        }
+        
+        .warning-box {
+            background: #fffbeb;
+            border: 3px solid var(--accent-gold);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .warning-box h4 {
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .ok-box {
+            background: #f0fdf4;
+            border: 3px solid var(--accent-teal);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .ok-box h4 {
+            color: var(--accent-teal);
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        footer { 
+            background: var(--text-dark); 
+            color: var(--bg-cream);
+            padding: 32px 0; 
+            text-align: center;
+            margin-top: 40px;
+            border-top: 4px solid var(--accent-gold);
+        }
+        footer p { font-size: 14px; }
+        footer .credits { 
+            margin-top: 12px; 
+            font-size: 12px; 
+            color: var(--border-brown);
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 28px; letter-spacing: 2px; }
+            .tab-btn { padding: 10px 16px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                OpenClaw 封殺事件
+                <span class="logo-icon">✦</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="film-strip">
+        <div class="film-frame">🦞</div>
+        <div class="film-frame">🤖</div>
+        <div class="film-frame">📱</div>
+        <div class="film-frame">🔗</div>
+        <div class="film-frame">✨</div>
+    </div>
+    
+    <div class="hero">
+        <div class="container">
+            <h1><span>小白</span>也能懂</h1>
+            <p>「Anthropic 封殺 OpenClaw？」用白話文解釋給你聽～</p>
+        </div>
+    </div>
+    
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="openTab('what')">🔔 發生什麼事</button>
+        <button class="tab-btn" onclick="openTab('why')">🔍 為什麼被封</button>
+        <button class="tab-btn" onclick="openTab('safe')">✅ 你安全嗎</button>
+        <button class="tab-btn" onclick="openTab('skills')">🎬 這個網站</button>
+    </div>
+    
+    <div class="container">
+        <!-- 發生什麼事 -->
+        <div id="what" class="tab-content active">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🔔 簡單說就是...</h2>
+            
+            <div class="scene-card">
+                <h3>📰 新聞摘要</h3>
+                <p>昨天（2026/4/3）Anthropic 宣布：不再支援第三方串接平台的用量。</p>
+                <p style="margin-top: 12px;">結果：<span class="highlight">OpenClaw（被叫小龍蝦）直接被封殺</span></p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🖼️ 用比喻來說</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🏠</span>
+                    <h3>你的電腦</h3>
+                    <p>像你的家，Claude Code 是住在裡面的 AI 助手</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🔑</span>
+                    <h3>API Key</h3>
+                    <p>像你家門的鑰匙，你給別人借住要收房租</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🏨</span>
+                    <h3>第三方平台</h3>
+                    <p>像 Airbnb，把你的鑰匙借給陌生人住</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🚫</span>
+                    <h3>Anthropic</h3>
+                    <p>發現你把鑰匙借給很多人，決定把鎖換掉</p>
+                </div>
+            </div>
+            
+            <div class="scene-card rose" style="margin-top: 24px;">
+                <h3>⚠️ 重點來了</h3>
+                <p>被封的是<strong>「用你的額度跑第三方服務」</strong>這種方式，不是 OpenClaw 本身壞掉了。</p>
+            </div>
+        </div>
+        
+        <!-- 為什麼被封 -->
+        <div id="why" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🔍 為什麼被封？</h2>
+            
+            <div class="scene-card">
+                <h3>💰 Anthropic 的煩惱</h3>
+                <p>很多人訂閱 Claude（每個月 $20），但把 API Key 給第三方平台用。</p>
+                <p style="margin-top: 12px;">結果：平台用你的訂閱額度服務別人，Anthropic 賺不到錢。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🚫 兩種情況比較</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">❌</span>
+                    <h3>被封的用法</h3>
+                    <p>第三方平台 → 用你的 Key → Anthropic API</p>
+                    <p style="margin-top: 12px; font-size: 12px; color: var(--accent-rose);">你的錢被別人賺走了</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">✅</span>
+                    <h3>安全的用法</h3>
+                    <p>你自己開 → Claude Code → Anthropic API</p>
+                    <p style="margin-top: 12px; font-size: 12px; color: var(--accent-teal);">直接付錢給官方</p>
+                </div>
+            </div>
+            
+            <div class="scene-card gold">
+                <h3>🔑 比喻总结</h3>
+                <p> Anthropic 發現很多人把房子借給 Airbnb 收租金，決定把這些民宿 ban 掉。但你自己住在房子裡（用官方 CLI）完全沒事。</p>
+            </div>
+        </div>
+        
+        <!-- 你安全嗎 -->
+        <div id="safe" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">✅ 你安全嗎？</h2>
+            
+            <div class="ok-box">
+                <h4>✅ 你是安全的！</h4>
+                <p>因為你現在的做法是：<strong>直接用 Claude Code CLI</strong>，不是經過第三方平台。</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">📋 你的用法 vs 被封的用法</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">🏠</span>
+                    <h3>你的做法</h3>
+                    <p>OpenClaw 直接執行 claude 命令</p>
+                    <p style="margin-top: 8px; color: var(--accent-teal);">↓</p>
+                    <p>Claude Code CLI</p>
+                    <p style="margin-top: 8px; color: var(--accent-teal);">↓</p>
+                    <p>Anthropic API</p>
+                    <p style="margin-top: 8px; font-weight: 600; color: var(--accent-teal);">✅ 官方路徑</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🏨</span>
+                    <h3>被封的做法</h3>
+                    <p>第三方平台</p>
+                    <p style="margin-top: 8px; color: var(--accent-rose);">↓</p>
+                    <p>用你的 API Key</p>
+                    <p style="margin-top: 8px; color: var(--accent-rose);">↓</p>
+                    <p>Anthropic API</p>
+                    <p style="margin-top: 8px; font-weight: 600; color: var(--accent-rose);">❌ 經過第三方</p>
+                </div>
+            </div>
+            
+            <div class="scene-card teal" style="margin-top: 24px;">
+                <h3>📝 結論</h3>
+                <p>你用 OpenClaw 呼叫 Claude Code CLI 當 sub-agent，<strong>完全沒問題</strong>！</p>
+                <p style="margin-top: 12px;">這是官方用法，不是在繞過 Anthropic 的機制，可以放心繼續用～ ✨</p>
+            </div>
+        </div>
+        
+        <!-- 這個網站 -->
+        <div id="skills" class="tab-content">
+            <h2 style="margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px;">🎬 這個網站怎麼這麼好看？</h2>
+            
+            <div class="scene-card">
+                <h3>✨ 答案是：Cinematic UI</h3>
+                <p>這是一個讓 AI 像電影導演一樣思考的設計 Skill！</p>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🎬 傳統 vs Cinematic UI</h3>
+            <div class="frames-grid">
+                <div class="frame-card">
+                    <span class="frame-icon">📋</span>
+                    <h3>傳統設計</h3>
+                    <p>AI 是選購員，從 67 種風格中挑選</p>
+                    <p style="margin-top: 8px; color: var(--text-muted);">結果：看起來像一般網站</p>
+                </div>
+                <div class="frame-card">
+                    <span class="frame-icon">🎬</span>
+                    <h3>Cinematic UI</h3>
+                    <p>AI 是導演，研究電影創造獨特風格</p>
+                    <p style="margin-top: 8px; color: var(--accent-teal);">結果：像電影場景的網站</p>
+                </div>
+            </div>
+            
+            <div class="scene-card gold">
+                <h3>🎥 本網站採用的風格</h3>
+                <p>本網站使用了 <strong>Wes Anderson</strong>（《布達佩斯大飯店》導演）的風格：</p>
+                <ul class="menu-list">
+                    <li><span class="menu-icon">🎨</span> 奶油白背景 + 薄荷綠 + 珊瑚紅配色</li>
+                    <li><span class="menu-icon">📐</span> 對稱布局（導演的簽名構圖）</li>
+                    <li><span class="menu-icon">🎞️</span> 電影膠片裝飾條</li>
+                    <li><span class="menu-icon">🖼️</span> 邊框卡片設計（電影フレーム感）</li>
+                    <li><span class="menu-icon">✨</span> 金色裝飾線條</li>
+                </ul>
+            </div>
+            
+            <h3 style="margin: 24px 0 16px;">🛠️ 如何安裝？</h3>
+            <div class="scene-card teal">
+                <h3>Claude Code 安裝</h3>
+                <p style="font-family: monospace; background: var(--text-dark); color: var(--bg-cream); padding: 12px; border-radius: 4px; margin-top: 8px;">
+git clone https://github.com/akseolabs-seo/cinematic-ui ~/.claude/skills/cinematic-ui
+                </p>
+                <p style="margin-top: 12px;">然後在 Claude Code 中輸入：<span class="highlight">/cinematic-ui</span></p>
+            </div>
+            
+            <div class="scene-card rose">
+                <h3>⚠️ 注意</h3>
+                <p>這是 Claude Code 的技能，不適用於 OpenClaw。但這個網站是使用該 Skill 的方法論「手動執行」的結果。</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>✦ OpenClaw 封殺事件 - 小白也能懂 ✦</p>
+            <p class="credits">用 Cinematic UI 技術打造 | 2026-04-04</p>
+        </div>
+    </footer>
+    
+    <script>
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

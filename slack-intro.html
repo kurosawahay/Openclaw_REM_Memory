@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slack 完整介紹 - OpenClaw 整合指南</title>
+  <style>
+    :root {
+      --slack-purple: #4A154B;
+      --slack-blue: #1264A4;
+      --slack-green: #2EB67D;
+      --slack-yellow: #ECB22E;
+      --slack-red: #E01E5A;
+      --bg-dark: #1a1a2e;
+      --bg-card: #16213e;
+      --text-primary: #e8e8e8;
+      --text-secondary: #a0a0a0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slack-logo {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      background: linear-gradient(90deg, #E01E5A, #ECB22E, #2EB67D, #1264A4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+
+    .subtitle {
+      font-size: 1.3em;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--slack-purple);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      margin: 5px;
+    }
+
+    .badge.openclaw {
+      background: linear-gradient(90deg, #4A154B, #E01E5A);
+    }
+
+    section {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    h2 .icon {
+      font-size: 1.2em;
+    }
+
+    h3 {
+      font-size: 1.3em;
+      color: var(--slack-green);
+      margin: 25px 0 15px 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .feature-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(74,21,75,0.3);
+    }
+
+    .feature-card .card-icon {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+    }
+
+    .feature-card h4 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: var(--slack-yellow);
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95em;
+    }
+
+    .openclaw-section {
+      background: linear-gradient(135deg, rgba(74,21,75,0.4), rgba(224,30,90,0.2));
+      border: 2px solid var(--slack-purple);
+    }
+
+    .openclaw-section h2 {
+      color: var(--slack-yellow);
+    }
+
+    .control-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .control-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .control-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .control-item .check {
+      color: var(--slack-green);
+      font-size: 1.3em;
+    }
+
+    .control-item .cross {
+      color: var(--slack-red);
+      font-size: 1.3em;
+    }
+
+    .control-item.limited {
+      opacity: 0.7;
+      border-left: 3px solid var(--slack-yellow);
+    }
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 2em;
+      }
+      section {
+        padding: 25px;
+      }
+    }
+
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .channel-item {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+    }
+
+    .channel-item .emoji {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    th {
+      color: var(--slack-green);
+      font-weight: 600;
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    .highlight {
+      color: var(--slack-yellow);
+      font-weight: 600;
+    }
+
+    .slack-canvas-demo {
+      background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+      border: 2px dashed var(--slack-purple);
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .canvas-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .canvas-tag {
+      background: var(--slack-purple);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 60px;
+    }
+
+    footer a {
+      color: var(--slack-blue);
+      text-decoration: none;
+    }
+
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--slack-purple);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5em;
+      transition: transform 0.3s;
+      text-decoration: none;
+    }
+
+    .scroll-top:hover {
+      transform: scale(1.1);
+    }
+
+    .telegram-note {
+      background: linear-gradient(90deg, #0088cc, #1dcaff);
+      padding: 15px 25px;
+      border-radius: 10px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .telegram-note .icon {
+      font-size: 2em;
+    }
+
+    .telegram-note p {
+      color: white;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="slack-logo">💬</div>
+      <h1>Slack 完整介紹</h1>
+      <p class="subtitle">企業級通訊平台 × OpenClaw 智能整合</p>
+      <div>
+        <span class="badge">即時訊息</span>
+        <span class="badge">頻道管理</span>
+        <span class="badge">視訊會議</span>
+        <span class="badge">檔案共享</span>
+        <span class="badge openclaw">🤖 OpenClaw 整合</span>
+      </div>
+    </header>
+
+    <section>
+      <h2><span class="icon">🚀</span> Slack 核心功能</h2>
+      <p>Slack 是全球最受歡迎的企業通訊平台之一，專為團隊協作設計。</p>
+
+      <h3>📱 即時通訊</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="card-icon">💬</div>
+          <h4>直接訊息 (DM)</h4>
+          <p>與團隊成員一對一私密的即時對話</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">📢</div>
+          <h4>頻道 (Channels)</h4>
+          <p>按專案、主題或部門建立公開或私人頻道</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">🗂️</div>
+          <h4>群組訊息 (Group)</h4>
+          <p>小組討論串，適合多人協作專案</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">🔗</div>
+          <h4>執行緒回覆</h4>
+          <p>保持對話整潔，不打斷主要討論流程</p>
+        </div>
+      </div>
+
+      <h3>🎯 協作工具</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="card-icon">📞</div>
+          <h4>視訊 / 語音通話</h4>
+          <p>內建 HD 視訊會議和語音通話功能</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">📎</div>
+          <h4>檔案共享</h4>
+          <p>拖曳上傳，支援圖片、文檔、壓縮檔等</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">📌</div>
+          <h4>Pins 釘選</h4>
+          <p>重要訊息釘選到頻道頂部方便查閱</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">👍</div>
+          <h4>反應 Emoji</h4>
+          <p>用表情符號回應訊息，快速表達意見</p>
+        </div>
+      </div>
+
+      <h3>🤖 自動化與整合</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="card-icon">⚡</div>
+          <h4>Slack Workflow</h4>
+          <p>無需程式碼即可建立自動化工作流程</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">🔌</div>
+          <h4>App 整合</h4>
+          <p>與 4,000+ 種工具整合：GitHub、Google Drive、Notion 等</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">🤖</div>
+          <h4>Bots 機器人</h4>
+          <p>建立自訂 Bot 自動化任務和獲取資訊</p>
+        </div>
+        <div class="feature-card">
+          <div class="card-icon">📊</div>
+          <h4>Canvas 畫布</h4>
+          <p>建立豐富格式的文件和知識庫頁面</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="icon">🎨</span> Slack Canvas 畫布功能</h2>
+      <p>Canvas 是 Slack 推出的類似 Notion 的文件協作工具，讓團隊可以在頻道中建立和管理文件。</p>
+
+      <div class="slack-canvas-demo">
+        <h3 style="color: var(--slack-yellow); margin-bottom: 10px;">✨ Canvas 可以做到：</h3>
+        <div class="canvas-features">
+          <span class="canvas-tag">📝 格式化文字編輯</span>
+          <span class="canvas-tag">📊 表格與清單</span>
+          <span class="canvas-tag">🖼️ 圖片嵌入</span>
+          <span class="canvas-tag">📋 任務清單</span>
+          <span class="canvas-tag">🔗 連結預覽</span>
+          <span class="canvas-tag">👥 多人即時編輯</span>
+          <span class="canvas-tag">🔄 即時同步</span>
+          <span class="canvas-tag">📱 行動裝置支援</span>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 30px;">⚠️ 目前限制</h3>
+      <p>Slack Canvas API 目前仍在發展階段，OpenClaw 尚未完整整合 Canvas 的讀寫功能。但可以透過 Slack Bot 發送包含 Canvas 連結的訊息。</p>
+    </section>
+
+    <section>
+      <h2><span class="icon">🤖</span> OpenClaw 能控制的 Slack 功能</h2>
+      <p>透過 OpenClaw 整合，您可以從任何頻道（Telegram、飛書等）遙控 Slack！</p>
+
+      <h3>✅ 可以完整控制</h3>
+      <div class="control-list">
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>發送文字訊息</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>發送圖片 / 檔案</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>發送預覽連結</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>回覆執行緒</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>編輯訊息</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>刪除訊息</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>添加 Emoji 反應</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>移除 Emoji 反應</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>釘選訊息 (Pin)</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>取消釘選 (Unpin)</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>列出已釘選訊息</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>查詢頻道成員</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>查詢使用者資料</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>列出可用 Emoji</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>讀取頻道歷史</span>
+        </div>
+        <div class="control-item">
+          <span class="check">✓</span>
+          <span>頻道資訊查詢</span>
+        </div>
+      </div>
+
+      <h3 style="color: var(--slack-yellow);">⚠️ 有限制或無法做到</h3>
+      <div class="control-list">
+        <div class="control-item limited">
+          <span class="cross">✗</span>
+          <span>建立 / 刪除頻道</span>
+        </div>
+        <div class="control-item limited">
+          <span class="cross">✗</span>
+          <span>管理頻道成員</span>
+        </div>
+        <div class="control-item limited">
+          <span class="cross">✗</span>
+          <span>建立 Canvas 畫布</span>
+        </div>
+        <div class="control-item limited">
+          <span class="cross">✗</span>
+          <span>編輯 Canvas 內容</span>
+        </div>
+        <div class="control-item limited">
+          <span class="cross">✗</span>
+          <span>主動 DM 其他用戶</span>
+        </div>
+        <div class="control-item limited">
+          <span class="cross">✗</span>
+          <span>語音 / 視訊通話</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="icon">📡</span> 連線模式</h2>
+      <div class="two-columns">
+        <div>
+          <h3 style="color: var(--slack-green);">⚡ Socket Mode（推薦）</h3>
+          <p>WebSocket 為基礎的即時連線，不需要公開 Webhook。</p>
+          <ul style="margin-top: 15px; padding-left: 20px; color: var(--text-secondary);">
+            <li>✅ 設定簡單</li>
+            <li>✅ 不需要公網 IP</li>
+            <li>✅ 自動重連</li>
+            <li>✅ 適合開發和小型團隊</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color: var(--slack-blue);">🌐 HTTP Events API</h3>
+          <p>傳統 Webhook 模式，需要公開可訪問的端點。</p>
+          <ul style="margin-top: 15px; padding-left: 20px; color: var(--text-secondary);">
+            <li>✅ 更適合企業環境</li>
+            <li>✅ 容易紀錄和審計</li>
+            <li>⚠️ 需要公開 Webhook URL</li>
+            <li>⚠️ 設定較複雜</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="icon">💡</span> 操作範例</h2>
+      <p>透過 OpenClaw 控制 Slack 的實際應用場景：</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>操作</th>
+            <th>Telegram 指令</th>
+            <th>說明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>發送訊息</td>
+            <td><span class="highlight">"幫我傳訊息到 #general：早安！"</span></td>
+            <td>向指定頻道發送文字</td>
+          </tr>
+          <tr>
+            <td>釘選重要訊息</td>
+            <td><span class="highlight">"Pin 這條訊息"</span></td>
+            <td>將重要資訊釘選到頻道頂部</td>
+          </tr>
+          <tr>
+            <td>回覆執行緒</td>
+            <td><span class="highlight">"回覆：謝謝建議！"</span></td>
+            <td>在執行緒中繼續對話</td>
+          </tr>
+          <tr>
+            <td>添加反應</td>
+            <td><span class="highlight">"給這條訊息 👍"</span></td>
+            <td>快速表達同意或反應</td>
+          </tr>
+          <tr>
+            <td>查詢成員</td>
+            <td><span class="highlight">"列出 #general 的成員"</span></td>
+            <td>查看頻道參與者</td>
+          </tr>
+          <tr>
+            <td>發送圖片</td>
+            <td><span class="highlight">"傳送圖片到 #design：看看這個設計"</span></td>
+            <td>分享視覺素材到頻道</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="telegram-note">
+        <div class="icon">📱</div>
+        <p>所有這些操作都可以透過 Telegram 指令完成！OpenClaw 會自動將指令轉換為 Slack API 呼叫。</p>
+      </div>
+    </section>
+
+    <section class="openclaw-section">
+      <h2><span class="icon">🔧</span> OpenClaw Slack 設定</h2>
+      <h3>需要的 Token</h3>
+      <div class="two-columns" style="margin-top: 15px;">
+        <div>
+          <p><strong style="color: var(--slack-green);">App Token (xapp-...)</strong></p>
+          <p style="color: var(--text-secondary); font-size: 0.9em;">用於 Socket Mode 連線，需要 connections:write 權限</p>
+        </div>
+        <div>
+          <p><strong style="color: var(--slack-green);">Bot Token (xoxb-...)</strong></p>
+          <p style="color: var(--text-secondary); font-size: 0.9em;"> Bot 身份驗證，需要申請多個 OAuth Scopes</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 30px;">必備 OAuth Scopes</h3>
+      <div class="channel-grid">
+        <div class="channel-item"><span class="emoji">💬</span><br>app_mentions:read</div>
+        <div class="channel-item"><span class="emoji">📝</span><br>channels:history</div>
+        <div class="channel-item"><span class="emoji">📖</span><br>channels:read</div>
+        <div class="channel-item"><span class="emoji">✉️</span><br>chat:write</div>
+        <div class="channel-item"><span class="emoji">👥</span><br>groups:history</div>
+        <div class="channel-item"><span class="emoji">🔊</span><br>im:history</div>
+        <div class="channel-item"><span class="emoji">📊</span><br>reactions:read</div>
+        <div class="channel-item"><span class="emoji">📌</span><br>pins:read</div>
+      </div>
+    </section>
+
+    <footer>
+      <p>💬 Slack 介紹頁面 | 🤖 由 OpenClaw + Claude AI 共同製作</p>
+      <p style="margin-top: 10px;">
+        <a href="https://slack.com/intl/zh-tw/" target="_blank">Slack 官網</a> |
+        <a href="https://docs.openclaw.ai/channels/slack" target="_blank">OpenClaw Slack 文檔</a>
+      </p>
+    </footer>
+  </div>
+
+  <a href="#" class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">↑</a>
+</body>
+</html>

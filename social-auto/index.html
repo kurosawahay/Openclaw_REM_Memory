@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社群自動發文指南｜青焰映畫</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b6b;
+        }
+        h2 {
+            font-size: 1.2rem;
+            margin: 25px 0 15px;
+            color: #333;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0079bf;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .section {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #fafafa;
+            cursor: pointer;
+            user-select: none;
+        }
+        .section-header:hover {
+            background: #f0f0f0;
+        }
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .section-toggle {
+            font-size: 0.8rem;
+            color: #999;
+            transition: transform 0.2s;
+        }
+        .section.open .section-toggle {
+            transform: rotate(180deg);
+        }
+        .section-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            background: #fff;
+        }
+        .section.open .section-content {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .tag-easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .tag-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        .tag-hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .method-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .method-item h4 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .method-item p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .pros-cons {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        .pros {
+            color: #2e7d32;
+            font-size: 0.85rem;
+        }
+        .cons {
+            color: #c62828;
+            font-size: 0.85rem;
+        }
+        .note {
+            background: #fff8e1;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 15px;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            table {
+                font-size: 0.8rem;
+            }
+            th, td {
+                padding: 8px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← 返回首頁</a>
+    
+    <h1>📱 社群自動發文指南</h1>
+    
+    <div class="section open">
+        <div class="section-header" onclick="toggle(this.parentElement)">
+            <span class="section-title">📘 Facebook 自動發文</span>
+            <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+            <div class="method-item">
+                <h4>1. Facebook 開發者 API（官方）</h4>
+                <p>透過 Meta Graph API 程式化發文</p>
+                <div class="pros-cons">
+                    <span class="pros">✅ 官方支援，功能完整</span>
+                    <span class="cons">❌ 需開發者帳號、審核</span>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <th>項目</th>
+                    <th>說明</th>
+                </tr>
+                <tr><td>難度</td><td><span class="tag tag-hard">困難</span></td></tr>
+                <tr><td>費用</td><td>免費（基本功能）</td></tr>
+                <tr><td>需要</td><td>開發者帳號 + App 審核</td></tr>
+                <tr><td>權限</td><td>pages_manage_posts</td></tr>
+                <tr><td>審核時間</td><td>1-2 天</td></tr>
+            </table>
+            
+            <div class="method-item">
+                <h4>2. 第三方工具</h4>
+                <p>Buffer、Hootsuite、Meta Business Suite</p>
+                <div class="pros-cons">
+                    <span class="pros">✅ 較簡單，無需開發</span>
+                    <span class="cons">❌ 功能受限，費用較高</span>
+                </div>
+            </div>
+            <table>
+                <tr><th>工具</th><th>費用</th></tr>
+                <tr><td>Meta Business Suite</td><td>免費</td></tr>
+                <tr><td>Buffer</td><td>$6/人/月起</td></tr>
+                <tr><td>Hootsuite</td><td>$99/月起</td></tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header" onclick="toggle(this.parentElement)">
+            <span class="section-title">📸 Instagram 自動發文</span>
+            <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+            <div class="method-item">
+                <h4>1. Instagram Graph API（官方）</h4>
+                <p>需要 Business/Creator 帳號</p>
+                <div class="pros-cons">
+                    <span class="pros">✅ 官方支援</span>
+                    <span class="cons">❌ 審核嚴格，需 Business 帳號</span>
+                </div>
+            </div>
+            <table>
+                <tr><th>項目</th><th>說明</th></tr>
+                <tr><td>難度</td><td><span class="tag tag-hard">困難</span></td></tr>
+                <tr><td>需要</td><td>Business 或 Creator 帳號</td></tr>
+                <tr><td>權限</td><td>instagram_basic, instagram_content_publish</td></tr>
+                <tr><td>限制</td><td>只能發到 Business 帳號</td></tr>
+            </table>
+            
+            <div class="method-item">
+                <h4>2. 第三方工具（推薦）</h4>
+                <p>Later、Preview、Metricool</p>
+                <div class="pros-cons">
+                    <span class="pros">✅ 較簡單，有視覺化編輯</span>
+                    <span class="cons">❌ 免費版功能有限</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header" onclick="toggle(this.parentElement)">
+            <span class="section-title">🧵 Threads 自動發文</span>
+            <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+            <div class="method-item">
+                <h4>1. Threads API（官方）</h4>
+                <p>Meta 官方 API，2024 年推出</p>
+                <div class="pros-cons">
+                    <span class="pros">✅ 官方支援</span>
+                    <span class="cons">❌ 需要 Meta 開發者帳號</span>
+                </div>
+            </div>
+            <table>
+                <tr><th>項目</th><th>說明</th></tr>
+                <tr><td>難度</td><td><span class="tag tag-medium">中等</span></td></tr>
+                <tr><td>限制</td><td>250 篇/24小時</td></tr>
+                <tr><td>不需要 IG</td><td>✅ 現在可以了！</td></tr>
+                <tr><td>發布次數</td><td>25-100 次/天</td></tr>
+            </table>
+            
+            <div class="method-item">
+                <h4>2. 第三方工具</h4>
+                <p>PostEverywhere、Buffer 等支援</p>
+                <div class="pros-cons">
+                    <span class="pros">✅ 較簡單</span>
+                    <span class="cons">❌ 依賴第三方</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header" onclick="toggle(this.parentElement)">
+            <span class="section-title">📊 第三方工具完整比較表</span>
+            <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+            <table>
+                <tr>
+                    <th>工具</th>
+                    <th>Facebook</th>
+                    <th>Instagram</th>
+                    <th>Threads</th>
+                    <th>費用</th>
+                    <th>難度</th>
+                </tr>
+                <tr>
+                    <td><strong>Buffer</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>$6/人/月起</td>
+                    <td><span class="tag tag-easy">簡單</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Hootsuite</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>❌</td>
+                    <td>$99/月起</td>
+                    <td><span class="tag tag-medium">中等</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Later</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>❌</td>
+                    <td>$18/月起</td>
+                    <td><span class="tag tag-easy">簡單</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Metricool</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>$23/月起</td>
+                    <td><span class="tag tag-easy">簡單</span></td>
+                </tr>
+                <tr>
+                    <td><strong>PostEverywhere</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>$9.99/月起</td>
+                    <td><span class="tag tag-easy">簡單</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Meta Business Suite</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>❌</td>
+                    <td>免費</td>
+                    <td><span class="tag tag-medium">中等</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Sprout Social</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>❌</td>
+                    <td>$99/月起</td>
+                    <td><span class="tag tag-medium">中等</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Publer</strong></td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>$12/月起</td>
+                    <td><span class="tag tag-easy">簡單</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Preview</strong></td>
+                    <td>❌</td>
+                    <td>✅</td>
+                    <td>❌</td>
+                    <td>免費</td>
+                    <td><span class="tag tag-easy">簡單</span></td>
+                </tr>
+            </table>
+            
+            <h2 style="margin-top:20px;">🏆 推薦</h2>
+            <div class="method-item">
+                <h4>💰 性價比首選：Buffer</h4>
+                <p>支援三大平台，收費合理，適合個人或小團隊</p>
+            </div>
+            <div class="method-item">
+                <h4>🆓 免費首選：Meta Business Suite</h4>
+                <p>Facebook/Instagram 官方工具，完全免費</p>
+            </div>
+            <div class="method-item">
+                <h4>✨Threads 專用：Metricool / PostEverywhere</h4>
+                <p>對 Threads 支援較好，有排程功能</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header" onclick="toggle(this.parentElement)">
+            <span class="section-title">🤖 雷姆能幫你的</span>
+            <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+            <div class="method-item">
+                <h4>✅ AI 文案生成</h4>
+                <p>告訴我主題，雷姆幫你寫吸睛文案</p>
+            </div>
+            <div class="method-item">
+                <h4>🔗 API 串接</h4>
+                <p>幫你設定 Facebook/Threads API</p>
+            </div>
+            <div class="method-item">
+                <h4>⏰ 排程發文</h4>
+                <p>配合 cron job 定時自動發布</p>
+            </div>
+            <div class="method-item">
+                <h4>📝 複製貼上</h4>
+                <p>最簡單方法，寫好給你複製</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="note">
+        💡 <strong>建議：</strong>如果只是偶爾發文，用 AI 幫你寫文案，然後手動貼上是最快的方法。如果想全自動化，再考慮 API 串接。
+    </div>
+    
+    <p style="color:#999;font-size:0.8rem;margin-top:30px;text-align:center;">
+        最後更新：2026-03-28
+    </p>
+    
+    <script>
+        function toggle(section) {
+            section.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
